@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/calendar_selected.svg</file>
+        <file>images/calendar_unselected.svg</file>
+        <file>images/timer_selected.svg</file>
+        <file>images/timer_unselected.svg</file>
+        <file>images/add.svg</file>
+        <file>images/edit.svg</file>
+        <file>images/heat.svg</file>
+        <file>images/humidity.svg</file>
+        <file>images/snowflake.svg</file>
+    </qresource>
+</RCC>
