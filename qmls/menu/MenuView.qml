@@ -44,7 +44,7 @@ Item {
                     height: 50
                     radius: 8
                     color: "transparent"
-                    opacity: sideBarId.selectedName === name ? 0.7 : 1.0
+                    opacity: itemMouseArea.pressed ? 0.7 : 1.0
                     Layout.alignment: Qt.AlignHCenter
 
                     Common.SvgImage {
@@ -53,9 +53,15 @@ Item {
                         color: sideBarId.selectedName === name ? "#ffffff" : "#e0e0e1"
                         source: sideBarId.selectedName === name ? iconSelected : iconUnselected
                         anchors.centerIn: parent
+                        scale: itemMouseArea.pressed ? 0.97 : 1.0
+
+                        Behavior on scale {
+                            NumberAnimation { duration: 50 }
+                        }
                     }
 
                     MouseArea {
+                        id: itemMouseArea
                         anchors.fill: parent
                         onClicked: {
                             sideBarId.selectedName = name

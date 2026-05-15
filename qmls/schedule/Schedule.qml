@@ -12,36 +12,80 @@ Item {
         spacing: 0
         anchors.fill: parent
 
-        Rectangle {
-            id: addBtn
-            height: 60; width: 60
-            radius: 30
-            color: "transparent"
+        Button {
+            id: newScheduleBtn
+            Layout.preferredHeight: 40
+            Layout.preferredWidth: 150
+            Layout.margins: 15
             Layout.alignment: Qt.AlignTop | Qt.AlignRight
-            Layout.rightMargin: 5
 
-            layer.enabled: true
-            layer.samples: 8
-            opacity: addMouseArea.pressed ? 0.7 : 1.0
+            onClicked: stackView.push("AddSchedule.qml")
 
-            Common.SvgImage {
-                height: 40; width: 40
-                color: "#fff"
-                source: "../../images/add.svg"
-                anchors.centerIn: parent
-                scale: addMouseArea.pressed ? 0.97 : 1.0
+            background: Rectangle {
+                color: "crimson"
+                radius: 5
+                anchors.fill: parent
+                opacity: newScheduleBtn.pressed ? 0.7 : 1.0
+                scale: newScheduleBtn.pressed ? 0.97 : 1.0
 
                 Behavior on scale {
                     NumberAnimation { duration: 50 }
                 }
             }
 
-            MouseArea {
-                id: addMouseArea
-                anchors.fill: parent
-                onClicked: stackView.push("AddSchedule.qml")
+            contentItem: Item {
+                Row {
+                    spacing: 5
+                    anchors.centerIn: parent
+
+                    Common.SvgImage {
+                        height: 17; width: 17
+                        color: "white"
+                        source: "../../images/add.svg"
+                    }
+
+                    Text {
+                        text: qsTr("New Schedule")
+                        color: "white"
+                        font {
+                            pixelSize: 15
+                            weight: Font.Medium
+                        }
+                    }
+                }
             }
         }
+
+        // Rectangle {
+        //     id: addBtn
+        //     height: 60; width: 60
+        //     radius: 30
+        //     color: "transparent"
+        //     Layout.alignment: Qt.AlignTop | Qt.AlignRight
+        //     Layout.rightMargin: 5
+
+        //     layer.enabled: true
+        //     layer.samples: 8
+        //     opacity: addMouseArea.pressed ? 0.7 : 1.0
+
+        //     Common.SvgImage {
+        //         height: 40; width: 40
+        //         color: "#fff"
+        //         source: "../../images/add.svg"
+        //         anchors.centerIn: parent
+        //         scale: addMouseArea.pressed ? 0.97 : 1.0
+
+        //         Behavior on scale {
+        //             NumberAnimation { duration: 50 }
+        //         }
+        //     }
+
+        //     MouseArea {
+        //         id: addMouseArea
+        //         anchors.fill: parent
+        //         onClicked: stackView.push("AddSchedule.qml")
+        //     }
+        // }
 
         ListView {
             model: scheduleModel
@@ -164,7 +208,7 @@ Item {
                                     let mins = Math.floor(totalSecs / 60);
                                     let secs = totalSecs % 60;
 
-                                     mins > 0 ? mins + "m " + secs + "s" : secs + "s";
+                                    mins > 0 ? mins + "m " + secs + "s" : secs + "s";
                                 }
                             }
                         }
@@ -198,6 +242,11 @@ Item {
                             color: "#fff"
                             source: "../../images/edit.svg"
                             anchors.centerIn: parent
+                            scale: editMouseArea.pressed ? 0.97 : 1.0
+
+                            Behavior on scale {
+                                NumberAnimation { duration: 50 }
+                            }
                         }
 
                         MouseArea {
@@ -222,6 +271,11 @@ Item {
                             color: "firebrick"
                             source: "../../images/delete.svg"
                             anchors.centerIn: parent
+                            scale: delMouseArea.pressed ? 0.97 : 1.0
+
+                            Behavior on scale {
+                                NumberAnimation { duration: 50 }
+                            }
                         }
 
                         MouseArea {

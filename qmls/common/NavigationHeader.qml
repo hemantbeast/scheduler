@@ -12,15 +12,16 @@ Rectangle {
     // Back button
     Rectangle {
         id: backBtn
-        width: 60; height: 60
+        width: 40; height: 40
         color: "transparent"
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: 5
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 15
         opacity: backMouseArea.pressed ? 0.7 : 1.0
 
         SvgImage {
-            height: 32; width: 32
+            height: 27; width: 27
             color: "white"
             source: "../../images/back.svg"
             anchors.centerIn: parent
@@ -48,7 +49,7 @@ Rectangle {
             color: navigationHeader.titleColor || "white"
             anchors.centerIn: parent
             font {
-                pointSize: 12
+                pixelSize: 20
                 weight: Font.Bold
             }
         }
