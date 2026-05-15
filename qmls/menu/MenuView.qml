@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
-import "../common" as Common
+import "../common"
 
 Item {
     id: sideBarRootId
@@ -47,7 +47,7 @@ Item {
                     opacity: itemMouseArea.pressed ? 0.7 : 1.0
                     Layout.alignment: Qt.AlignHCenter
 
-                    Common.SvgImage {
+                    SvgImage {
                         id: imageId
                         height:40; width: 40
                         color: sideBarId.selectedName === name ? "#ffffff" : "#e0e0e1"

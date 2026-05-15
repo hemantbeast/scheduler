@@ -1,7 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
-import "menu" as Menu
+import "menu"
+import "toast"
 
 Window {
     width: 800
@@ -16,6 +17,10 @@ Window {
         anchors.fill: parent
     }
 
+    Toast {
+        id: toastManager
+    }
+
     Component {
         id:mainView
 
@@ -25,7 +30,7 @@ Window {
 
             property string selectedMenu: "Timer"
 
-            Menu.MenuView {
+            MenuView {
                 id: sideBar
                 anchors.left: parent.left
                 anchors.top: parent.top

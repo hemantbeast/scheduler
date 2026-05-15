@@ -13,5 +13,7 @@
         <file>qmls/common/CustomComboBox.qml</file>
         <file>qmls/common/DateTimeDialog.qml</file>
         <file>qmls/common/TimerDialog.qml</file>
+        <file>qmls/toast/Toast.qml</file>
+        <file>qmls/toast/ToastDelegate.qml</file>
     </qresource>
 </RCC>

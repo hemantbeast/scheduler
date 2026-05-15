@@ -2,15 +2,19 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
-import "../common" as Common
+import "../common"
+import "../toast"
 
 Item {
+
+    property var selectedDateTime
+    property var selectedTimer
 
     ColumnLayout {
         spacing: 4
         anchors.fill: parent
 
-        Common.NavigationHeader {
+        NavigationHeader {
             id: navigation
             title: "Add Schedule"
             Layout.alignment: Qt.AlignTop
@@ -80,7 +84,7 @@ Item {
                             font.pointSize: 8
                         }
 
-                        Common.CustomComboBox {
+                        CustomComboBox {
                             id: modeField
                             Layout.preferredHeight: 40
                             Layout.fillWidth: true
@@ -191,7 +195,35 @@ Item {
                 palette.buttonText: "white"
 
                 onClicked: {
+                    const options = {
+                        type: "error",
+                        position: Qt.TopEdge,
+                        theme: "Color"
+                    };
 
+                    if (nameField.text === "") {
+                        toastManager.createMessage("Please enter name", options);
+                        return;
+                    }
+
+                    if (dateField.text === "") {
+                        toastManager.createMessage("Please select date and time", options);
+                        return;
+                    }
+
+                    if (timerField.text === "") {
+                        toastManager.createMessage("Please select timer", options);
+                        return;
+                    }
+
+                    scheduleModel.addItem(
+                                nameField.text,
+                                modeField.currentText.toUpperCase(),
+                                selectedDateTime,
+                                selectedTimer,
+                                true
+                                );
+                    stackView.pop();
                 }
 
                 font {
@@ -242,16 +274,19 @@ Item {
         }
     }
 
-    Common.DateTimeDialog {
+    DateTimeDialog {
         id: dateTimeDialog
         onDateTimeSelected: {
+            selectedDateTime = dateTime
             dateField.text = Qt.formatDateTime(dateTime, "dd MMM yyyy, hh:mm ap")
         }
     }
 
-    Common.TimerDialog {
+    TimerDialog {
         id: timerDialog
         onTimeSelected: {
+            selectedTimer = totalSeconds
+
             let minutes = Math.floor((totalSeconds % 3600) / 60)
             let seconds = totalSeconds % 60
 

@@ -2,8 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
-import "../../config" as Config
-import "../common" as Common
+import "../../config"
+import "../common"
 
 Item {
     id: scheduleRoot
@@ -38,7 +38,7 @@ Item {
                     spacing: 5
                     anchors.centerIn: parent
 
-                    Common.SvgImage {
+                    SvgImage {
                         height: 17; width: 17
                         color: "white"
                         source: "../../images/add.svg"
@@ -68,7 +68,7 @@ Item {
         //     layer.samples: 8
         //     opacity: addMouseArea.pressed ? 0.7 : 1.0
 
-        //     Common.SvgImage {
+        //     SvgImage {
         //         height: 40; width: 40
         //         color: "#fff"
         //         source: "../../images/add.svg"
@@ -114,7 +114,7 @@ Item {
                 anchors.fill: parent
                 anchors.margins: 15
 
-                property var currentSettings: Config.StyleConfig.modeSettings[model.mode] || Config.StyleConfig.modeSettings["HEAT"]
+                property var currentSettings: StyleConfig.modeSettings[model.mode] || StyleConfig.modeSettings["HEAT"]
 
                 // Mode Indicator
                 Rectangle {
@@ -130,7 +130,7 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     color: "transparent"
 
-                    Common.SvgImage {
+                    SvgImage {
                         height: 22; width: 22
                         color: itemLayout.currentSettings.color
                         source: itemLayout.currentSettings.icon
@@ -160,7 +160,7 @@ Item {
                         Row {
                             spacing: 4
 
-                            Common.SvgImage {
+                            SvgImage {
                                 height: 15; width: 15
                                 color: "#777"
                                 source: "../../images/play.svg"
@@ -190,7 +190,7 @@ Item {
                         Row {
                             spacing: 4
 
-                            Common.SvgImage {
+                            SvgImage {
                                 height: 15; width: 15
                                 color: "#777"
                                 source: "../../images/clock.svg"
@@ -236,7 +236,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         opacity: editMouseArea.pressed ? 0.7 : 1.0
 
-                        Common.SvgImage {
+                        SvgImage {
                             id: imgEdit
                             height: 22; width: 22
                             color: "#fff"
@@ -265,7 +265,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         opacity: delMouseArea.pressed ? 0.7 : 1.0
 
-                        Common.SvgImage {
+                        SvgImage {
                             id: imgDelete
                             height: 25; width: 25
                             color: "firebrick"
@@ -282,7 +282,7 @@ Item {
                             id: delMouseArea
                             anchors.fill: parent
                             onClicked: {
-                                console.log("Delete clicked")
+                                scheduleModel.removeItem(index)
                             }
                         }
                     }
