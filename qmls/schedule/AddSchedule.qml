@@ -111,6 +111,7 @@ Item {
                             placeholderTextColor: "#999"
                             color: "white"
                             clip: true
+                            readOnly: true
                             Layout.preferredHeight: 40
                             Layout.fillWidth: true
 
@@ -122,6 +123,11 @@ Item {
                                     width: 1
                                     color: dateField.focus ? "white" : "#a1a1a1"
                                 }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: dateTimeDialog.open()
                             }
                         }
                     }
@@ -144,6 +150,7 @@ Item {
                             placeholderTextColor: "#999"
                             color: "white"
                             clip: true
+                            readOnly: true
                             Layout.preferredHeight: 40
                             Layout.fillWidth: true
 
@@ -155,6 +162,11 @@ Item {
                                     width: 1
                                     color: timerField.focus ? "white" : "#a1a1a1"
                                 }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: timerDialog.open()
                             }
                         }
                     }
@@ -227,6 +239,26 @@ Item {
                     }
                 }
             }
+        }
+    }
+
+    Common.DateTimeDialog {
+        id: dateTimeDialog
+        onDateTimeSelected: {
+            dateField.text = Qt.formatDateTime(dateTime, "dd MMM yyyy, hh:mm ap")
+        }
+    }
+
+    Common.TimerDialog {
+        id: timerDialog
+        onTimeSelected: {
+            let minutes = Math.floor((totalSeconds % 3600) / 60)
+            let seconds = totalSeconds % 60
+
+            let formattedMinutes = String(minutes).padStart(2, '0')
+            let formattedSeconds = String(seconds).padStart(2, '0')
+
+            timerField.text = `${minutes}:${seconds}`
         }
     }
 }

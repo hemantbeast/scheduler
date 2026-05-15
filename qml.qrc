@@ -11,5 +11,7 @@
         <file>qmls/schedule/AddSchedule.qml</file>
         <file>qmls/common/NavigationHeader.qml</file>
         <file>qmls/common/CustomComboBox.qml</file>
+        <file>qmls/common/DateTimeDialog.qml</file>
+        <file>qmls/common/TimerDialog.qml</file>
     </qresource>
 </RCC>
