@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
+import "../common" as Common
 
 Item {
     id: sideBarRootId
@@ -46,24 +47,12 @@ Item {
                     opacity: sideBarId.selectedName === name ? 0.7 : 1.0
                     Layout.alignment: Qt.AlignHCenter
 
-                    Image {
+                    Common.SvgImage {
                         id: imageId
-                        width: 40
-                        height: 40
+                        height:40; width: 40
+                        color: sideBarId.selectedName === name ? "#ffffff" : "#e0e0e1"
                         source: sideBarId.selectedName === name ? iconSelected : iconUnselected
                         anchors.centerIn: parent
-                    }
-
-                    ColorOverlay {
-                        source: imageId
-                        anchors.fill: imageId
-                        color: sideBarId.selectedName === name ? "#ffffff" : "#e0e0e1"
-
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: 200
-                            }
-                        }
                     }
 
                     MouseArea {

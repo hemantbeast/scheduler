@@ -1,5 +1,8 @@
 #include <QGuiApplication>
+#include <QQmlContext>
 #include <QQmlApplicationEngine>
+
+#include "src/schedule/schedulemodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +15,9 @@ int main(int argc, char *argv[])
 
     // Tell the engine to look inside your source directory for modules
     engine.addImportPath(":/");
+
+    ScheduleModel scheduleModel;
+    engine.rootContext()->setContextProperty("scheduleModel", &scheduleModel);
 
     const QUrl url(QStringLiteral("qrc:/qmls/main.qml"));
 

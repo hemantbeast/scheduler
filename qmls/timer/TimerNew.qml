@@ -28,7 +28,7 @@ Item {
     RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 60
+        anchors.topMargin: 40
         spacing: 50
 
         Repeater {
@@ -39,7 +39,7 @@ Item {
                 scale: currentMode === index ? 1.1 : 1.0
 
                 font {
-                    pixelSize: 14
+                    pixelSize: 10
                     letterSpacing: 1.5
                     bold: true
                 }
@@ -64,15 +64,15 @@ Item {
     // Center dial
     Rectangle {
         id: dialContainer
-        height: 400; width: 400
+        height: 250; width: 250
         color: "transparent"
         anchors.centerIn: parent
 
         Rectangle {
             id: pulseRing
-            width: 380; height: 380
+            width: 237.5; height: 237.5
             anchors.centerIn: dialContainer
-            radius: 190
+            radius: 118.75
             color: "transparent"
             border.color: modeColors[currentMode]
             border.width: 2
@@ -96,10 +96,10 @@ Item {
         Repeater {
             model: 40 // Number of ticks
             delegate: Rectangle {
-                width: 2; height: 10
+                width: 1.25; height: 6.25
                 color: "#444"
-                x: 200 + 180 * Math.cos((index * (270/40) - 225) * Math.PI / 180) - width/2
-                y: 200 + 180 * Math.sin((index * (270/40) - 225) * Math.PI / 180) - height/2
+                x: 125 + 112.5 * Math.cos((index * (270/40) - 225) * Math.PI / 180) - width/2
+                y: 125 + 112.5 * Math.sin((index * (270/40) - 225) * Math.PI / 180) - height/2
                 rotation: index * (270/40) - 135
             }
         }
@@ -132,7 +132,7 @@ Item {
             layer.samples: 8
 
             ShapePath {
-                strokeWidth: 22; fillColor: "transparent"
+                strokeWidth: 13.75; fillColor: "transparent"
                 capStyle: ShapePath.RoundCap
                 strokeColor: modeColors[currentMode]
 
@@ -142,8 +142,8 @@ Item {
 
                 PathAngleArc {
                     id: heatArc
-                    centerX: 200; centerY: 200
-                    radiusX: 180; radiusY: 180
+                    centerX: 125; centerY: 125
+                    radiusX: 112.5; radiusY: 112.5
                     startAngle: -225
                     sweepAngle: 180 // Linked to timer progress
 
@@ -158,19 +158,19 @@ Item {
 
         // Inner Glow & Display
         Rectangle {
-            width: 300
-            height: 300
-            radius: 150
+            width: 187.5
+            height: 187.5
+            radius: 93.75
             color: "#1a1a1a"
             anchors.centerIn: parent
 
             border {
                 color: "#2a2a2a"
-                width: 2
+                width: 1.25
             }
 
             ColumnLayout {
-                spacing: 5
+                spacing: 3
                 anchors.centerIn: parent
 
                 Text {
@@ -178,8 +178,8 @@ Item {
                     color: "#666"
                     Layout.alignment: Qt.AlignHCenter
                     font {
-                        pixelSize: 14
-                        letterSpacing: 2
+                        pixelSize: 9
+                        letterSpacing: 1.25
                     }
                 }
 
@@ -188,7 +188,7 @@ Item {
                     text: "24:00"
                     color: "white"
                     font {
-                        pixelSize: 80
+                        pixelSize: 50
                         weight: Font.Light
                     }
                 }
@@ -198,25 +198,25 @@ Item {
                     color: modeColors[currentMode]
                     Layout.alignment: Qt.AlignHCenter
                     font {
-                        pixelSize: 16
+                        pixelSize: 10
                         weight: Font.Bold
                     }
                 }
 
                 Rectangle {
-                    width: 120; height: 1; color: "#333"
+                    width: 75; height: 1; color: "#333"
                     Layout.alignment: Qt.AlignHCenter
                 }
 
                 ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter
-                    spacing: 2
+                    spacing: 1
                     Text {
                         text: qsTr("NEXT UP")
                         color: "#555"
                         Layout.alignment: Qt.AlignHCenter
                         font {
-                            pixelSize: 10; bold: true
+                            pixelSize: 6; bold: true
                         }
                     }
                     Text {
@@ -224,7 +224,7 @@ Item {
                         color: "#AAA"
                         Layout.alignment: Qt.AlignHCenter
                         font {
-                            pixelSize: 14; italic: true
+                            pixelSize: 9; italic: true
                         }
                     }
                 }

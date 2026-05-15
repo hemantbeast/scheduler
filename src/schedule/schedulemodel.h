@@ -14,6 +14,7 @@ struct ScheduleItem {
     QString mode;
     QDateTime startTime;
     int timer;
+    bool isEnabled;
 };
 
 
@@ -25,7 +26,8 @@ class ScheduleModel : public QAbstractListModel
         NameRole = Qt::UserRole + 1,
         ModeRole,
         StartTimeRole,
-        TimerRole
+        TimerRole,
+        IsEnabledRole
     };
 
 public:
@@ -43,8 +45,10 @@ public:
 
     Q_INVOKABLE void removeItem(int index);
 
+    Q_INVOKABLE void setItemEnabled(int index, bool enable);
+
 private:
-    QList<ScheduleItem*> mSchedules;
+    QList<ScheduleItem> mSchedules;
 };
 
 #endif // SCHEDULEMODEL_H

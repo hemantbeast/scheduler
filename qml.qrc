@@ -7,5 +7,9 @@
         <file>qmls/schedule/Schedule.qml</file>
         <file>config/StyleConfig.qml</file>
         <file>config/qmldir</file>
+        <file>qmls/common/SvgImage.qml</file>
+        <file>qmls/schedule/AddSchedule.qml</file>
+        <file>qmls/common/NavigationHeader.qml</file>
+        <file>qmls/common/CustomComboBox.qml</file>
     </qresource>
 </RCC>

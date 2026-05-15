@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
 import "../../config" as Config
+import "../common" as Common
 
 Item {
     id: scheduleRoot
@@ -17,67 +18,37 @@ Item {
             radius: 30
             color: "transparent"
             Layout.alignment: Qt.AlignTop | Qt.AlignRight
+            Layout.rightMargin: 5
 
             layer.enabled: true
             layer.samples: 8
             opacity: addMouseArea.pressed ? 0.7 : 1.0
 
-            Image {
-                id: imgAdd
+            Common.SvgImage {
                 height: 40; width: 40
+                color: "#fff"
                 source: "../../images/add.svg"
                 anchors.centerIn: parent
-            }
+                scale: addMouseArea.pressed ? 0.97 : 1.0
 
-            ColorOverlay {
-                source: imgAdd
-                anchors.fill: imgAdd
-                color: "#fff"
+                Behavior on scale {
+                    NumberAnimation { duration: 50 }
+                }
             }
 
             MouseArea {
                 id: addMouseArea
                 anchors.fill: parent
-                onClicked: {
-
-                }
+                onClicked: stackView.push("AddSchedule.qml")
             }
         }
 
         ListView {
-            model: schedleItems
+            model: scheduleModel
             delegate: scheduleDelegate
             clip: true
             Layout.fillHeight: true
             Layout.fillWidth: true
-        }
-    }
-
-    ListModel {
-        id: schedleItems
-        ListElement {
-            name: "Living Room"
-            mode: "HEAT"
-            startTime: "06:00"
-            timer: "20:00"
-        }
-        ListElement {
-            name: "Bedroom"
-            mode: "COOL"
-            startTime: "12:00"
-            timer: "30:00"
-        }
-        ListElement {
-            name: "Garage"
-            mode: "DRY"
-            startTime: "08:00"
-            timer: "15:00"
-        }
-        ListElement {
-            name: "Kitchen"
-            mode: "COOL"
-            startTime: "18:00"
-            timer: "25:00"
         }
     }
 
@@ -115,31 +86,26 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                     color: "transparent"
 
-                    Image {
-                        id: imgIcon
-                        height: 22
-                        width: 22
+                    Common.SvgImage {
+                        height: 22; width: 22
+                        color: itemLayout.currentSettings.color
                         source: itemLayout.currentSettings.icon
                         anchors.centerIn: parent
-                    }
-
-                    ColorOverlay {
-                        source: imgIcon
-                        anchors.fill: imgIcon
-                        color: itemLayout.currentSettings.color
                     }
                 }
 
                 ColumnLayout {
+                    spacing: 6
                     Layout.fillWidth: true
-                    spacing: 4
+                    Layout.alignment: Qt.AlignVCenter
 
                     Text {
                         text: model.name
                         color: "white"
                         font {
-                            pixelSize: 16
-                            weight: Font.DemiBold
+                            pixelSize: 17
+                            weight: Font.Bold
+                            letterSpacing: 0.2
                         }
                     }
 
@@ -147,45 +113,59 @@ Item {
                         spacing: 15
 
                         // Start Time Group
-                        Column {
-                            Text {
-                                text: qsTr("START")
-                                color: "#555"
-                                font {
-                                    pixelSize: 9
-                                    bold: true
-                                }
+                        Row {
+                            spacing: 4
+
+                            Common.SvgImage {
+                                height: 15; width: 15
+                                color: "#777"
+                                source: "../../images/play.svg"
+                                anchors.verticalCenter: parent.verticalCenter
                             }
 
                             Text {
-                                text: model.startTime
-                                color: "#bbb"
-                                font.pixelSize: 14
+                                text: Qt.formatDateTime(model.startTime, "dd MMM yyyy, hh:mm a")
+                                color: "#e0e0e0"
+                                font {
+                                    pixelSize: 13
+                                    weight: Font.Medium
+                                }
                             }
                         }
 
-                        // Divider
+                        // Dot Divider
                         Rectangle {
-                            width: 1
-                            height: 15
-                            color: "#333"
+                            width: 4
+                            height: 4
+                            radius: 2
+                            color: "#555"
+                            Layout.alignment: Qt.AlignVCenter
                         }
 
                         // Duration Group
-                        Column {
-                            Text {
-                                text: "DURATION"
-                                color: "#555"
-                                font {
-                                    pixelSize: 9
-                                    bold: true
-                                }
+                        Row {
+                            spacing: 4
+
+                            Common.SvgImage {
+                                height: 15; width: 15
+                                color: "#777"
+                                source: "../../images/clock.svg"
+                                anchors.verticalCenter: parent.verticalCenter
                             }
 
                             Text {
-                                text: model.timer + " min"
-                                color: "#bbb"
-                                font.pixelSize: 14
+                                color: "#b3b3b3"
+                                font {
+                                    pixelSize: 13
+                                    weight: Font.Medium
+                                }
+                                text: {
+                                    let totalSecs = model.timer;
+                                    let mins = Math.floor(totalSecs / 60);
+                                    let secs = totalSecs % 60;
+
+                                     mins > 0 ? mins + "m " + secs + "s" : secs + "s";
+                                }
                             }
                         }
                     }
@@ -193,39 +173,63 @@ Item {
 
                 Switch {
                     scale: 0.7
-                    checked: true
+                    checked: model.isEnabled
                     Layout.alignment: Qt.AlignVCenter
-                    // OnClicked: model.enabled = checked
+                    onCheckedChanged: {
+                        scheduleModel.setItemEnabled(index, checked)
+                    }
                 }
 
-                Rectangle {
-                    //z: 20
-                    color: "transparent"
-                    Layout.preferredHeight: 32
-                    Layout.preferredWidth: 32
+                Row {
+                    spacing: 15
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     Layout.rightMargin: 5
-                    opacity: editMouseArea.pressed ? 0.7 : 1.0
 
-                    Image {
-                        id: imgEdit
-                        source: "../../images/edit.svg"
-                        sourceSize: Qt.size(25, 25)
-                        anchors.centerIn: parent
+                    Rectangle {
+                        id: rectEdit
+                        color: "transparent"
+                        height: 32; width: 32
+                        anchors.verticalCenter: parent.verticalCenter
+                        opacity: editMouseArea.pressed ? 0.7 : 1.0
+
+                        Common.SvgImage {
+                            id: imgEdit
+                            height: 22; width: 22
+                            color: "#fff"
+                            source: "../../images/edit.svg"
+                            anchors.centerIn: parent
+                        }
+
+                        MouseArea {
+                            id: editMouseArea
+                            anchors.fill: parent
+                            onClicked: {
+                                console.log("Edit clicked")
+                            }
+                        }
                     }
 
-                    ColorOverlay {
-                        source: imgEdit
-                        anchors.fill: imgEdit
-                        color: "#fff"
-                    }
+                    Rectangle {
+                        id: rectDelete
+                        color: "transparent"
+                        height: 32; width: 32
+                        anchors.verticalCenter: parent.verticalCenter
+                        opacity: delMouseArea.pressed ? 0.7 : 1.0
 
-                    MouseArea {
-                        id: editMouseArea
-                        //z: 20
-                        anchors.fill: parent
-                        onClicked: {
-                            console.log("Edit clicked")
+                        Common.SvgImage {
+                            id: imgDelete
+                            height: 25; width: 25
+                            color: "firebrick"
+                            source: "../../images/delete.svg"
+                            anchors.centerIn: parent
+                        }
+
+                        MouseArea {
+                            id: delMouseArea
+                            anchors.fill: parent
+                            onClicked: {
+                                console.log("Delete clicked")
+                            }
                         }
                     }
                 }

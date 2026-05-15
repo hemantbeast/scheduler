@@ -1,38 +1,54 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
 import "menu" as Menu
 
 Window {
-    width: 1280
-    height: 720
+    width: 800
+    height: 450
     visible: true
     title: qsTr("Timer & Scheduler")
     color: "#121212"
 
-    property string selectedMenu: "Timer"
-
-    Menu.MenuView {
-        id: sideBar
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        onSelected: {
-            selectedMenu = name
-        }
+    StackView {
+        id: stackView
+        initialItem: mainView
+        anchors.fill: parent
     }
 
-    Item {
-        anchors.left: sideBar.right
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+    Component {
+        id:mainView
 
-        Loader {
+        Item {
+            id: mainRoot
             anchors.fill: parent
-            source: {
-                if (selectedMenu === "Timer") return "timer/TimerNew.qml"
-                if (selectedMenu === "Schedule") return "schedule/Schedule.qml"
-                return ""
+
+            property string selectedMenu: "Timer"
+
+            Menu.MenuView {
+                id: sideBar
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                onSelected: {
+                    mainRoot.selectedMenu = name
+                }
+            }
+
+            Item {
+                anchors.left: sideBar.right
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
+                Loader {
+                    anchors.fill: parent
+                    source: {
+                        if (mainRoot.selectedMenu === "Timer") return "timer/TimerNew.qml"
+                        if (mainRoot.selectedMenu === "Schedule") return "schedule/Schedule.qml"
+                        return ""
+                    }
+                }
             }
         }
     }

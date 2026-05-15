@@ -9,5 +9,9 @@
         <file>images/heat.svg</file>
         <file>images/humidity.svg</file>
         <file>images/snowflake.svg</file>
+        <file>images/clock.svg</file>
+        <file>images/play.svg</file>
+        <file>images/delete.svg</file>
+        <file>images/back.svg</file>
     </qresource>
 </RCC>
