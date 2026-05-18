@@ -10,6 +10,13 @@ Dialog {
 
     signal timeSelected(real totalMs, int totalSeconds)
 
+    property int selectedTotalSecs: 0
+
+    Overlay.modal: Rectangle {
+        color: "#1a1a1a"
+        opacity: 0.85
+    }
+
     background: Rectangle {
         color: "#2c3e50"
         border.color: "#34495e"
@@ -18,8 +25,16 @@ Dialog {
     }
 
     onAboutToShow: {
-        pickerRepeater.itemAt(0).currentIdx = 5  // 5 Minutes
-        pickerRepeater.itemAt(1).currentIdx = 0  // 0 Seconds
+        if (selectedTotalSecs > 0) {
+            let minutes = Math.floor((selectedTotalSecs % 3600) / 60)
+            let seconds = selectedTotalSecs % 60
+
+            pickerRepeater.itemAt(0).currentIdx = minutes
+            pickerRepeater.itemAt(1).currentIdx = seconds
+        } else {
+            pickerRepeater.itemAt(0).currentIdx = 5  // 5 Minutes
+            pickerRepeater.itemAt(1).currentIdx = 0  // 0 Seconds
+        }
     }
 
     header: Rectangle {

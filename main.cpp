@@ -3,6 +3,7 @@
 #include <QQmlApplicationEngine>
 
 #include "src/schedule/schedulemodel.h"
+#include "utils/stringhelper.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,9 @@ int main(int argc, char *argv[])
 
     ScheduleModel scheduleModel;
     engine.rootContext()->setContextProperty("scheduleModel", &scheduleModel);
+
+    StringHelper strHelper;
+    engine.rootContext()-> setContextProperty("StringHelper", &strHelper);
 
     const QUrl url(QStringLiteral("qrc:/qmls/main.qml"));
 

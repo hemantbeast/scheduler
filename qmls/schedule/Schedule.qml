@@ -233,6 +233,7 @@ Item {
                         id: rectEdit
                         color: "transparent"
                         height: 32; width: 32
+                        enabled: model.isEnabled
                         anchors.verticalCenter: parent.verticalCenter
                         opacity: editMouseArea.pressed ? 0.7 : 1.0
 
@@ -253,7 +254,12 @@ Item {
                             id: editMouseArea
                             anchors.fill: parent
                             onClicked: {
-                                console.log("Edit clicked")
+                                stackView.push("AddSchedule.qml", {
+                                        "isEdit": true,
+                                        "index": index,
+                                        "schedule": model
+                                    }
+                                )
                             }
                         }
                     }
@@ -262,6 +268,7 @@ Item {
                         id: rectDelete
                         color: "transparent"
                         height: 32; width: 32
+                        enabled: model.isEnabled
                         anchors.verticalCenter: parent.verticalCenter
                         opacity: delMouseArea.pressed ? 0.7 : 1.0
 

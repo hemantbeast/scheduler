@@ -6,7 +6,10 @@ import "../common"
 import "../toast"
 
 Item {
+    property int index: 0
+    property bool isEdit: false
 
+    property var schedule
     property var selectedDateTime
     property var selectedTimer
 
@@ -16,7 +19,7 @@ Item {
 
         NavigationHeader {
             id: navigation
-            title: "Add Schedule"
+            title: isEdit ? "Edit Schedule" : "Add Schedule"
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
         }
@@ -53,6 +56,7 @@ Item {
 
                         TextField {
                             id: nameField
+                            text: isEdit ? schedule.name : ""
                             placeholderText: qsTr("Enter name")
                             placeholderTextColor: "#999"
                             color: "white"
@@ -89,6 +93,13 @@ Item {
                             Layout.preferredHeight: 40
                             Layout.fillWidth: true
                             model: ["Heat", "Cool", "Dry"]
+
+                            Component.onCompleted: {
+                                if (isEdit) {
+                                    let mode = StringHelper.toTitleCase(schedule.mode)
+                                    currentIndex = indexOfValue(mode)
+                                }
+                            }
                         }
                     }
                 }
@@ -126,6 +137,13 @@ Item {
                                 border {
                                     width: 1
                                     color: dateField.focus ? "white" : "#a1a1a1"
+                                }
+                            }
+
+                            Component.onCompleted: {
+                                if (isEdit) {
+                                    selectedDateTime = schedule.startTime
+                                    text = Qt.formatDateTime(schedule.startTime, "dd MMM yyyy, hh:mm ap")
                                 }
                             }
 
@@ -168,6 +186,12 @@ Item {
                                 }
                             }
 
+                            Component.onCompleted: {
+                                if (isEdit) {
+                                    text = setTimer(schedule.timer)
+                                }
+                            }
+
                             MouseArea {
                                 anchors.fill: parent
                                 onClicked: timerDialog.open()
@@ -191,40 +215,10 @@ Item {
                 Layout.preferredHeight: 40
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                text: "Save"
+                text: isEdit ? "Update" : "Save"
                 palette.buttonText: "white"
 
-                onClicked: {
-                    const options = {
-                        type: "error",
-                        position: Qt.TopEdge,
-                        theme: "Color"
-                    };
-
-                    if (nameField.text === "") {
-                        toastManager.createMessage("Please enter name", options);
-                        return;
-                    }
-
-                    if (dateField.text === "") {
-                        toastManager.createMessage("Please select date and time", options);
-                        return;
-                    }
-
-                    if (timerField.text === "") {
-                        toastManager.createMessage("Please select timer", options);
-                        return;
-                    }
-
-                    scheduleModel.addItem(
-                                nameField.text,
-                                modeField.currentText.toUpperCase(),
-                                selectedDateTime,
-                                selectedTimer,
-                                true
-                                );
-                    stackView.pop();
-                }
+                onClicked: onAddEditSchedule()
 
                 font {
                     pixelSize: 16
@@ -276,6 +270,7 @@ Item {
 
     DateTimeDialog {
         id: dateTimeDialog
+        selectedDate: selectedDateTime
         onDateTimeSelected: {
             selectedDateTime = dateTime
             dateField.text = Qt.formatDateTime(dateTime, "dd MMM yyyy, hh:mm ap")
@@ -284,16 +279,65 @@ Item {
 
     TimerDialog {
         id: timerDialog
+        selectedTotalSecs: selectedTimer ?? 0
         onTimeSelected: {
-            selectedTimer = totalSeconds
-
-            let minutes = Math.floor((totalSeconds % 3600) / 60)
-            let seconds = totalSeconds % 60
-
-            let formattedMinutes = String(minutes).padStart(2, '0')
-            let formattedSeconds = String(seconds).padStart(2, '0')
-
-            timerField.text = `${minutes}:${seconds}`
+            timerField.text = setTimer(totalSeconds)
         }
+    }
+
+    // Set timer value
+    function setTimer(totalSeconds) {
+        selectedTimer = totalSeconds
+
+        let minutes = Math.floor((totalSeconds % 3600) / 60)
+        let seconds = totalSeconds % 60
+
+        let formattedMinutes = String(minutes).padStart(2, '0')
+        let formattedSeconds = String(seconds).padStart(2, '0')
+
+        return `${minutes}:${seconds}`
+    }
+
+    // On add/edit the schedule
+    function onAddEditSchedule() {
+        const options = {
+            type: "error",
+            position: Qt.TopEdge,
+            theme: "Color"
+        };
+
+        if (nameField.text === "") {
+            toastManager.createMessage("Please enter name", options);
+            return;
+        }
+
+        if (dateField.text === "") {
+            toastManager.createMessage("Please select date and time", options);
+            return;
+        }
+
+        if (timerField.text === "") {
+            toastManager.createMessage("Please select timer", options);
+            return;
+        }
+
+        if (isEdit) {
+            scheduleModel.editItem(
+                index,
+                nameField.text,
+                modeField.currentText.toUpperCase(),
+                selectedDateTime,
+                selectedTimer
+            );
+        } else {
+            scheduleModel.addItem(
+                nameField.text,
+                modeField.currentText.toUpperCase(),
+                selectedDateTime,
+                selectedTimer
+            );
+        }
+
+        stackView.pop();
     }
 }

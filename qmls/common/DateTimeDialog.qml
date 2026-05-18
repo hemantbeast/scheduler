@@ -7,10 +7,17 @@ Dialog {
     // Base year used to offset calculations
     readonly property int baseYear: 2026
 
+    property var selectedDate
+
     anchors.centerIn: parent
     modal: true
     width: 480
     height: 320
+
+    Overlay.modal: Rectangle {
+        color: "#1a1a1a"
+        opacity: 0.85
+    }
 
     background: Rectangle {
         color: "#2c3e50"
@@ -20,7 +27,7 @@ Dialog {
     }
 
     onAboutToShow: {
-        let now = new Date()
+        let now = selectedDate ?? new Date()
 
         // Calculate current indexes based on the offset definitions
         let yearIndex   = now.getFullYear() - baseYear

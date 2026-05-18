@@ -6,7 +6,8 @@ QT += quick quickcontrols2 svg
 
 SOURCES += \
         main.cpp \
-        src/schedule/schedulemodel.cpp
+        src/schedule/schedulemodel.cpp \
+        utils/stringhelper.cpp
 
 RESOURCES += qml.qrc \
     resource.qrc
@@ -23,4 +24,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    src/schedule/schedulemodel.h
+    src/schedule/schedulemodel.h \
+    utils/stringhelper.h
