@@ -5,9 +5,22 @@ import QtQuick.Shapes 1.15
 import QtGraphicalEffects 1.15
 
 Item {
-    property int currentMode: 0
+    id: timerScreen
+
     property var modeColors: ["#FF5F00", "#00B4FF", "#00FFC2"]
     property var modeNames: ["HEAT", "COOL", "DRY"]
+
+    property real progressPercentage: timerManager.secondsRemaining / timerManager.totalDuration
+    property real computedSweepAngle: progressPercentage * 270
+
+    function formatTime(totalSeconds) {
+        if (totalSeconds <= 0) return "00:00"
+
+        let minutes = Math.floor(totalSeconds / 60)
+        let seconds = totalSeconds % 60
+
+        return (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+    }
 
     // Rectangle {
     //     id: bgGlow
@@ -32,11 +45,11 @@ Item {
         spacing: 50
 
         Repeater {
-            model: modeNames
+            model: timerScreen.modeNames
             Text {
                 text: modelData
-                color: currentMode === index ? modeColors[index] : "#555555"
-                scale: currentMode === index ? 1.1 : 1.0
+                color: timerManager.currentMode === index ? timerScreen.modeColors[index] : "#555555"
+                scale: timerManager.currentMode === index ? 1.1 : 1.0
 
                 font {
                     pixelSize: 10
@@ -50,12 +63,6 @@ Item {
 
                 Behavior on scale {
                     NumberAnimation { duration: 200 }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: currentMode = index
                 }
             }
         }
@@ -74,20 +81,20 @@ Item {
             anchors.centerIn: dialContainer
             radius: 118.75
             color: "transparent"
-            border.color: modeColors[currentMode]
+            border.color: timerScreen.modeColors[timerManager.currentMode]
             border.width: 2
             opacity: 0.2
 
             SequentialAnimation on scale {
                 loops: Animation.Infinite
-                running: true
+                running: timerManager.secondsRemaining > 0
                 NumberAnimation { from: 1.0; to: 1.08; duration: 2000; easing.type: Easing.SineInOut }
                 NumberAnimation { from: 1.08; to: 1.0; duration: 2000; easing.type: Easing.SineInOut }
             }
 
             SequentialAnimation on opacity {
                 loops: Animation.Infinite
-                running: true
+                running: timerManager.secondsRemaining > 0
                 NumberAnimation { from: 0.1; to: 0.3; duration: 2000; easing.type: Easing.SineInOut }
                 NumberAnimation { from: 0.3; to: 0.1; duration: 2000; easing.type: Easing.SineInOut }
             }
@@ -134,7 +141,7 @@ Item {
             ShapePath {
                 strokeWidth: 13.75; fillColor: "transparent"
                 capStyle: ShapePath.RoundCap
-                strokeColor: modeColors[currentMode]
+                strokeColor: timerScreen.modeColors[timerManager.currentMode]
 
                 Behavior on strokeColor {
                     ColorAnimation { duration: 400 }
@@ -145,12 +152,10 @@ Item {
                     centerX: 125; centerY: 125
                     radiusX: 112.5; radiusY: 112.5
                     startAngle: -225
-                    sweepAngle: 180 // Linked to timer progress
+                    sweepAngle: timerScreen.computedSweepAngle // Linked to timer progress
 
                     Behavior on sweepAngle {
-                        NumberAnimation {
-                            duration: 600; easing.type: Easing.OutCubic
-                        }
+                        NumberAnimation { duration: 300 }
                     }
                 }
             }
@@ -174,7 +179,7 @@ Item {
                 anchors.centerIn: parent
 
                 Text {
-                    text: qsTr("TIME LEFT")
+                    text: timerManager.secondsRemaining > 0 ? qsTr("TIME LEFT") : qsTr("SYSTEM IDLE")
                     color: "#666"
                     Layout.alignment: Qt.AlignHCenter
                     font {
@@ -185,7 +190,7 @@ Item {
 
                 Text {
                     id: timeDisplay
-                    text: "24:00"
+                    text: timerScreen.formatTime(timerManager.secondsRemaining)
                     color: "white"
                     font {
                         pixelSize: 50
@@ -194,8 +199,8 @@ Item {
                 }
 
                 Text {
-                    text: qsTr("MINUTES")
-                    color: modeColors[currentMode]
+                    text: timerManager.secondsRemaining <= 0 ? qsTr("") : timerManager.secondsRemaining < 60 ? qsTr("SECONDS") : qsTr("MINUTES")
+                    color: timerScreen.modeColors[timerManager.currentMode]
                     Layout.alignment: Qt.AlignHCenter
                     font {
                         pixelSize: 10
@@ -220,7 +225,7 @@ Item {
                         }
                     }
                     Text {
-                        text: "Project Review"
+                        text: timerManager.nextScheduleName
                         color: "#AAA"
                         Layout.alignment: Qt.AlignHCenter
                         font {
@@ -231,9 +236,9 @@ Item {
             }
         }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: heatArc.sweepAngle = (heatArc.sweepAngle + 45) % 271
-        }
+        // MouseArea {
+        //     anchors.fill: parent
+        //     onClicked: heatArc.sweepAngle = (heatArc.sweepAngle + 45) % 271
+        // }
     }
 }

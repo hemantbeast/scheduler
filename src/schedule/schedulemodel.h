@@ -47,6 +47,8 @@ public:
 
     Q_INVOKABLE void setItemEnabled(int index, bool enable);
 
+    const QList<ScheduleItem>& getSchedulesList();
+
 private:
     QList<ScheduleItem> mSchedules;
 };

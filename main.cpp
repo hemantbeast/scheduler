@@ -3,6 +3,7 @@
 #include <QQmlApplicationEngine>
 
 #include "src/schedule/schedulemodel.h"
+#include "src/timer/timermanager.h"
 #include "utils/stringhelper.h"
 
 int main(int argc, char *argv[])
@@ -17,8 +18,11 @@ int main(int argc, char *argv[])
     // Tell the engine to look inside your source directory for modules
     engine.addImportPath(":/");
 
-    ScheduleModel scheduleModel;
-    engine.rootContext()->setContextProperty("scheduleModel", &scheduleModel);
+    ScheduleModel *scheduleModel = new ScheduleModel(&app);
+    TimerManager *timerManager = new TimerManager(scheduleModel, &app);
+
+    engine.rootContext()->setContextProperty("scheduleModel", scheduleModel);
+    engine.rootContext()->setContextProperty("timerManager", timerManager);
 
     StringHelper strHelper;
     engine.rootContext()-> setContextProperty("StringHelper", &strHelper);

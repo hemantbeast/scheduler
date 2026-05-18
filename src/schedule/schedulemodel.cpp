@@ -108,3 +108,8 @@ void ScheduleModel::setItemEnabled(int index, bool enable)
 
     emit dataChanged(modelIndex, modelIndex, {IsEnabledRole});
 }
+
+const QList<ScheduleItem> &ScheduleModel::getSchedulesList()
+{
+    return mSchedules;
+}
