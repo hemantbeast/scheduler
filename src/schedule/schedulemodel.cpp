@@ -3,22 +3,6 @@
 ScheduleModel::ScheduleModel(QObject *parent)
     : QAbstractListModel{parent}
 {
-    QDateTime time1 = QDateTime::currentDateTime();
-    time1.setTime(QTime::fromString("06:00", "HH:mm"));
-
-    QDateTime time2 = QDateTime::currentDateTime();
-    time2.setTime(QTime::fromString("12:00", "HH:mm"));
-
-    QDateTime time3 = QDateTime::currentDateTime();
-    time3.setTime(QTime::fromString("08:00", "HH:mm"));
-
-    QDateTime time4 = QDateTime::currentDateTime();
-    time4.setTime(QTime::fromString("18:00", "HH:mm"));
-
-    mSchedules.append({"Living Room", "HEAT", time1, 1440, true});
-    mSchedules.append({"Bedroom", "COOL", time2, 1800, true});
-    mSchedules.append({"Garage", "DRY", time3, 900, true});
-    mSchedules.append({"Kitchen", "COOL", time4, 1800, false});
 }
 
 int ScheduleModel::rowCount(const QModelIndex &parent) const

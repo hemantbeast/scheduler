@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Shapes 1.15
 import QtGraphicalEffects 1.15
 import "../../config"
 import "../common"
@@ -8,84 +9,82 @@ import "../common"
 Item {
     id: scheduleRoot
 
+    // Empty schedule list layout
     ColumnLayout {
+        id: emptySchedules
+        anchors.centerIn: parent
+        spacing: 8
+        width: parent.width * 0.8
+        visible: scheduleModel.rowCount() === 0
+
+        Shape {
+            Layout.alignment: Qt.AlignHCenter
+            width: 80; height: 80
+            layer.enabled: true
+            layer.samples: 8
+
+            // Outer Dashed Ring
+            ShapePath {
+                strokeColor: "#333333"
+                strokeWidth: 2
+                fillColor: "transparent"
+                strokeStyle: ShapePath.DashLine
+                dashPattern: [4, 4]
+                PathAngleArc { centerX: 40; centerY: 40; radiusX: 35; radiusY: 35; startAngle: 0; sweepAngle: 360 }
+            }
+
+            // Inner solid hands icon representation
+            ShapePath {
+                strokeColor: "#444444"
+                strokeWidth: 3
+                capStyle: ShapePath.RoundCap
+                fillColor: "transparent"
+                startX: 40; startY: 20
+                PathLine { x: 40; y: 40 }
+                PathLine { x: 55; y: 40 }
+            }
+        }
+
+        // Primary Label Text
+        Text {
+            text: qsTr("No Schedules Found")
+            color: "#eeeeee"
+            Layout.topMargin: 8
+            Layout.alignment: Qt.AlignHCenter
+            font { pixelSize: 18; weight: Font.Medium }
+        }
+
+        // Helper Sub-Text Instruction
+        Text {
+            text: qsTr("Tap the button below to add your first active task configuration window.")
+            color: "#666666"
+            Layout.alignment: Qt.AlignHCenter
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            font { pixelSize: 12; weight: Font.Normal }
+        }
+
+        NewScheduleButton {
+            Layout.topMargin: 10
+            Layout.preferredHeight: 40
+            Layout.preferredWidth: 150
+            Layout.alignment: Qt.AlignHCenter
+        }
+    }
+
+    // Schedule list layout
+    ColumnLayout {
+        id: activeSchedules
         spacing: 0
         anchors.fill: parent
+        visible: scheduleModel.rowCount() > 0
 
-        Button {
-            id: newScheduleBtn
+        NewScheduleButton {
             Layout.preferredHeight: 40
             Layout.preferredWidth: 150
             Layout.margins: 15
             Layout.alignment: Qt.AlignTop | Qt.AlignRight
-
-            onClicked: stackView.push("AddSchedule.qml")
-
-            background: Rectangle {
-                color: "crimson"
-                radius: 5
-                anchors.fill: parent
-                opacity: newScheduleBtn.pressed ? 0.7 : 1.0
-                scale: newScheduleBtn.pressed ? 0.97 : 1.0
-
-                Behavior on scale {
-                    NumberAnimation { duration: 50 }
-                }
-            }
-
-            contentItem: Item {
-                Row {
-                    spacing: 5
-                    anchors.centerIn: parent
-
-                    SvgImage {
-                        height: 17; width: 17
-                        color: "white"
-                        source: "../../images/add.svg"
-                    }
-
-                    Text {
-                        text: qsTr("New Schedule")
-                        color: "white"
-                        font {
-                            pixelSize: 15
-                            weight: Font.Medium
-                        }
-                    }
-                }
-            }
         }
-
-        // Rectangle {
-        //     id: addBtn
-        //     height: 60; width: 60
-        //     radius: 30
-        //     color: "transparent"
-        //     Layout.alignment: Qt.AlignTop | Qt.AlignRight
-        //     Layout.rightMargin: 5
-
-        //     layer.enabled: true
-        //     layer.samples: 8
-        //     opacity: addMouseArea.pressed ? 0.7 : 1.0
-
-        //     SvgImage {
-        //         height: 40; width: 40
-        //         color: "#fff"
-        //         source: "../../images/add.svg"
-        //         anchors.centerIn: parent
-        //         scale: addMouseArea.pressed ? 0.97 : 1.0
-
-        //         Behavior on scale {
-        //             NumberAnimation { duration: 50 }
-        //         }
-        //     }
-
-        //     MouseArea {
-        //         id: addMouseArea
-        //         anchors.fill: parent
-        //         onClicked: stackView.push("AddSchedule.qml")
-        //     }
-        // }
 
         ListView {
             model: scheduleModel
@@ -96,6 +95,7 @@ Item {
         }
     }
 
+    // List item component
     Component {
         id: scheduleDelegate
         Rectangle {
@@ -255,11 +255,11 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 stackView.push("AddSchedule.qml", {
-                                        "isEdit": true,
-                                        "index": index,
-                                        "schedule": model
-                                    }
-                                )
+                                                   "isEdit": true,
+                                                   "index": index,
+                                                   "schedule": model
+                                               }
+                                               )
                             }
                         }
                     }
