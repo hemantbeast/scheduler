@@ -15,7 +15,7 @@ Item {
         anchors.centerIn: parent
         spacing: 8
         width: parent.width * 0.8
-        visible: scheduleModel.rowCount() === 0
+        visible: scheduleList.count === 0
 
         Shape {
             Layout.alignment: Qt.AlignHCenter
@@ -77,7 +77,7 @@ Item {
         id: activeSchedules
         spacing: 0
         anchors.fill: parent
-        visible: scheduleModel.rowCount() > 0
+        visible: scheduleList.count > 0
 
         NewScheduleButton {
             Layout.preferredHeight: 40
@@ -87,6 +87,7 @@ Item {
         }
 
         ListView {
+            id: scheduleList
             model: scheduleModel
             delegate: scheduleDelegate
             clip: true

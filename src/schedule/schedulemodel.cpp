@@ -8,7 +8,7 @@ ScheduleModel::ScheduleModel(QObject *parent)
 int ScheduleModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return mSchedules.size();
+    return mSchedules.count();
 }
 
 QVariant ScheduleModel::data(const QModelIndex &index, int role) const
@@ -56,7 +56,7 @@ void ScheduleModel::addItem(const QString &name, const QString &mode, const QDat
 
 void ScheduleModel::editItem(int index, const QString &name, const QString &mode, const QDateTime &startTime, const int &timer)
 {
-    if (index < 0 || index >= mSchedules.size()) {
+    if (index < 0 || index >= mSchedules.count()) {
         return;
     }
 
@@ -97,3 +97,4 @@ const QList<ScheduleItem> &ScheduleModel::getSchedulesList()
 {
     return mSchedules;
 }
+

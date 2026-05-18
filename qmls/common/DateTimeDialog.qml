@@ -12,7 +12,7 @@ Dialog {
     anchors.centerIn: parent
     modal: true
     width: 480
-    height: 320
+    height: 350
 
     Overlay.modal: Rectangle {
         color: "#1a1a1a"
@@ -94,7 +94,7 @@ Dialog {
 
                 // Unified configuration schema for data generation
                 model: [
-                    { title: "Year",  size: 5,  offset: baseYear },
+                    { title: "Year",  size: 15,  offset: baseYear },
                     { title: "Month", size: 12, offset: 1    },
                     { title: "Day",   size: 31, offset: 1    },
                     { title: "Hour",  size: 24, offset: 0    },
