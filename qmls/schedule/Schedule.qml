@@ -101,7 +101,7 @@ Item {
         id: scheduleDelegate
         Rectangle {
             height: 80
-            width: parent.width
+            width: ListView.view ? ListView.view.width : 0
             color: mouseArea.containsMouse ? "#252525" : "#1a1a1a"
             border.color: "#333"
 
@@ -146,7 +146,7 @@ Item {
 
                     Text {
                         text: model.name
-                        color: "white"
+                        color: model.isEnabled ? "white" : "#d9d9d9"
                         font {
                             pixelSize: 17
                             weight: Font.Bold
@@ -163,14 +163,14 @@ Item {
 
                             SvgImage {
                                 height: 15; width: 15
-                                color: "#777"
+                                color: model.isEnabled ? "#777" : "#555"
                                 source: "../../images/play.svg"
                                 anchors.verticalCenter: parent.verticalCenter
                             }
 
                             Text {
                                 text: Qt.formatDateTime(model.startTime, "dd MMM yyyy, hh:mm a")
-                                color: "#e0e0e0"
+                                color: model.isEnabled ? "#e0e0e0" : "#d1d1d1"
                                 font {
                                     pixelSize: 13
                                     weight: Font.Medium
@@ -193,13 +193,13 @@ Item {
 
                             SvgImage {
                                 height: 15; width: 15
-                                color: "#777"
+                                color: model.isEnabled ? "#777" : "#555"
                                 source: "../../images/clock.svg"
                                 anchors.verticalCenter: parent.verticalCenter
                             }
 
                             Text {
-                                color: "#b3b3b3"
+                                color: model.isEnabled ? "#e0e0e0" : "#d1d1d1"
                                 font {
                                     pixelSize: 13
                                     weight: Font.Medium
@@ -217,11 +217,46 @@ Item {
                 }
 
                 Switch {
-                    scale: 0.7
+                    id: switchBtn
                     checked: model.isEnabled
                     Layout.alignment: Qt.AlignVCenter
                     onCheckedChanged: {
                         scheduleModel.setItemEnabled(index, checked)
+                    }
+
+                    implicitWidth: 40
+                    implicitHeight: 20
+
+                    indicator: Item {
+                        width: parent.width
+                        height: parent.height
+
+                        Rectangle {
+                            id: trackRect
+                            width: parent.width
+                            height: 12
+                            radius: height / 2
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: switchBtn.checked ? "#804CAF50" : "#424242"
+
+                            Behavior on color {
+                                ColorAnimation { duration: 150 }
+                            }
+                        }
+
+                        Rectangle {
+                            id: thumbCircle
+                            width: parent.height
+                            height: parent.height
+                            radius: width / 2
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: switchBtn.checked ? "#4CAF50" : "#FFFFFF"
+                            x: switchBtn.checked ? (parent.width - width) : 0
+
+                            Behavior on x {
+                                NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
+                            }
+                        }
                     }
                 }
 
@@ -234,7 +269,6 @@ Item {
                         id: rectEdit
                         color: "transparent"
                         height: 32; width: 32
-                        enabled: model.isEnabled
                         anchors.verticalCenter: parent.verticalCenter
                         opacity: editMouseArea.pressed ? 0.7 : 1.0
 
@@ -256,11 +290,11 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 stackView.push("AddSchedule.qml", {
-                                                   "isEdit": true,
-                                                   "index": index,
-                                                   "schedule": model
-                                               }
-                                               )
+                                       "isEdit": true,
+                                       "index": index,
+                                       "schedule": model
+                                   }
+                                )
                             }
                         }
                     }
@@ -269,7 +303,6 @@ Item {
                         id: rectDelete
                         color: "transparent"
                         height: 32; width: 32
-                        enabled: model.isEnabled
                         anchors.verticalCenter: parent.verticalCenter
                         opacity: delMouseArea.pressed ? 0.7 : 1.0
 
