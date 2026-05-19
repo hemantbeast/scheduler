@@ -9,7 +9,10 @@
 #include <QList>
 #include <QVariant>
 
+#include "utils/databasemanager.h"
+
 struct ScheduleItem {
+    int id;
     QString name;
     QString mode;
     QDateTime startTime;
@@ -23,6 +26,7 @@ class ScheduleModel : public QAbstractListModel
     Q_OBJECT
 
     enum ScheduleRole {
+        IdRole,
         NameRole = Qt::UserRole + 1,
         ModeRole,
         StartTimeRole,
@@ -31,13 +35,15 @@ class ScheduleModel : public QAbstractListModel
     };
 
 public:
-    explicit ScheduleModel(QObject *parent = nullptr);
+    explicit ScheduleModel(DatabaseManager *db, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const;
 
     QVariant data(const QModelIndex &index, int role) const;
 
     QHash<int, QByteArray> roleNames() const;
+
+    Q_INVOKABLE void loadAllItems();
 
     Q_INVOKABLE void addItem(const QString &name, const QString &mode, const QDateTime &startTime, const int &timer);
 
@@ -50,6 +56,7 @@ public:
     const QList<ScheduleItem>& getSchedulesList();
 
 private:
+    DatabaseManager *dbManager;
     QList<ScheduleItem> mSchedules;
 };
 

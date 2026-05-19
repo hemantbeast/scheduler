@@ -1,4 +1,4 @@
-QT += quick quickcontrols2 svg
+QT += quick quickcontrols2 svg sql
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -8,6 +8,7 @@ SOURCES += \
         main.cpp \
         src/schedule/schedulemodel.cpp \
         src/timer/timermanager.cpp \
+        utils/databasemanager.cpp \
         utils/stringhelper.cpp
 
 RESOURCES += qml.qrc \
@@ -27,4 +28,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     src/schedule/schedulemodel.h \
     src/timer/timermanager.h \
+    utils/databasemanager.h \
     utils/stringhelper.h

@@ -18,9 +18,15 @@ int main(int argc, char *argv[])
     // Tell the engine to look inside your source directory for modules
     engine.addImportPath(":/");
 
-    ScheduleModel *scheduleModel = new ScheduleModel(&app);
+    // Register database manager
+    DatabaseManager *dbGlobal = new DatabaseManager("scheduler.db", &app);
+    engine.rootContext()->setContextProperty("DBManager", dbGlobal);
+
+    // Initialize Schedule model and Timer manager
+    ScheduleModel *scheduleModel = new ScheduleModel(dbGlobal, &app);
     TimerManager *timerManager = new TimerManager(scheduleModel, &app);
 
+    // Register schedule model and timer manager
     engine.rootContext()->setContextProperty("scheduleModel", scheduleModel);
     engine.rootContext()->setContextProperty("timerManager", timerManager);
 
