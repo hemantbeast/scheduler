@@ -295,7 +295,7 @@ Item {
         let formattedMinutes = String(minutes).padStart(2, '0')
         let formattedSeconds = String(seconds).padStart(2, '0')
 
-        return `${minutes}:${seconds}`
+        return `${formattedMinutes}:${formattedSeconds}`
     }
 
     // On add/edit the schedule

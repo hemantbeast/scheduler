@@ -261,7 +261,7 @@ Item {
                 }
 
                 Row {
-                    spacing: 15
+                    spacing: 20
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     Layout.rightMargin: 5
 
