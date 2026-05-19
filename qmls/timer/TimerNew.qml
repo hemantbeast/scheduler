@@ -88,15 +88,15 @@ Item {
             SequentialAnimation on scale {
                 loops: Animation.Infinite
                 running: timerManager.secondsRemaining > 0
-                NumberAnimation { from: 1.0; to: 1.08; duration: 2000; easing.type: Easing.SineInOut }
-                NumberAnimation { from: 1.08; to: 1.0; duration: 2000; easing.type: Easing.SineInOut }
+                NumberAnimation { from: 1.0; to: 1.08; duration: 2000; easing.type: Easing.InOutSine }
+                NumberAnimation { from: 1.08; to: 1.0; duration: 2000; easing.type: Easing.InOutSine }
             }
 
             SequentialAnimation on opacity {
                 loops: Animation.Infinite
                 running: timerManager.secondsRemaining > 0
-                NumberAnimation { from: 0.1; to: 0.3; duration: 2000; easing.type: Easing.SineInOut }
-                NumberAnimation { from: 0.3; to: 0.1; duration: 2000; easing.type: Easing.SineInOut }
+                NumberAnimation { from: 0.1; to: 0.3; duration: 2000; easing.type: Easing.InOutSine }
+                NumberAnimation { from: 0.3; to: 0.1; duration: 2000; easing.type: Easing.InOutSine }
             }
         }
 

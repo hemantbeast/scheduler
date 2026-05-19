@@ -26,7 +26,6 @@ Window {
 
         Item {
             id: mainRoot
-            anchors.fill: parent
 
             property string selectedMenu: "Timer"
 
