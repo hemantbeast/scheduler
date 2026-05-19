@@ -38,6 +38,10 @@ Item {
                 spacing: 20
                 width: scrollView.availableWidth
 
+                property int currentMode: 0
+                property var modeColors: ["#FF5F00", "#00B4FF", "#00FFC2"]
+                property var modeNames: ["Heat", "Cool", "Dry"]
+
                 RowLayout {
                     spacing: 15
                     width: parent.width
@@ -88,16 +92,79 @@ Item {
                             font.pointSize: 8
                         }
 
-                        CustomComboBox {
-                            id: modeField
-                            Layout.preferredHeight: 40
+                        Rectangle {
+                            id: segmentedControl
                             Layout.fillWidth: true
-                            model: ["Heat", "Cool", "Dry"]
+                            Layout.preferredHeight: 40
+                            Layout.alignment: Qt.AlignHCenter
+                            radius: 5
+                            color: "#161616"
+                            border.color: "#A1A1A1"
+                            border.width: 1
+
+                            Rectangle {
+                                id: activeIndicator
+                                width: segmentedControl.width / layout.modeNames.length - 8
+                                height: segmentedControl.height - 8
+                                radius: 5
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: layout.modeColors[layout.currentMode]
+                                x: 4 + (layout.currentMode * (segmentedControl.width / layout.modeNames.length))
+
+                                Behavior on x {
+                                    NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
+                                }
+
+                                Behavior on color {
+                                    ColorAnimation { duration: 300 }
+                                }
+                            }
+
+                            Row {
+                                anchors.fill: parent
+
+                                Repeater {
+                                    model: layout.modeNames
+
+                                    Item {
+                                        width: segmentedControl.width / layout.modeNames.length
+                                        height: segmentedControl.height
+
+                                        Text {
+                                            text: modelData
+                                            anchors.centerIn: parent
+                                            color: layout.currentMode === index ? "white" : "#8A8A8A"
+                                            scale: layout.currentMode === index ? 1.05 : 1.0
+                                            font {
+                                                pixelSize: 11
+                                                letterSpacing: 1.5
+                                                bold: true
+                                            }
+
+                                            Behavior on color {
+                                                ColorAnimation { duration: 250 }
+                                            }
+
+                                            Behavior on scale {
+                                                NumberAnimation { duration: 200 }
+                                            }
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: {
+                                                layout.currentMode = index
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                             Component.onCompleted: {
                                 if (isEdit) {
                                     let mode = StringHelper.toTitleCase(schedule.mode)
-                                    currentIndex = indexOfValue(mode)
+                                    layout.currentMode = layout.modeNames.indexOf(mode)
                                 }
                             }
                         }
@@ -325,14 +392,14 @@ Item {
             scheduleModel.editItem(
                 index,
                 nameField.text,
-                modeField.currentText.toUpperCase(),
+                layout.modeNames[layout.currentMode].toUpperCase(),
                 selectedDateTime,
                 selectedTimer
             );
         } else {
             scheduleModel.addItem(
                 nameField.text,
-                modeField.currentText.toUpperCase(),
+                layout.modeNames[layout.currentMode].toUpperCase(),
                 selectedDateTime,
                 selectedTimer
             );
