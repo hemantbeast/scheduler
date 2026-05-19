@@ -8,7 +8,9 @@ ScheduleModel::ScheduleModel(DatabaseManager *db, QObject *parent)
                      "mode TEXT, "
                      "startTime TEXT, "
                      "timer INTEGER, "
-                     "isEnabled INTEGER CHECK (isEnabled IN (0, 1))";
+                     "isEnabled INTEGER CHECK (isEnabled IN (0, 1)), "
+                     "repeatType INTEGER, "
+                     "repeatDays TEXT";
 
     bool success = dbManager->createTable("schedules", schema);
 
@@ -48,6 +50,10 @@ QVariant ScheduleModel::data(const QModelIndex &index, int role) const
         return schedule.timer;
     case IsEnabledRole:
         return schedule.isEnabled;
+    case RepeatTypeRole:
+        return schedule.repeatType;
+    case RepeatDaysRole:
+        return schedule.repeatDays;
     default:
         return QVariant();
     }
@@ -63,6 +69,8 @@ QHash<int, QByteArray> ScheduleModel::roleNames() const
     roles[StartTimeRole] = "startTime";
     roles[TimerRole] = "timer";
     roles[IsEnabledRole] = "isEnabled";
+    roles[RepeatTypeRole] = "repeatType";
+    roles[RepeatDaysRole] = "repeatDays";
     return roles;
 }
 
@@ -79,6 +87,8 @@ void ScheduleModel::loadAllItems()
         item.name = row["name"].toString();
         item.mode = row["mode"].toString();
         item.timer = row["timer"].toInt();
+        item.repeatType = row["repeatType"].toInt();
+        item.repeatDays = row["repeatDays"].toString();
 
         // Convert SQLite text back into a proper QDateTime object
         item.startTime = QDateTime::fromString(row["startTime"].toString(), Qt::ISODate);
@@ -91,7 +101,7 @@ void ScheduleModel::loadAllItems()
     }
 }
 
-void ScheduleModel::addItem(const QString &name, const QString &mode, const QDateTime &startTime, const int &timer)
+void ScheduleModel::addItem(const QString &name, const QString &mode, const QDateTime &startTime, const int &timer, const int &repeatType, const QString &repeatDays)
 {
     QVariantMap data;
     data["name"] = name;
@@ -99,6 +109,8 @@ void ScheduleModel::addItem(const QString &name, const QString &mode, const QDat
     data["startTime"] = startTime.toString(Qt::ISODate);
     data["timer"] = timer;
     data["isEnabled"] = true;
+    data["repeatType"] = repeatType;
+    data["repeatDays"] = repeatDays;
 
     int itemId = dbManager->insertRecord("schedules", data);
 
@@ -110,11 +122,11 @@ void ScheduleModel::addItem(const QString &name, const QString &mode, const QDat
     qDebug() << "Record inserted successfully.";
 
     beginInsertRows(QModelIndex(), mSchedules.size(), mSchedules.size());
-    mSchedules.append({itemId, name, mode, startTime, timer, true});
+    mSchedules.append({itemId, name, mode, startTime, timer, true, repeatType, repeatDays});
     endInsertRows();
 }
 
-void ScheduleModel::editItem(int index, const QString &name, const QString &mode, const QDateTime &startTime, const int &timer)
+void ScheduleModel::editItem(int index, const QString &name, const QString &mode, const QDateTime &startTime, const int &timer, const int &repeatType, const QString &repeatDays)
 {
     if (index < 0 || index >= mSchedules.count()) {
         return;
@@ -127,6 +139,8 @@ void ScheduleModel::editItem(int index, const QString &name, const QString &mode
     data["mode"] = mode;
     data["startTime"] = startTime.toString(Qt::ISODate);
     data["timer"] = timer;
+    data["repeatType"] = repeatType;
+    data["repeatDays"] = repeatDays;
 
     QString whereClause = QString("id = %1").arg(schedule.id);
     bool success = dbManager->updateRecord("schedules", data, whereClause);
@@ -138,10 +152,12 @@ void ScheduleModel::editItem(int index, const QString &name, const QString &mode
 
     qDebug() << "Record updated successfully";
 
-    mSchedules[index] = {schedule.id, name, mode, startTime, timer, schedule.isEnabled};
+    mSchedules[index] = {schedule.id, name, mode, startTime, timer, schedule.isEnabled, repeatType, repeatDays};
     QModelIndex modelIndex = createIndex(index, 0);
 
-    emit dataChanged(modelIndex, modelIndex, {IdRole, NameRole, ModeRole, StartTimeRole, TimerRole, IsEnabledRole});
+    emit dataChanged(modelIndex, modelIndex, {
+        IdRole, NameRole, ModeRole, StartTimeRole, TimerRole, IsEnabledRole, RepeatTypeRole, RepeatDaysRole
+    });
 }
 
 void ScheduleModel::removeItem(int index)

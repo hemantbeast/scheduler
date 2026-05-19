@@ -16,5 +16,6 @@
         <file>qmls/toast/Toast.qml</file>
         <file>qmls/toast/ToastDelegate.qml</file>
         <file>qmls/schedule/NewScheduleButton.qml</file>
+        <file>qmls/common/TimeDialog.qml</file>
     </qresource>
 </RCC>

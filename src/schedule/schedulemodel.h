@@ -18,6 +18,8 @@ struct ScheduleItem {
     QDateTime startTime;
     int timer;
     bool isEnabled;
+    int repeatType;
+    QString repeatDays;
 };
 
 
@@ -31,7 +33,9 @@ class ScheduleModel : public QAbstractListModel
         ModeRole,
         StartTimeRole,
         TimerRole,
-        IsEnabledRole
+        IsEnabledRole,
+        RepeatTypeRole,
+        RepeatDaysRole
     };
 
 public:
@@ -45,9 +49,9 @@ public:
 
     Q_INVOKABLE void loadAllItems();
 
-    Q_INVOKABLE void addItem(const QString &name, const QString &mode, const QDateTime &startTime, const int &timer);
+    Q_INVOKABLE void addItem(const QString &name, const QString &mode, const QDateTime &startTime, const int &timer, const int &repeatType, const QString &repeatDays);
 
-    Q_INVOKABLE void editItem(int index, const QString &name, const QString &mode, const QDateTime &startTime, const int &timer);
+    Q_INVOKABLE void editItem(int index, const QString &name, const QString &mode, const QDateTime &startTime, const int &timer, const int &repeatType, const QString &repeatDays);
 
     Q_INVOKABLE void removeItem(int index);
 

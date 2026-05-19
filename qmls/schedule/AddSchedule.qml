@@ -69,12 +69,12 @@ Item {
                             Layout.fillWidth: true
 
                             background: Rectangle {
-                                color: "#1f1f1f"
+                                color: "#191919"
                                 radius: 5
 
                                 border {
                                     width: 1
-                                    color: nameField.focus ? "white" : "#a1a1a1"
+                                    color: nameField.focus ? "white" : "#424242"
                                 }
                             }
                         }
@@ -98,8 +98,8 @@ Item {
                             Layout.preferredHeight: 40
                             Layout.alignment: Qt.AlignHCenter
                             radius: 5
-                            color: "#161616"
-                            border.color: "#A1A1A1"
+                            color: "#191919"
+                            border.color: "#424242"
                             border.width: 1
 
                             Rectangle {
@@ -182,14 +182,18 @@ Item {
 
                         Text {
                             id: txtDate
-                            text: qsTr("Date & Time")
+                            text: repeatLayout.selectedRepeatType == 1 || repeatLayout.selectedRepeatType == 2
+                                  ? qsTr("Time")
+                                  : qsTr("Date & Time")
                             color: "#b0b0b0"
                             font.pointSize: 8
                         }
 
                         TextField {
                             id: dateField
-                            placeholderText: qsTr("Select date and time")
+                            placeholderText: repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
+                                             ? qsTr("Select time")
+                                             : qsTr("Select date and time")
                             placeholderTextColor: "#999"
                             color: "white"
                             clip: true
@@ -198,25 +202,30 @@ Item {
                             Layout.fillWidth: true
 
                             background: Rectangle {
-                                color: "#1f1f1f"
+                                color: "#191919"
                                 radius: 5
 
                                 border {
                                     width: 1
-                                    color: dateField.focus ? "white" : "#a1a1a1"
+                                    color: dateField.focus ? "white" : "#424242"
                                 }
                             }
 
                             Component.onCompleted: {
                                 if (isEdit) {
                                     selectedDateTime = schedule.startTime
-                                    text = Qt.formatDateTime(schedule.startTime, "dd MMM yyyy, hh:mm ap")
+
+                                    let format = repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
+                                        ? "hh:mm ap"
+                                        : "dd MMM yyyy, hh:mm ap"
+                                    text = Qt.formatDateTime(schedule.startTime, format)
                                 }
                             }
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: dateTimeDialog.open()
+                                onClicked: repeatLayout.selectedRepeatType == 1 || repeatLayout.selectedRepeatType == 2
+                                           ? timeDialog.open() : dateTimeDialog.open()
                             }
                         }
                     }
@@ -244,12 +253,12 @@ Item {
                             Layout.fillWidth: true
 
                             background: Rectangle {
-                                color: "#1f1f1f"
+                                color: "#191919"
                                 radius: 5
 
                                 border {
                                     width: 1
-                                    color: timerField.focus ? "white" : "#a1a1a1"
+                                    color: timerField.focus ? "white" : "#424242"
                                 }
                             }
 
@@ -263,6 +272,149 @@ Item {
                                 anchors.fill: parent
                                 onClicked: timerDialog.open()
                             }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: repeatLayout
+                    spacing: 5
+                    width: parent.width
+
+                    property int selectedRepeatType: 0 // 0=Once, 1=Daily, 2=Weekly, 3=Monthly
+                    property var selectedDays: [false, false, false, false, false, false, false]
+                    property var dayLabels: ["M", "T", "W", "T", "F", "S", "S"]
+
+                    Text {
+                        id: txtRepeat
+                        text: qsTr("Repeat")
+                        color: "#b0b0b0"
+                        font.pointSize: 8
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 10
+
+                        Repeater {
+                            model: ["Once", "Daily", "Weekly", "Monthly"]
+
+                            Button {
+                                id: repeatTypeBtn
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: 36
+
+                                // Track button active state
+                                property bool isActive: repeatLayout.selectedRepeatType === index
+
+                                contentItem: Text {
+                                    text: modelData
+                                    color: repeatTypeBtn.isActive ? "#FFFFFF" : "#8A8A8A"
+                                    font.bold: repeatTypeBtn.isActive
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+                                background: Rectangle {
+                                    color: repeatTypeBtn.isActive ? "#FF5F00" : "#191919"
+                                    border.color: repeatTypeBtn.isActive ? "#FF5F00" : "#424242"
+                                    border.width: 1
+                                    radius: 6
+
+                                    Behavior on color { ColorAnimation { duration: 150 } }
+                                }
+
+                                onClicked: {
+                                    selectedDateTime = null
+                                    dateField.text = ""
+                                    repeatLayout.selectedRepeatType = index
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: weekdayContainer
+                        Layout.fillWidth: true
+                        Layout.topMargin: 5
+
+                        // Dynamic animation properties based on "Weekly" (index 2) being active
+                        Layout.preferredHeight: repeatLayout.selectedRepeatType === 2 ? 50 : 0
+                        opacity: repeatLayout.selectedRepeatType === 2 ? 1.0 : 0.0
+                        visible: Layout.preferredHeight > 0
+                        color: "transparent"
+                        clip: true
+
+                        Behavior on Layout.preferredHeight {
+                            NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+                        }
+
+                        Behavior on opacity {
+                            NumberAnimation { duration: 200 }
+                        }
+
+                        RowLayout {
+                            anchors.centerIn: parent
+                            spacing: 12
+
+                            Repeater {
+                                model: repeatLayout.dayLabels
+
+                                Rectangle {
+                                    id: dayBubble
+                                    width: 36
+                                    height: 36
+                                    radius: width / 2
+
+                                    // Read tracking array states dynamically
+                                    property bool isDaySelected: repeatLayout.selectedDays[index]
+
+                                    // Visual states
+                                    color: isDaySelected ? "#00B4FF" : "#1B1B1B"
+                                    border.color: isDaySelected ? "#00B4FF" : "#2F2F2F"
+                                    border.width: 1
+
+                                    Text {
+                                        text: modelData
+                                        anchors.centerIn: parent
+                                        color: dayBubble.isDaySelected ? "#FFFFFF" : "#7A7A7A"
+                                        font { pixelSize: 11; bold: true }
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            // Toggles the specific boolean slot in our state array
+                                            var temp = repeatLayout.selectedDays
+                                            temp[index] = !temp[index]
+                                            repeatLayout.selectedDays = temp // Triggers binding refresh
+                                        }
+                                    }
+
+                                    Behavior on color { ColorAnimation { duration: 150 } }
+                                }
+                            }
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        if (!isEdit) return
+
+                        repeatLayout.selectedRepeatType = schedule.repeatType
+
+                        if (schedule.repeatType === 2 && schedule.repeatDays) {
+                            let days = schedule.repeatDays.split(",")
+                            var temp = repeatLayout.selectedDays
+
+                            for (var i = 0; i < days.length; i++) {
+                                let index = parseInt(days[i], 10)
+
+                                if (index >= 0 && index < temp.length) {
+                                    temp[index] = true
+                                }
+                            }
+                            repeatLayout.selectedDays = temp
                         }
                     }
                 }
@@ -312,6 +464,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 text: "Cancel"
+                palette.buttonText: "white"
 
                 onClicked: stackView.pop()
 
@@ -321,7 +474,7 @@ Item {
                 }
 
                 background: Rectangle {
-                    color: "gray"
+                    color: "slategray"
                     radius: 5
                     anchors.fill: parent
                     opacity: cancelBtn.pressed ? 0.7 : 1.0
@@ -349,6 +502,15 @@ Item {
         selectedTotalSecs: selectedTimer ?? 0
         onTimeSelected: {
             timerField.text = setTimer(totalSeconds)
+        }
+    }
+
+    TimeDialog {
+        id: timeDialog
+        selectedTime: selectedDateTime
+        onTimeSelected: {
+            selectedDateTime = time
+            dateField.text = Qt.formatDateTime(time, "hh:mm ap")
         }
     }
 
@@ -388,20 +550,40 @@ Item {
             return;
         }
 
+        // Repeat occurence with days
+        var dayIndices = [];
+        if (repeatLayout.selectedRepeatType === 2) { // Only calculate if 'Weekly' is active
+            for (var i = 0; i < repeatLayout.selectedDays.length; i++) {
+                if (repeatLayout.selectedDays[i]) {
+                    dayIndices.push(i);
+                }
+            }
+        }
+
+        var repeatDaysString = dayIndices.join(",");
+        if (repeatLayout.selectedRepeatType === 2 && repeatDaysString === "") {
+            toastManager.createMessage("Please select a week day.", options);
+            return;
+        }
+
         if (isEdit) {
             scheduleModel.editItem(
                 index,
                 nameField.text,
                 layout.modeNames[layout.currentMode].toUpperCase(),
                 selectedDateTime,
-                selectedTimer
+                selectedTimer,
+                repeatLayout.selectedRepeatType,
+                repeatDaysString
             );
         } else {
             scheduleModel.addItem(
                 nameField.text,
                 layout.modeNames[layout.currentMode].toUpperCase(),
                 selectedDateTime,
-                selectedTimer
+                selectedTimer,
+                repeatLayout.selectedRepeatType,
+                repeatDaysString
             );
         }
 
