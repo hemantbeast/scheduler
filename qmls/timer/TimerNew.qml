@@ -38,31 +38,65 @@ Item {
     // }
 
     // Mode Text
-    RowLayout {
+    Rectangle {
+        id: segmentedControl
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 40
-        spacing: 50
+        width: 320
+        height: 40
+        radius: height / 2
+        color: "#161616"
+        border.color: "#282828"
+        border.width: 1
 
-        Repeater {
-            model: timerScreen.modeNames
-            Text {
-                text: modelData
-                color: timerManager.currentMode === index ? timerScreen.modeColors[index] : "#555555"
-                scale: timerManager.currentMode === index ? 1.1 : 1.0
+        Rectangle {
+            id: activeIndicator
+            width: segmentedControl.width / timerScreen.modeNames.length - 8
+            height: segmentedControl.height - 8
+            radius: height / 2
+            anchors.verticalCenter: parent.verticalCenter
+            color: timerScreen.modeColors[timerManager.currentMode]
+            x: 4 + (timerManager.currentMode * (segmentedControl.width / timerScreen.modeNames.length))
 
-                font {
-                    pixelSize: 10
-                    letterSpacing: 1.5
-                    bold: true
-                }
+            Behavior on x {
+                NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
+            }
 
-                Behavior on color {
-                    ColorAnimation { duration: 400 }
-                }
+            Behavior on color {
+                ColorAnimation { duration: 300 }
+            }
+        }
 
-                Behavior on scale {
-                    NumberAnimation { duration: 200 }
+        Row {
+            anchors.fill: parent
+
+            Repeater {
+                model: timerScreen.modeNames
+
+                Item {
+                    width: segmentedControl.width / timerScreen.modeNames.length
+                    height: segmentedControl.height
+
+                    Text {
+                        text: modelData
+                        anchors.centerIn: parent
+                        color: timerManager.currentMode === index ? "white" : "#8A8A8A"
+                        scale: timerManager.currentMode === index ? 1.05 : 1.0
+                        font {
+                            pixelSize: 11
+                            letterSpacing: 1.5
+                            bold: true
+                        }
+
+                        Behavior on color {
+                            ColorAnimation { duration: 250 }
+                        }
+
+                        Behavior on scale {
+                            NumberAnimation { duration: 200 }
+                        }
+                    }
                 }
             }
         }
@@ -183,7 +217,7 @@ Item {
                     color: "#666"
                     Layout.alignment: Qt.AlignHCenter
                     font {
-                        pixelSize: 9
+                        pixelSize: 10
                         letterSpacing: 1.25
                     }
                 }
@@ -199,8 +233,9 @@ Item {
                 }
 
                 Text {
-                    text: timerManager.secondsRemaining <= 0 ? qsTr("") : timerManager.secondsRemaining < 60 ? qsTr("SECONDS") : qsTr("MINUTES")
+                    text: timerManager.secondsRemaining < 60 ? qsTr("SECONDS") : qsTr("MINUTES")
                     color: timerScreen.modeColors[timerManager.currentMode]
+                    visible: timerManager.secondsRemaining > 0
                     Layout.alignment: Qt.AlignHCenter
                     font {
                         pixelSize: 10
@@ -221,7 +256,7 @@ Item {
                         color: "#555"
                         Layout.alignment: Qt.AlignHCenter
                         font {
-                            pixelSize: 6; bold: true
+                            pixelSize: 8; bold: true
                         }
                     }
                     Text {
@@ -229,7 +264,7 @@ Item {
                         color: "#AAA"
                         Layout.alignment: Qt.AlignHCenter
                         font {
-                            pixelSize: 9; italic: true
+                            pixelSize: 10; italic: true
                         }
                     }
                 }
