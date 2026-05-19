@@ -1,8 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
 import "menu"
 import "toast"
+import "timer"
+import "schedule"
 
 Window {
     width: 800
@@ -40,17 +43,39 @@ Window {
             }
 
             Item {
+                clip: true
                 anchors.left: sideBar.right
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
-                Loader {
-                    anchors.fill: parent
-                    source: {
-                        if (mainRoot.selectedMenu === "Timer") return "timer/TimerNew.qml"
-                        if (mainRoot.selectedMenu === "Schedule") return "schedule/Schedule.qml"
-                        return ""
+                TimerNew {
+                    id: timerPage
+                    width: parent.width
+                    height: parent.height
+                    y: mainRoot.selectedMenu === "Timer" ? 0 : -parent.height
+                    opacity: mainRoot.selectedMenu === "Timer" ? 1.0 : 0.0
+
+                    Behavior on y {
+                        NumberAnimation { duration: 400; easing.type: Easing.OutCubic }
+                    }
+                    Behavior on opacity {
+                        NumberAnimation { duration: 300 }
+                    }
+                }
+
+                Schedule {
+                    id: schedulePage
+                    width: parent.width
+                    height: parent.height
+                    y: mainRoot.selectedMenu === "Schedule" ? 0 : parent.height
+                    opacity: mainRoot.selectedMenu === "Schedule" ? 1.0 : 0.0
+
+                    Behavior on y {
+                        NumberAnimation { duration: 400; easing.type: Easing.OutCubic }
+                    }
+                    Behavior on opacity {
+                        NumberAnimation { duration: 300 }
                     }
                 }
             }
