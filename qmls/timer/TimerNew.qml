@@ -97,6 +97,16 @@ Item {
                             NumberAnimation { duration: 200 }
                         }
                     }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            if (timerManager.secondsRemaining > 0) {
+                                timerManager.currentMode = index
+                            }
+                        }
+                    }
                 }
             }
         }

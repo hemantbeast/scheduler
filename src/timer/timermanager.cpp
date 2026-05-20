@@ -14,6 +14,11 @@ int TimerManager::currentMode()
     return mCurrentMode;
 }
 
+void TimerManager::setCurrentMode(const int &index)
+{
+    mCurrentMode = index;
+}
+
 int TimerManager::secondsRemaining()
 {
     return mSecondsRemaining;

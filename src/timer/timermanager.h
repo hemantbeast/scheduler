@@ -12,7 +12,7 @@ class TimerManager : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int currentMode READ currentMode NOTIFY timerUpdated)
+    Q_PROPERTY(int currentMode READ currentMode WRITE setCurrentMode NOTIFY timerUpdated)
     Q_PROPERTY(int secondsRemaining READ secondsRemaining NOTIFY timerUpdated)
     Q_PROPERTY(int totalDuration READ totalDuration NOTIFY timerUpdated)
     Q_PROPERTY(QString nextScheduleName READ nextScheduleName NOTIFY timerUpdated)
@@ -21,6 +21,8 @@ public:
     explicit TimerManager(ScheduleModel *model, QObject *parent = nullptr);
 
     int currentMode();
+
+    void setCurrentMode(const int &index);
 
     int secondsRemaining();
 
