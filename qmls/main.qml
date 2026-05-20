@@ -79,6 +79,34 @@ Window {
                     }
                 }
             }
+
+            Item {
+                height: 50
+                anchors.left: sideBar.right
+                anchors.top: parent.top
+                anchors.topMargin: 5
+                anchors.leftMargin: 10
+
+                Text {
+                    id: timeDisplay
+                    text: Qt.formatDateTime(new Date(), "hh:mm ap").toUpperCase()
+                    color: "white"
+                    anchors.verticalCenter: parent.verticalCenter
+                    font {
+                        pixelSize: 16
+                        weight: Font.Medium
+                    }
+                }
+
+                Timer {
+                    interval: 1000
+                    running: true
+                    repeat: true
+                    onTriggered: {
+                        timeDisplay.text = Qt.formatDateTime(new Date(), "hh:mm ap").toUpperCase()
+                    }
+                }
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>qmls/main.qml</file>
-        <file>qmls/timer/Timer.qml</file>
+        <file>qmls/timer/TimerOld.qml</file>
         <file>qmls/menu/MenuView.qml</file>
         <file>qmls/timer/TimerNew.qml</file>
         <file>qmls/schedule/Schedule.qml</file>
