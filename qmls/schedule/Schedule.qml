@@ -137,6 +137,17 @@ Item {
                         source: itemLayout.currentSettings.icon
                         anchors.centerIn: parent
                     }
+
+                    SvgImage {
+                        height: 12; width: 12
+                        color: "#4CAF50"
+                        source: "../../images/repeat.svg"
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        anchors.rightMargin: -5
+                        anchors.bottomMargin: -5
+                        visible: model.repeatType > 0
+                    }
                 }
 
                 ColumnLayout {
@@ -169,7 +180,7 @@ Item {
                             }
 
                             Text {
-                                text: Qt.formatDateTime(model.startTime, "dd MMM yyyy, hh:mm a")
+                                text: getScheduleDateTimeLabel(model.startTime, model.repeatType, model.repeatDays)
                                 color: model.isEnabled ? "#e0e0e0" : "#d1d1d1"
                                 font {
                                     pixelSize: 13
@@ -216,54 +227,60 @@ Item {
                     }
                 }
 
-                Switch {
-                    id: switchBtn
-                    checked: model.isEnabled
-                    Layout.alignment: Qt.AlignVCenter
-                    onCheckedChanged: {
-                        scheduleModel.setItemEnabled(index, checked)
-                    }
-
-                    implicitWidth: 40
-                    implicitHeight: 20
-
-                    indicator: Item {
-                        width: parent.width
-                        height: parent.height
-
-                        Rectangle {
-                            id: trackRect
-                            width: parent.width
-                            height: 12
-                            radius: height / 2
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: switchBtn.checked ? "#804CAF50" : "#424242"
-
-                            Behavior on color {
-                                ColorAnimation { duration: 150 }
-                            }
-                        }
-
-                        Rectangle {
-                            id: thumbCircle
-                            width: parent.height
-                            height: parent.height
-                            radius: width / 2
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: switchBtn.checked ? "#4CAF50" : "#FFFFFF"
-                            x: switchBtn.checked ? (parent.width - width) : 0
-
-                            Behavior on x {
-                                NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
-                            }
-                        }
-                    }
-                }
-
                 Row {
                     spacing: 20
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
                     Layout.rightMargin: 5
+
+                    Switch {
+                        id: switchBtn
+                        checked: model.isEnabled
+                        onCheckedChanged: {
+                            scheduleModel.setItemEnabled(index, checked)
+                        }
+
+                        implicitWidth: 40
+                        implicitHeight: 20
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        indicator: Item {
+                            width: parent.width
+                            height: parent.height
+
+                            Rectangle {
+                                id: trackRect
+                                width: parent.width
+                                height: 12
+                                radius: height / 2
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: switchBtn.checked ? "#804CAF50" : "#424242"
+
+                                Behavior on color {
+                                    ColorAnimation { duration: 150 }
+                                }
+                            }
+
+                            Rectangle {
+                                id: thumbCircle
+                                width: parent.height
+                                height: parent.height
+                                radius: width / 2
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: switchBtn.checked ? "#4CAF50" : "#FFFFFF"
+                                x: switchBtn.checked ? (parent.width - width) : 0
+
+                                Behavior on x {
+                                    NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        width: 5; height: 10
+                        color: "transparent"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
                     Rectangle {
                         id: rectEdit
@@ -290,11 +307,10 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 stackView.push("AddSchedule.qml", {
-                                       "isEdit": true,
-                                       "index": index,
-                                       "schedule": model
-                                   }
-                                )
+                                   "isEdit": true,
+                                   "index": index,
+                                   "schedule": model
+                                })
                             }
                         }
                     }
@@ -336,6 +352,45 @@ Item {
                 hoverEnabled: true
                 // onClicked: openEditDialog(index) // Opens the edit form
             }
+        }
+    }
+
+    function getScheduleDateTimeLabel(startTime, repeatType, repeatDays) {
+        let dateObj = new Date(startTime);
+
+        let timeStr = Qt.formatDateTime(startTime, "hh:mm ap");
+        let dayNum = Qt.formatDateTime(startTime, "d");
+
+        switch(repeatType) {
+            case 0: // Once
+                return Qt.formatDateTime(startTime, "d MMM yyyy, hh:mm ap");
+
+            case 1: // Daily
+                return "Every day at " + timeStr;
+
+            case 2: // Weekly
+                if (!repeatDays) return "Weekly at " + timeStr;
+                const longLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+                let indices = repeatDays.split(",");
+                let days = [];
+
+                indices.forEach(idx => {
+                    let n = parseInt(idx.trim());
+                    if (n >= 0 && n < 7) days.push(longLabels[n]);
+                });
+
+                return days.join(", ") + " at " + timeStr;
+
+            case 3: // Monthly
+                let suffix = "th";
+                if (dayNum % 10 === 1 && dayNum !== 11) suffix = "st";
+                else if (dayNum % 10 === 2 && dayNum !== 12) suffix = "nd";
+                else if (dayNum % 10 === 3 && dayNum !== 13) suffix = "rd";
+
+                return "Every " + dayNum + suffix + " of the month at " + timeStr;
+
+            default:
+                return Qt.formatDateTime(startTime, "d MMM yyyy, hh:mm ap");
         }
     }
 }

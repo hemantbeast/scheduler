@@ -212,6 +212,16 @@ void ScheduleModel::setItemEnabled(int index, bool enable)
     emit dataChanged(modelIndex, modelIndex, {IsEnabledRole});
 }
 
+bool ScheduleModel::nameExists(const QString &name)
+{
+    for (const auto &item : mSchedules) {
+        if (item.name.trimmed().compare(name.trimmed(), Qt::CaseInsensitive) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 const QList<ScheduleItem> &ScheduleModel::getSchedulesList()
 {
     return mSchedules;

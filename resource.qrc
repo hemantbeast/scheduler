@@ -39,5 +39,6 @@
         <file>resources/icons/success-white.svg</file>
         <file>resources/icons/warning.svg</file>
         <file>resources/icons/warning-white.svg</file>
+        <file>images/repeat.svg</file>
     </qresource>
 </RCC>

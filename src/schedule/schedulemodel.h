@@ -57,6 +57,8 @@ public:
 
     Q_INVOKABLE void setItemEnabled(int index, bool enable);
 
+    Q_INVOKABLE bool nameExists(const QString &name);
+
     const QList<ScheduleItem>& getSchedulesList();
 
 private:

@@ -44,6 +44,7 @@ private:
     QString mNextScheduleName = "";
 
     int mapModeToIndex(const QString &modeStr);
+    QDateTime calculateNextOccurance(const ScheduleItem &item, const QDateTime &now);
 };
 
 #endif // TIMERMANAGER_H

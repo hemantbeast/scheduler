@@ -577,6 +577,11 @@ Item {
                 repeatDaysString
             );
         } else {
+            if (scheduleModel.nameExists(nameField.text)) {
+                toastManager.createMessage("A schedule with this name already exists.", options);
+                return;
+            }
+
             scheduleModel.addItem(
                 nameField.text,
                 layout.modeNames[layout.currentMode].toUpperCase(),
