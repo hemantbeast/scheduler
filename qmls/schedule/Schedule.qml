@@ -325,7 +325,7 @@ Item {
                         SvgImage {
                             id: imgDelete
                             height: 25; width: 25
-                            color: "firebrick"
+                            color: "#EF5350"
                             source: "../../images/delete.svg"
                             anchors.centerIn: parent
                             scale: delMouseArea.pressed ? 0.97 : 1.0

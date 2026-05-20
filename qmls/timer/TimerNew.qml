@@ -270,10 +270,47 @@ Item {
                 }
             }
         }
+    }
 
-        // MouseArea {
-        //     anchors.fill: parent
-        //     onClicked: heatArc.sweepAngle = (heatArc.sweepAngle + 45) % 271
-        // }
+    Button {
+        id: stopBtn
+        implicitWidth: 44
+        implicitHeight: 44
+
+        anchors.top: dialContainer.bottom
+        anchors.topMargin: 20
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        visible: timerManager.secondsRemaining > 0
+        onClicked: timerManager.stopTimer()
+
+        background: Rectangle {
+            radius: width / 2
+            color: "#424242"
+            scale: stopBtn.pressed ? 0.9 : 1.0
+            opacity: stopBtn.pressed ? 0.7 : 1.0
+
+            Behavior on scale {
+                NumberAnimation { duration: 50 }
+            }
+        }
+
+        contentItem: Item {
+            anchors.fill: parent
+
+            Rectangle {
+                width: 14
+                height: 14
+                radius: 2
+                anchors.centerIn: parent
+                color: "#EF4444"
+                opacity: stopBtn.pressed ? 0.7 : 1.0
+                scale: stopBtn.pressed ? 0.9 : 1.0
+
+                Behavior on scale {
+                    NumberAnimation { duration: 50 }
+                }
+            }
+        }
     }
 }

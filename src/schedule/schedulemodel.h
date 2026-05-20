@@ -61,6 +61,9 @@ public:
 
     const QList<ScheduleItem>& getSchedulesList();
 
+signals:
+    void schedulesChanged();
+
 private:
     DatabaseManager *dbManager;
     QList<ScheduleItem> mSchedules;

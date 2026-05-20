@@ -30,6 +30,9 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("scheduleModel", scheduleModel);
     engine.rootContext()->setContextProperty("timerManager", timerManager);
 
+    QObject::connect(scheduleModel, &ScheduleModel::schedulesChanged,
+                     timerManager, &TimerManager::processSchedules);
+
     StringHelper strHelper;
     engine.rootContext()-> setContextProperty("StringHelper", &strHelper);
 

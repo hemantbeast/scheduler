@@ -29,6 +29,20 @@ QString TimerManager::nextScheduleName()
     return mNextScheduleName;
 }
 
+void TimerManager::stopTimer()
+{
+    bool isRunning = timer->isActive();
+
+    if (isRunning) {
+        timer->stop();
+    }
+
+    mSecondsRemaining = 0;
+    mTotalDuration = 1;
+
+    emit timerUpdated();
+}
+
 void TimerManager::processSchedules()
 {
     if (!schedule) {

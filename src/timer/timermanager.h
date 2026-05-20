@@ -28,6 +28,8 @@ public:
 
     QString nextScheduleName();
 
+    Q_INVOKABLE void stopTimer();
+
 signals:
     void timerUpdated();
 

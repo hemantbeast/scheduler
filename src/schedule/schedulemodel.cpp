@@ -210,6 +210,7 @@ void ScheduleModel::setItemEnabled(int index, bool enable)
     qDebug() << "Index: " << index << " Status: " << enable;
 
     emit dataChanged(modelIndex, modelIndex, {IsEnabledRole});
+    emit schedulesChanged();
 }
 
 bool ScheduleModel::nameExists(const QString &name)
