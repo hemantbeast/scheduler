@@ -18,10 +18,16 @@ public:
     ~DatabaseManager();
 
     Q_INVOKABLE bool createTable(const QString &tableName, const QString &schema);
+
     Q_INVOKABLE int insertRecord(const QString &tableName, const QVariantMap &data);
+
     Q_INVOKABLE QVariantList fetchAll(const QString &tableName, const QString &whereClause = "");
+
     Q_INVOKABLE bool updateRecord(const QString &tableName, const QVariantMap &data, const QString &whereClause);
+
     Q_INVOKABLE bool deleteRecord(const QString &tableName, const QString &whereClause);
+
+    Q_INVOKABLE bool addColumnIfNeeded(const QString &tableName, const QString &columnName, const QString &columnType);
 
 private:
     QSqlDatabase mDb;

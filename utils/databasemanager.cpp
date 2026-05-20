@@ -129,3 +129,27 @@ bool DatabaseManager::deleteRecord(const QString &tableName, const QString &wher
     }
     return true;
 }
+
+bool DatabaseManager::addColumnIfNeeded(const QString &tableName, const QString &columnName, const QString &columnType)
+{
+    QSqlQuery query;
+
+    // Check if column already exists
+    query.exec(QString("PRAGMA table_info(%1);").arg(tableName));
+
+    while (query.next()) {
+        if (query.value("name").toString() == columnName) {
+            return true; // Column already exists, do nothing
+        }
+    }
+
+    // Column is missing, add it
+    QString alterSql = QString("ALTER TABLE %1 ADD COLUMN %2 %3;")
+                           .arg(tableName, columnName, columnType);
+
+    if (!query.exec(alterSql)) {
+        qDebug() << "Failed to add column:" << query.lastError().text();
+        return false;
+    }
+    return true;
+}

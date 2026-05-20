@@ -8,9 +8,7 @@ ScheduleModel::ScheduleModel(DatabaseManager *db, QObject *parent)
                      "mode TEXT, "
                      "startTime TEXT, "
                      "timer INTEGER, "
-                     "isEnabled INTEGER CHECK (isEnabled IN (0, 1)), "
-                     "repeatType INTEGER, "
-                     "repeatDays TEXT";
+                     "isEnabled INTEGER CHECK (isEnabled IN (0, 1))";
 
     bool success = dbManager->createTable("schedules", schema);
 
@@ -19,6 +17,9 @@ ScheduleModel::ScheduleModel(DatabaseManager *db, QObject *parent)
     } else {
         qDebug() << "Failed to create schedules table.";
     }
+
+    dbManager->addColumnIfNeeded("schedules", "repeatType", "INTEGER");
+    dbManager->addColumnIfNeeded("schedules", "repeatDays", "TEXT");
 
     loadAllItems();
 }
