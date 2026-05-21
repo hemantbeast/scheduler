@@ -43,6 +43,8 @@ private:
     QTimer *timer;
 
     int mCurrentMode = 0;
+    int mUserMode = -1;
+
     int mSecondsRemaining = 0;
     int mTotalDuration = 1;
     QString mNextScheduleName = "";

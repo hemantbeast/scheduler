@@ -26,14 +26,37 @@ Item {
     //     id: bgGlow
     //     anchors.fill: parent
 
-    //     RadialGradient {
+    //     Item {
+    //         id: proxySource
     //         anchors.fill: parent
-    //         gradient: Gradient {
-    //             GradientStop { position: 0.0; color: Qt.alpha(modeColors[currentMode], 0.15) }
-    //             GradientStop { position: 0.7; color: "transparent" }
-    //         }
+    //         visible: false
+    //     }
 
-    //         Behavior on gradient { PropertyAnimation { duration: 1000 } }
+    //     RadialGradient {
+    //         source: proxySource
+    //         anchors.fill: parent
+    //         horizontalRadius: width / 2
+    //         verticalRadius: height / 2
+    //         gradient: Gradient {
+    //             GradientStop {
+    //                 id: coreColor
+    //                 position: 0.0
+
+    //                 // Correct syntax: target color string + desired alpha
+    //                 color: {
+    //                     let baseColor = timerScreen.modeColors[timerManager.currentMode] || "#000000";
+    //                     return Qt.rgba(baseColor.r, baseColor.g, baseColor.b, 0.15);
+    //                 }
+
+    //                 // Animate the color property directly
+    //                 Behavior on color { ColorAnimation { duration: 1000 } }
+    //             }
+
+    //             GradientStop {
+    //                 position: 0.7
+    //                 color: "transparent"
+    //             }
+    //         }
     //     }
     // }
 

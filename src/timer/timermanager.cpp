@@ -16,7 +16,7 @@ int TimerManager::currentMode()
 
 void TimerManager::setCurrentMode(const int &index)
 {
-    mCurrentMode = index;
+    mUserMode = index;
 }
 
 int TimerManager::secondsRemaining()
@@ -82,7 +82,7 @@ void TimerManager::processSchedules()
             if (!scheduleRunning || currentTotalSeconds < shortestRunningDuration) {
                 mSecondsRemaining = static_cast<int>(now.secsTo(endTime));
                 mTotalDuration = currentTotalSeconds;
-                mCurrentMode = mapModeToIndex(item.mode);
+                mCurrentMode = mUserMode != -1 ? mUserMode : mapModeToIndex(item.mode);
 
                 shortestRunningDuration = currentTotalSeconds;
                 scheduleRunning = true;
@@ -103,6 +103,7 @@ void TimerManager::processSchedules()
     if (!scheduleRunning) {
         mSecondsRemaining = 0;
         mTotalDuration = 1;
+        mUserMode = -1;
     }
 
     mNextScheduleName = upcomingName;
