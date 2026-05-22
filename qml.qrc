@@ -11,11 +11,13 @@
         <file>qmls/schedule/AddSchedule.qml</file>
         <file>qmls/common/NavigationHeader.qml</file>
         <file>qmls/common/CustomComboBox.qml</file>
-        <file>qmls/common/DateTimeDialog.qml</file>
-        <file>qmls/common/TimerDialog.qml</file>
         <file>qmls/toast/Toast.qml</file>
         <file>qmls/toast/ToastDelegate.qml</file>
         <file>qmls/schedule/NewScheduleButton.qml</file>
-        <file>qmls/common/TimeDialog.qml</file>
+        <file>qmls/dialogs/CommonDialog.qml</file>
+        <file>qmls/dialogs/DayTimeDialog.qml</file>
+        <file>qmls/dialogs/DateTimeDialog.qml</file>
+        <file>qmls/dialogs/TimeDialog.qml</file>
+        <file>qmls/dialogs/TimerDialog.qml</file>
     </qresource>
 </RCC>

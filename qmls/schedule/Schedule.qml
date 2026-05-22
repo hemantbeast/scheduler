@@ -132,7 +132,7 @@ Item {
                     color: "transparent"
 
                     SvgImage {
-                        height: 22; width: 22
+                        height: 24; width: 24
                         color: itemLayout.currentSettings.color
                         source: itemLayout.currentSettings.icon
                         anchors.centerIn: parent

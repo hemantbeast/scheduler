@@ -3,15 +3,21 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
 import "../common"
+import "../dialogs"
 import "../toast"
 
 Item {
+    id: itemId
     property int index: 0
     property bool isEdit: false
 
     property var schedule
     property var selectedDateTime
     property var selectedTimer
+    onXChanged: {
+        console.log("itemId x"+itemId.x)
+        console.log("itemId y"+itemId.y)
+    }
 
     ColumnLayout {
         spacing: 4
@@ -184,7 +190,7 @@ Item {
                             id: txtDate
                             text: repeatLayout.selectedRepeatType == 1 || repeatLayout.selectedRepeatType == 2
                                   ? qsTr("Time")
-                                  : qsTr("Date & Time")
+                                  : repeatLayout.selectedRepeatType == 3 ? qsTr("Day & Time") : qsTr("Date & Time")
                             color: "#b0b0b0"
                             font.pointSize: 8
                         }
@@ -193,7 +199,7 @@ Item {
                             id: dateField
                             placeholderText: repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
                                              ? qsTr("Select time")
-                                             : qsTr("Select date and time")
+                                             : repeatLayout.selectedRepeatType == 3 ? qsTr("Select day and time") : qsTr("Select date and time")
                             placeholderTextColor: "#999"
                             color: "white"
                             clip: true
@@ -215,6 +221,11 @@ Item {
                                 if (isEdit) {
                                     selectedDateTime = schedule.startTime
 
+                                    if (repeatLayout.selectedRepeatType == 3) {
+                                        text = "Every " + Qt.formatDateTime(dateTime, "dd") + ", at " + Qt.formatDateTime(dateTime, "hh:mm ap")
+                                        return
+                                    }
+
                                     let format = repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
                                         ? "hh:mm ap"
                                         : "dd MMM yyyy, hh:mm ap"
@@ -224,8 +235,19 @@ Item {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: repeatLayout.selectedRepeatType == 1 || repeatLayout.selectedRepeatType == 2
-                                           ? timeDialog.open() : dateTimeDialog.open()
+                                onClicked:  {
+                                    switch (repeatLayout.selectedRepeatType) {
+                                    case 1:
+                                    case 2:
+                                        timeDialog.open()
+                                        break
+                                    case 3:
+                                        dayTimeDialog.open()
+                                        break
+                                    default:
+                                        dateTimeDialog.open()
+                                    }
+                                }
                             }
                         }
                     }
@@ -511,6 +533,16 @@ Item {
         onTimeSelected: {
             selectedDateTime = time
             dateField.text = Qt.formatDateTime(time, "hh:mm ap")
+        }
+    }
+
+    DayTimeDialog {
+        id: dayTimeDialog
+        selectedDate: selectedDateTime
+
+        onDateTimeSelected: {
+            selectedDateTime = dateTime
+            dateField.text = "Every " + Qt.formatDateTime(dateTime, "dd") + ", at " + Qt.formatDateTime(dateTime, "hh:mm ap")
         }
     }
 

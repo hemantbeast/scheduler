@@ -2,22 +2,21 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Dialog {
-    id: dateTimeDialog
+    id: dayTimeDialog
+
     signal dateTimeSelected(date dateTime)
 
-    // Base year used to offset calculations
-    readonly property int baseYear: 2026
-
     property var selectedDate
+    property int fadeDuration: 300
 
-    anchors.centerIn: parent
+
     modal: true
     width: 480
     height: 350
+    anchors.centerIn: parent
 
     Overlay.modal: Rectangle {
-        color: "#1a1a1a"
-        opacity: 0.85
+        color: "#D9000000"
     }
 
     background: Rectangle {
@@ -27,39 +26,67 @@ Dialog {
         anchors.fill: parent
     }
 
+    enter: Transition {
+        NumberAnimation {
+            property: "opacity"
+            from: 0.0
+            to: 1.0
+            duration: dayTimeDialog.fadeDuration
+        }
+
+        NumberAnimation {
+            property: "scale"
+            from: 0.3
+            to: 1.0
+            duration: dayTimeDialog.fadeDuration
+        }
+    }
+
+    exit: Transition {
+        NumberAnimation {
+            property: "opacity"
+            from: 1.0
+            to: 0.0
+            duration: dayTimeDialog.fadeDuration
+        }
+
+        NumberAnimation {
+            property: "scale"
+            from: 1.0
+            to: 0.3
+            duration: dayTimeDialog.fadeDuration
+        }
+    }
+
+    onClosed: {
+        dayTimeDialog.x = Qt.binding(function() { return 160 })
+        dayTimeDialog.y = Qt.binding(function() { return 50 })
+    }
+
     onAboutToShow: {
         let now = selectedDate ?? new Date()
 
         // Calculate current indexes based on the offset definitions
-        let yearIndex   = now.getFullYear() - baseYear
-        let monthIndex  = now.getMonth() // 0-indexed matches perfectly
         let dayIndex    = now.getDate() - 1
         let hourIndex   = now.getHours()
         let minuteIndex = now.getMinutes()
 
-        // Safely bounds-check the year in case current year falls outside model limits
-        if (yearIndex < 0 || yearIndex > 4) {
-            yearIndex = 0 // Default to first item if out of bounds
-        }
-
         // 2. Assign indexes directly to the instantiated repeater components
-        pickerRepeater.itemAt(0).currentIdx = yearIndex
-        pickerRepeater.itemAt(1).currentIdx = monthIndex
-        pickerRepeater.itemAt(2).currentIdx = dayIndex
-        pickerRepeater.itemAt(3).currentIdx = hourIndex
-        pickerRepeater.itemAt(4).currentIdx = minuteIndex
+        pickerRepeater.itemAt(0).currentIdx = dayIndex
+        pickerRepeater.itemAt(1).currentIdx = hourIndex
+        pickerRepeater.itemAt(2).currentIdx = minuteIndex
     }
 
     onAccepted: {
-        // Read index offsets (+1 for months/days because Tumblers are 0-indexed)
-        let year   = baseYear + pickerRepeater.itemAt(0).currentIdx
-        let month  = pickerRepeater.itemAt(1).currentIdx
-        let day    = pickerRepeater.itemAt(2).currentIdx + 1
-        let hour   = pickerRepeater.itemAt(3).currentIdx
-        let minute = pickerRepeater.itemAt(4).currentIdx
+        let now = new Date()
+
+        // Read index offsets (+1 for days because Tumblers are 0-indexed)
+        let day    = pickerRepeater.itemAt(0).currentIdx + 1
+        let hour   = pickerRepeater.itemAt(1).currentIdx
+        let minute = pickerRepeater.itemAt(2).currentIdx
 
         // Write formatted string back to the text field
-        let dateTime = new Date(year, month, day, hour, minute, 0)
+        let dateTime = new Date(now.getFullYear(), now.getMonth(), day, hour, minute, 0)
         dateTimeSelected(dateTime)
     }
 
@@ -72,8 +99,15 @@ Dialog {
         clip: true
         layer.enabled: true
 
+        Rectangle {
+            width: parent.width
+            height: parent.radius
+            color: parent.color
+            anchors.bottom: parent.bottom
+        }
+
         Label {
-            text: "Choose Date & Time"
+            text: "Choose Day & Time"
             color: "white"
             font.bold: true
             font.pixelSize: 16
@@ -95,8 +129,6 @@ Dialog {
 
                 // Unified configuration schema for data generation
                 model: [
-                    { title: "Year",  size: 15,  offset: baseYear },
-                    { title: "Month", size: 12, offset: 1    },
                     { title: "Day",   size: 31, offset: 1    },
                     { title: "Hour",  size: 24, offset: 0    },
                     { title: "Min",   size: 60, offset: 0    }
@@ -115,8 +147,8 @@ Dialog {
                     // Space Layout component
                     Item {
                         height: 1
-                        width: 20
-                        visible: index === 3
+                        width: 40
+                        visible: index === 1
                     }
 
                     // Item Layout component
@@ -172,6 +204,13 @@ Dialog {
         clip: true
         layer.enabled: true
 
+        Rectangle {
+            width: parent.width
+            height: parent.radius
+            color: parent.color
+            anchors.top: parent.top
+        }
+
         Button {
             text: "OK"
             palette.buttonText: "white"
@@ -186,7 +225,7 @@ Dialog {
                 color: parent.pressed ? "#2980b9" : "#3498db"
                 radius: 4
             }
-            onClicked: dateTimeDialog.accept() // Triggers onAccepted
+            onClicked: dayTimeDialog.accept() // Triggers onAccepted
         }
     }
 }

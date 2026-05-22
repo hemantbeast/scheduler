@@ -1,31 +1,17 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Dialog {
+CommonDialog {
     id: dateTimeDialog
+    width: 480
+    height: 350
+    headerText: "Choose Date & Time"
+
     signal dateTimeSelected(date dateTime)
+    property var selectedDate
 
     // Base year used to offset calculations
     readonly property int baseYear: 2026
-
-    property var selectedDate
-
-    anchors.centerIn: parent
-    modal: true
-    width: 480
-    height: 350
-
-    Overlay.modal: Rectangle {
-        color: "#1a1a1a"
-        opacity: 0.85
-    }
-
-    background: Rectangle {
-        color: "#2c3e50"
-        border.color: "#34495e"
-        radius: 5
-        anchors.fill: parent
-    }
 
     onAboutToShow: {
         let now = selectedDate ?? new Date()
@@ -63,27 +49,7 @@ Dialog {
         dateTimeSelected(dateTime)
     }
 
-    header: Rectangle {
-        color: "#1a252f"
-        height: 50
-        radius: 5
-
-        // Prevent bottom corners of header from sticking out of background radius
-        clip: true
-        layer.enabled: true
-
-        Label {
-            text: "Choose Date & Time"
-            color: "white"
-            font.bold: true
-            font.pixelSize: 16
-            anchors.left: parent.left
-            anchors.leftMargin: 16
-            anchors.verticalCenter: parent.verticalCenter
-        }
-    }
-
-    contentItem: Item {
+    Item {
         anchors.fill: parent
 
         Row {
@@ -162,31 +128,6 @@ Dialog {
                     }
                 }
             }
-        }
-    }
-
-    footer: Rectangle {
-        color: "#1a252f" // Match header color
-        height: 60
-        radius: 5
-        clip: true
-        layer.enabled: true
-
-        Button {
-            text: "OK"
-            palette.buttonText: "white"
-            anchors.right: parent.right
-            anchors.rightMargin: 16
-            anchors.verticalCenter: parent.verticalCenter
-
-            // Custom button background to pop out
-            background: Rectangle {
-                implicitWidth: 80
-                implicitHeight: 36
-                color: parent.pressed ? "#2980b9" : "#3498db"
-                radius: 4
-            }
-            onClicked: dateTimeDialog.accept() // Triggers onAccepted
         }
     }
 }
