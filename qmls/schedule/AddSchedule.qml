@@ -52,6 +52,7 @@ Item {
                     spacing: 15
                     width: parent.width
 
+                    // Name
                     ColumnLayout {
                         spacing: 5
                         Layout.fillWidth: true
@@ -86,6 +87,7 @@ Item {
                         }
                     }
 
+                    // Mode
                     ColumnLayout {
                         spacing: 5
                         Layout.fillWidth: true
@@ -177,173 +179,7 @@ Item {
                     }
                 }
 
-                RowLayout {
-                    spacing: 15
-                    width: parent.width
-
-                    ColumnLayout {
-                        spacing: 5
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-
-                        Text {
-                            id: txtDate
-                            text: repeatLayout.selectedRepeatType == 1 || repeatLayout.selectedRepeatType == 2
-                                  ? qsTr("Time")
-                                  : repeatLayout.selectedRepeatType == 3 ? qsTr("Day & Time") : qsTr("Date & Time")
-                            color: "#b0b0b0"
-                            font.pointSize: 8
-                        }
-
-                        TextField {
-                            id: dateField
-                            placeholderText: repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
-                                             ? qsTr("Select time")
-                                             : repeatLayout.selectedRepeatType == 3 ? qsTr("Select day and time") : qsTr("Select date and time")
-                            placeholderTextColor: "#999"
-                            color: "white"
-                            clip: true
-                            readOnly: true
-                            Layout.preferredHeight: 40
-                            Layout.fillWidth: true
-
-                            background: Rectangle {
-                                color: "#191919"
-                                radius: 5
-
-                                border {
-                                    width: 1
-                                    color: dateField.focus ? "white" : "#424242"
-                                }
-                            }
-
-                            Component.onCompleted: {
-                                if (isEdit) {
-                                    selectedDateTime = schedule.startTime
-
-                                    if (repeatLayout.selectedRepeatType == 3) {
-                                        text = "Every " + Qt.formatDateTime(dateTime, "dd") + ", at " + Qt.formatDateTime(dateTime, "hh:mm ap")
-                                        return
-                                    }
-
-                                    let format = repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
-                                        ? "hh:mm ap"
-                                        : "dd MMM yyyy, hh:mm ap"
-                                    text = Qt.formatDateTime(schedule.startTime, format)
-                                }
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked:  {
-                                    switch (repeatLayout.selectedRepeatType) {
-                                    case 1:
-                                    case 2:
-                                        timeDialog.open()
-                                        break
-                                    case 3:
-                                        dayTimeDialog.open()
-                                        break
-                                    default:
-                                        dateTimeDialog.open()
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    ColumnLayout {
-                        spacing: 5
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-
-                        Text {
-                            id: txtTimer
-                            text: qsTr("Timer")
-                            color: "#b0b0b0"
-                            font.pointSize: 8
-                        }
-
-                        TextField {
-                            id: timerField
-                            placeholderText: qsTr("Select timer")
-                            placeholderTextColor: "#999"
-                            color: "white"
-                            clip: true
-                            readOnly: true
-                            Layout.preferredHeight: 40
-                            Layout.fillWidth: true
-
-                            background: Rectangle {
-                                color: "#191919"
-                                radius: 5
-
-                                border {
-                                    width: 1
-                                    color: timerField.focus ? "white" : "#424242"
-                                }
-                            }
-
-                            Component.onCompleted: {
-                                if (isEdit) {
-                                    text = setTimer(schedule.timer)
-                                }
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: timerDialog.open()
-                            }
-                        }
-
-                        Row {
-                            spacing: 8
-                            Layout.topMargin: 5
-
-                            Repeater {
-                                model: [
-                                    { label: "5m",  secs: 300 },
-                                    { label: "10m", secs: 600 },
-                                    { label: "15m", secs: 900 },
-                                    { label: "30m", secs: 1800 },
-                                    { label: "1h",  secs: 3600 }
-                                ]
-
-                                delegate: Rectangle {
-                                    width: 50
-                                    height: 28
-                                    radius: 14
-                                    color: selectedTimer === modelData.secs ? layout.modeColors[layout.currentMode] : "#191919"
-                                    border.color: selectedTimer === modelData.secs ? layout.modeColors[layout.currentMode] : "#424242"
-                                    border.width: 1
-
-                                    Behavior on color { ColorAnimation { duration: 150 } }
-                                    Behavior on border.color { ColorAnimation { duration: 150 } }
-
-                                    Text {
-                                        text: modelData.label
-                                        anchors.centerIn: parent
-                                        color: selectedTimer === modelData.secs ? "white" : "#8A8A8A"
-                                        font {
-                                            pixelSize: 11
-                                            bold: selectedTimer === modelData.secs
-                                        }
-                                    }
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        cursorShape: Qt.PointingHandCursor
-                                        onClicked: {
-                                            selectedTimer = modelData.secs
-                                            timerField.text = setTimer(modelData.secs)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
+                // Repeat
                 ColumnLayout {
                     id: repeatLayout
                     spacing: 5
@@ -483,6 +319,181 @@ Item {
                                 }
                             }
                             repeatLayout.selectedDays = temp
+                        }
+                    }
+                }
+
+                RowLayout {
+                    spacing: 15
+                    width: parent.width
+
+                    // Date and Time
+                    ColumnLayout {
+                        spacing: 5
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+
+                        Text {
+                            id: txtDate
+                            text: repeatLayout.selectedRepeatType == 1 || repeatLayout.selectedRepeatType == 2
+                                  ? qsTr("Time")
+                                  : repeatLayout.selectedRepeatType == 3 ? qsTr("Day & Time") : qsTr("Date & Time")
+                            color: "#b0b0b0"
+                            font.pointSize: 8
+                        }
+
+                        TextField {
+                            id: dateField
+                            placeholderText: repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
+                                             ? qsTr("Select time")
+                                             : repeatLayout.selectedRepeatType == 3 ? qsTr("Select day and time") : qsTr("Select date and time")
+                            placeholderTextColor: "#999"
+                            color: "white"
+                            clip: true
+                            readOnly: true
+                            Layout.preferredHeight: 40
+                            Layout.fillWidth: true
+
+                            background: Rectangle {
+                                color: "#191919"
+                                radius: 5
+
+                                border {
+                                    width: 1
+                                    color: dateField.focus ? "white" : "#424242"
+                                }
+                            }
+
+                            Component.onCompleted: {
+                                if (isEdit) {
+                                    selectedDateTime = schedule.startTime
+
+                                    if (repeatLayout.selectedRepeatType == 3) {
+                                        text = "Every " + Qt.formatDateTime(dateTime, "dd") + ", at " + Qt.formatDateTime(dateTime, "hh:mm ap")
+                                        return
+                                    }
+
+                                    let format = repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
+                                        ? "hh:mm ap"
+                                        : "dd MMM yyyy, hh:mm ap"
+                                    text = Qt.formatDateTime(schedule.startTime, format)
+                                }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked:  {
+                                    switch (repeatLayout.selectedRepeatType) {
+                                    case 1:
+                                    case 2:
+                                        timeDialog.open()
+                                        break
+                                    case 3:
+                                        dayTimeDialog.open()
+                                        break
+                                    default:
+                                        dateTimeDialog.open()
+                                    }
+                                }
+                            }
+                        }
+
+                        Item {
+                            height: 28
+                            width: 10
+                            Layout.topMargin: 5
+                        }
+                    }
+
+                    // Timer
+                    ColumnLayout {
+                        spacing: 5
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+
+                        Text {
+                            id: txtTimer
+                            text: qsTr("Timer")
+                            color: "#b0b0b0"
+                            font.pointSize: 8
+                        }
+
+                        TextField {
+                            id: timerField
+                            placeholderText: qsTr("Select timer")
+                            placeholderTextColor: "#999"
+                            color: "white"
+                            clip: true
+                            readOnly: true
+                            Layout.preferredHeight: 40
+                            Layout.fillWidth: true
+
+                            background: Rectangle {
+                                color: "#191919"
+                                radius: 5
+
+                                border {
+                                    width: 1
+                                    color: timerField.focus ? "white" : "#424242"
+                                }
+                            }
+
+                            Component.onCompleted: {
+                                if (isEdit) {
+                                    text = setTimer(schedule.timer)
+                                }
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: timerDialog.open()
+                            }
+                        }
+
+                        Row {
+                            spacing: 8
+                            Layout.topMargin: 5
+
+                            Repeater {
+                                model: [
+                                    { label: "5m",  secs: 300 },
+                                    { label: "10m", secs: 600 },
+                                    { label: "15m", secs: 900 },
+                                    { label: "30m", secs: 1800 },
+                                    { label: "1h",  secs: 3599 }
+                                ]
+
+                                delegate: Rectangle {
+                                    width: 50
+                                    height: 28
+                                    radius: 14
+                                    color: selectedTimer === modelData.secs ? layout.modeColors[layout.currentMode] : "#191919"
+                                    border.color: selectedTimer === modelData.secs ? layout.modeColors[layout.currentMode] : "#424242"
+                                    border.width: 1
+
+                                    Behavior on color { ColorAnimation { duration: 150 } }
+                                    Behavior on border.color { ColorAnimation { duration: 150 } }
+
+                                    Text {
+                                        text: modelData.label
+                                        anchors.centerIn: parent
+                                        color: selectedTimer === modelData.secs ? "white" : "#8A8A8A"
+                                        font {
+                                            pixelSize: 11
+                                            bold: selectedTimer === modelData.secs
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            selectedTimer = modelData.secs
+                                            timerField.text = setTimer(modelData.secs)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
