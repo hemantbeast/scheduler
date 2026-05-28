@@ -129,7 +129,7 @@ Item {
                 Rectangle {
                     Layout.preferredWidth: 6
                     Layout.fillHeight: true
-                    color: itemLayout.currentSettings.color
+                    color: currentSettings.color
                     radius: 3
                 }
 
@@ -141,8 +141,8 @@ Item {
 
                     SvgImage {
                         height: 24; width: 24
-                        color: itemLayout.currentSettings.color
-                        source: itemLayout.currentSettings.icon
+                        color: currentSettings.color
+                        source: currentSettings.icon
                         anchors.centerIn: parent
                     }
 
@@ -181,7 +181,7 @@ Item {
                             width: runningLabel.width + 12
                             height: 18
                             radius: 9
-                            color: itemLayout.currentSettings.color
+                            color: currentSettings.color
 
                             Text {
                                 id: runningLabel
