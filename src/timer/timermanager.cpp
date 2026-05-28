@@ -34,6 +34,16 @@ QString TimerManager::nextScheduleName()
     return mNextScheduleName;
 }
 
+int TimerManager::activeScheduleId()
+{
+    return mActiveScheduleId;
+}
+
+QString TimerManager::activeScheduleName()
+{
+    return mActiveScheduleName;
+}
+
 void TimerManager::stopTimer()
 {
     bool isRunning = timer->isActive();
@@ -57,12 +67,12 @@ void TimerManager::processSchedules()
     QDateTime now = QDateTime::currentDateTime();
     bool scheduleRunning = false;
 
-    // Fallback trackers for finding the next chronological event
     qint64 minimumTimeDifference = std::numeric_limits<qint64>::max();
     int shortestRunningDuration = std::numeric_limits<int>::max();
     QString upcomingName = "";
+    int activeId = -1;
+    QString activeName = "";
 
-    // Access data safely from your existing mSchedules QList
     const QList<ScheduleItem> &schedules = schedule->getSchedulesList();
 
     for (const auto &item : schedules) {
@@ -75,7 +85,6 @@ void TimerManager::processSchedules()
 
         QDateTime endTime = effectiveStart.addSecs(item.timer);
 
-        // Scenario A: Item is currently running right now
         if (now >= effectiveStart && now < endTime) {
             int currentTotalSeconds = item.timer;
 
@@ -83,12 +92,13 @@ void TimerManager::processSchedules()
                 mSecondsRemaining = static_cast<int>(now.secsTo(endTime));
                 mTotalDuration = currentTotalSeconds;
                 mCurrentMode = mUserMode != -1 ? mUserMode : mapModeToIndex(item.mode);
+                activeId = item.id;
+                activeName = item.name;
 
                 shortestRunningDuration = currentTotalSeconds;
                 scheduleRunning = true;
             }
         }
-        // Scenario B: Item is in the future. Find the closest upcoming one
         else if (effectiveStart > now) {
             qint64 diff = now.secsTo(effectiveStart);
 
@@ -99,13 +109,22 @@ void TimerManager::processSchedules()
         }
     }
 
-    // Reset properties to zero idle state if no active windows are open
+    if (mWasRunning && !scheduleRunning) {
+        emit timerCompleted();
+    }
+
     if (!scheduleRunning) {
         mSecondsRemaining = 0;
         mTotalDuration = 1;
         mUserMode = -1;
+        mActiveScheduleId = -1;
+        mActiveScheduleName = "";
+    } else {
+        mActiveScheduleId = activeId;
+        mActiveScheduleName = activeName;
     }
 
+    mWasRunning = scheduleRunning;
     mNextScheduleName = upcomingName;
     emit timerUpdated();
 }
@@ -126,20 +145,18 @@ QDateTime TimerManager::calculateNextOccurance(const ScheduleItem &item, const Q
     QDateTime target(baseDate, timeOfDay);
 
     switch (item.repeatType) {
-    case 0: // Once
+    case 0:
         return item.startTime;
 
-    case 1: // Daily
-        // If the time has already passed today, it happens tomorrow
+    case 1:
         if (target.addSecs(item.timer) <= now) {
             target = target.addDays(1);
         }
         return target;
 
-    case 2: { // Weekly
+    case 2: {
         if (item.repeatDays.isEmpty()) return QDateTime();
 
-        // 1. Parse the comma-separated string into integers
         QList<int> parsedDays;
         QStringList dayTokens = item.repeatDays.split(',', Qt::SkipEmptyParts);
 
@@ -157,15 +174,12 @@ QDateTime TimerManager::calculateNextOccurance(const ScheduleItem &item, const Q
         QDateTime closestMatch;
         qint64 minSecs = std::numeric_limits<qint64>::max();
 
-        // 2. Check day offsets from today (0 to 6 days into the future)
         for (int daysAhead = 0; daysAhead < 7; ++daysAhead) {
             QDateTime candidate = target.addDays(daysAhead);
 
-            // Convert Qt dayOfWeek (1=Mon...7=Sun) to your index (0=Mon...6=Sun)
             int candidateDayIdx = candidate.date().dayOfWeek() - 1;
 
             if (parsedDays.contains(candidateDayIdx)) {
-                // If candidate is today but the timer window already ended, skip to next week
                 if (daysAhead == 0 && candidate.addSecs(item.timer) <= now) {
                     candidate = candidate.addDays(7);
                 }
@@ -180,8 +194,7 @@ QDateTime TimerManager::calculateNextOccurance(const ScheduleItem &item, const Q
         return closestMatch;
     }
 
-    case 3: // Monthly
-        // Matches the exact calendar day number (e.g., every 15th)
+    case 3:
         target = QDateTime(QDate(now.date().year(), now.date().month(), item.startTime.date().day()), timeOfDay);
         if (target.addSecs(item.timer) <= now) {
             target = target.addMonths(1);
@@ -190,5 +203,77 @@ QDateTime TimerManager::calculateNextOccurance(const ScheduleItem &item, const Q
 
     default:
         return item.startTime;
+    }
+}
+
+QString TimerManager::previewNextOccurrence(const QString &mode, const QDateTime &startTime,
+                                             int timer, int repeatType, const QString &repeatDays)
+{
+    if (!startTime.isValid()) return "";
+
+    QDateTime now = QDateTime::currentDateTime();
+
+    ScheduleItem tempItem;
+    tempItem.id = -1;
+    tempItem.name = "";
+    tempItem.mode = mode;
+    tempItem.startTime = startTime;
+    tempItem.timer = timer;
+    tempItem.isEnabled = true;
+    tempItem.repeatType = repeatType;
+    tempItem.repeatDays = repeatDays;
+
+    QDateTime nextOccurrence = calculateNextOccurance(tempItem, now);
+
+    if (!nextOccurrence.isValid()) return "";
+
+    QDate today = now.date();
+    QDate tomorrow = today.addDays(1);
+    QDate nextDate = nextOccurrence.date();
+    QTime nextTime = nextOccurrence.time();
+
+    QString timeStr = nextTime.toString("h:mm AP");
+
+    if (nextDate == today) {
+        return "Today at " + timeStr;
+    } else if (nextDate == tomorrow) {
+        return "Tomorrow at " + timeStr;
+    } else {
+        switch (repeatType) {
+        case 1:
+            return "Every day at " + timeStr;
+
+        case 2: {
+            if (repeatDays.isEmpty()) return "Weekly at " + timeStr;
+
+            QStringList dayLabels = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+            QStringList selectedDays;
+            QStringList tokens = repeatDays.split(',', Qt::SkipEmptyParts);
+
+            for (const QString &token : tokens) {
+                bool ok;
+                int idx = token.trimmed().toInt(&ok);
+                if (ok && idx >= 0 && idx < 7) {
+                    selectedDays.append(dayLabels[idx]);
+                }
+            }
+
+            if (selectedDays.isEmpty()) return "Weekly at " + timeStr;
+            return "Every " + selectedDays.join(", ") + " at " + timeStr;
+        }
+
+        case 3: {
+            int day = nextDate.day();
+            QString suffix = "th";
+            if (day % 10 == 1 && day != 11) suffix = "st";
+            else if (day % 10 == 2 && day != 12) suffix = "nd";
+            else if (day % 10 == 3 && day != 13) suffix = "rd";
+
+            return "Every " + QString::number(day) + suffix + " of the month at " + timeStr;
+        }
+
+        default:
+            return nextDate.toString("MMM d, yyyy") + " at " + timeStr;
+        }
     }
 }
