@@ -5,6 +5,7 @@ import QtQuick.Shapes 1.15
 import QtGraphicalEffects 1.15
 import "../../config"
 import "../common"
+import "../dialogs"
 
 Item {
     id: scheduleRoot
@@ -102,10 +103,19 @@ Item {
         Rectangle {
             height: 80
             width: ListView.view ? ListView.view.width : 0
-            color: mouseArea.containsMouse ? "#252525" : "#1a1a1a"
-            border.color: "#333"
+
+            property bool isActive: model.id === timerManager.activeScheduleId
+            property var currentSettings: StyleConfig.modeSettings[model.mode] || StyleConfig.modeSettings["HEAT"]
+
+            color: isActive ? Qt.darker(currentSettings.color, 8) : (mouseArea.containsMouse ? "#252525" : "#1a1a1a")
+            border.color: isActive ? currentSettings.color : "#333"
+            border.width: isActive ? 2 : 1
 
             Behavior on color {
+                ColorAnimation { duration: 150 }
+            }
+
+            Behavior on border.color {
                 ColorAnimation { duration: 150 }
             }
 
@@ -114,8 +124,6 @@ Item {
                 spacing: 15
                 anchors.fill: parent
                 anchors.margins: 15
-
-                property var currentSettings: StyleConfig.modeSettings[model.mode] || StyleConfig.modeSettings["HEAT"]
 
                 // Mode Indicator
                 Rectangle {
@@ -155,13 +163,44 @@ Item {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignVCenter
 
-                    Text {
-                        text: model.name
-                        color: model.isEnabled ? "white" : "#d9d9d9"
-                        font {
-                            pixelSize: 17
-                            weight: Font.Bold
-                            letterSpacing: 0.2
+                    RowLayout {
+                        spacing: 8
+
+                        Text {
+                            text: model.name
+                            color: model.isEnabled ? "white" : "#d9d9d9"
+                            font {
+                                pixelSize: 17
+                                weight: Font.Bold
+                                letterSpacing: 0.2
+                            }
+                        }
+
+                        Rectangle {
+                            visible: isActive
+                            width: runningLabel.width + 12
+                            height: 18
+                            radius: 9
+                            color: itemLayout.currentSettings.color
+
+                            Text {
+                                id: runningLabel
+                                text: "RUNNING"
+                                anchors.centerIn: parent
+                                color: "white"
+                                font {
+                                    pixelSize: 9
+                                    bold: true
+                                    letterSpacing: 0.5
+                                }
+                            }
+
+                            SequentialAnimation on opacity {
+                                loops: Animation.Infinite
+                                running: isActive
+                                NumberAnimation { from: 1.0; to: 0.6; duration: 1000; easing.type: Easing.InOutSine }
+                                NumberAnimation { from: 0.6; to: 1.0; duration: 1000; easing.type: Easing.InOutSine }
+                            }
                         }
                     }
 
@@ -339,7 +378,9 @@ Item {
                             id: delMouseArea
                             anchors.fill: parent
                             onClicked: {
-                                scheduleModel.removeItem(index)
+                                deleteConfirmDialog.scheduleIndex = index
+                                deleteConfirmDialog.scheduleName = model.name
+                                deleteConfirmDialog.open()
                             }
                         }
                     }
@@ -362,13 +403,13 @@ Item {
         let dayNum = Qt.formatDateTime(startTime, "d");
 
         switch(repeatType) {
-            case 0: // Once
+            case 0:
                 return Qt.formatDateTime(startTime, "d MMM yyyy, hh:mm ap");
 
-            case 1: // Daily
+            case 1:
                 return "Every day at " + timeStr;
 
-            case 2: // Weekly
+            case 2:
                 if (!repeatDays) return "Weekly at " + timeStr;
                 const longLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
                 let indices = repeatDays.split(",");
@@ -381,7 +422,7 @@ Item {
 
                 return days.join(", ") + " at " + timeStr;
 
-            case 3: // Monthly
+            case 3:
                 let suffix = "th";
                 if (dayNum % 10 === 1 && dayNum !== 11) suffix = "st";
                 else if (dayNum % 10 === 2 && dayNum !== 12) suffix = "nd";
@@ -391,6 +432,25 @@ Item {
 
             default:
                 return Qt.formatDateTime(startTime, "d MMM yyyy, hh:mm ap");
+        }
+    }
+
+    ConfirmDialog {
+        id: deleteConfirmDialog
+        property int scheduleIndex: -1
+        property string scheduleName: ""
+
+        message: "Delete \"" + scheduleName + "\"?\nThis action cannot be undone."
+        confirmText: "Delete"
+        confirmColor: "#EF5350"
+
+        onConfirmed: {
+            scheduleModel.removeItem(scheduleIndex)
+            toastManager.createMessage("Schedule deleted", {
+                type: "success",
+                position: Qt.TopEdge,
+                theme: "Color"
+            })
         }
     }
 }
