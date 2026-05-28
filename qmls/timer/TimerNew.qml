@@ -12,6 +12,7 @@ Item {
 
     property real progressPercentage: timerManager.secondsRemaining / timerManager.totalDuration
     property real computedSweepAngle: progressPercentage * 270
+    property bool isFlashing: false
 
     function formatTime(totalSeconds) {
         if (totalSeconds <= 0) return "00:00"
@@ -22,116 +23,24 @@ Item {
         return (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds
     }
 
-    // Rectangle {
-    //     id: bgGlow
-    //     anchors.fill: parent
+    TimerBackground {
+        anchors.fill: parent
+        currentColor: timerScreen.modeColors[timerManager.currentMode]
+        isActive: timerManager.secondsRemaining > 0
+    }
 
-    //     Item {
-    //         id: proxySource
-    //         anchors.fill: parent
-    //         visible: false
-    //     }
-
-    //     RadialGradient {
-    //         source: proxySource
-    //         anchors.fill: parent
-    //         horizontalRadius: width / 2
-    //         verticalRadius: height / 2
-    //         gradient: Gradient {
-    //             GradientStop {
-    //                 id: coreColor
-    //                 position: 0.0
-
-    //                 // Correct syntax: target color string + desired alpha
-    //                 color: {
-    //                     let baseColor = timerScreen.modeColors[timerManager.currentMode] || "#000000";
-    //                     return Qt.rgba(baseColor.r, baseColor.g, baseColor.b, 0.15);
-    //                 }
-
-    //                 // Animate the color property directly
-    //                 Behavior on color { ColorAnimation { duration: 1000 } }
-    //             }
-
-    //             GradientStop {
-    //                 position: 0.7
-    //                 color: "transparent"
-    //             }
-    //         }
-    //     }
-    // }
-
-    // Mode Text
-    Rectangle {
+    TimerModeText {
         id: segmentedControl
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 40
-        width: 320
-        height: 40
-        radius: height / 2
-        color: "#161616"
-        border.color: "#282828"
-        border.width: 1
+        currentMode: timerManager.currentMode
+        modeColors: timerScreen.modeColors
+        modeNames: timerScreen.modeNames
+        isTimerRunning: timerManager.secondsRemaining > 0
 
-        Rectangle {
-            id: activeIndicator
-            width: segmentedControl.width / timerScreen.modeNames.length - 8
-            height: segmentedControl.height - 8
-            radius: height / 2
-            anchors.verticalCenter: parent.verticalCenter
-            color: timerScreen.modeColors[timerManager.currentMode]
-            x: 4 + (timerManager.currentMode * (segmentedControl.width / timerScreen.modeNames.length))
-
-            Behavior on x {
-                NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-            }
-
-            Behavior on color {
-                ColorAnimation { duration: 300 }
-            }
-        }
-
-        Row {
-            anchors.fill: parent
-
-            Repeater {
-                model: timerScreen.modeNames
-
-                Item {
-                    width: segmentedControl.width / timerScreen.modeNames.length
-                    height: segmentedControl.height
-
-                    Text {
-                        text: modelData
-                        anchors.centerIn: parent
-                        color: timerManager.currentMode === index ? "white" : "#8A8A8A"
-                        scale: timerManager.currentMode === index ? 1.05 : 1.0
-                        font {
-                            pixelSize: 11
-                            letterSpacing: 1.5
-                            bold: true
-                        }
-
-                        Behavior on color {
-                            ColorAnimation { duration: 250 }
-                        }
-
-                        Behavior on scale {
-                            NumberAnimation { duration: 200 }
-                        }
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            if (timerManager.secondsRemaining > 0) {
-                                timerManager.currentMode = index
-                            }
-                        }
-                    }
-                }
-            }
+        onModeSelected: {
+            timerManager.currentMode = index
         }
     }
 
@@ -199,7 +108,6 @@ Item {
         //     }
         // }
 
-        // Animated "Mode" Progress Ring
         Shape {
             anchors.fill: parent
             layer.enabled: true
@@ -208,7 +116,7 @@ Item {
             ShapePath {
                 strokeWidth: 13.75; fillColor: "transparent"
                 capStyle: ShapePath.RoundCap
-                strokeColor: timerScreen.modeColors[timerManager.currentMode]
+                strokeColor: timerScreen.isFlashing ? "white" : timerScreen.modeColors[timerManager.currentMode]
 
                 Behavior on strokeColor {
                     ColorAnimation { duration: 400 }
@@ -219,7 +127,7 @@ Item {
                     centerX: 125; centerY: 125
                     radiusX: 112.5; radiusY: 112.5
                     startAngle: -225
-                    sweepAngle: timerScreen.computedSweepAngle // Linked to timer progress
+                    sweepAngle: timerScreen.computedSweepAngle
 
                     Behavior on sweepAngle {
                         NumberAnimation { duration: 300 }
@@ -284,6 +192,31 @@ Item {
                 ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 1
+                    visible: timerManager.activeScheduleName !== ""
+
+                    Text {
+                        text: qsTr("RUNNING")
+                        color: "#555"
+                        Layout.alignment: Qt.AlignHCenter
+                        font {
+                            pixelSize: 8; bold: true
+                        }
+                    }
+                    Text {
+                        text: timerManager.activeScheduleName
+                        color: timerScreen.modeColors[timerManager.currentMode]
+                        Layout.alignment: Qt.AlignHCenter
+                        font {
+                            pixelSize: 10; italic: true; bold: true
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    Layout.alignment: Qt.AlignHCenter
+                    spacing: 1
+                    visible: timerManager.activeScheduleName === "" && timerManager.nextScheduleName !== ""
+
                     Text {
                         text: qsTr("NEXT UP")
                         color: "#555"
@@ -344,6 +277,28 @@ Item {
                     NumberAnimation { duration: 50 }
                 }
             }
+        }
+    }
+
+    SequentialAnimation {
+        id: completionFlash
+        loops: 3
+
+        ScriptAction { script: timerScreen.isFlashing = true }
+        PauseAnimation { duration: 250 }
+        ScriptAction { script: timerScreen.isFlashing = false }
+        PauseAnimation { duration: 250 }
+    }
+
+    Connections {
+        target: timerManager
+        function onTimerCompleted() {
+            completionFlash.start()
+            toastManager.createMessage("Schedule completed!", {
+                type: "success",
+                position: Qt.TopEdge,
+                theme: "Color"
+            })
         }
     }
 }

@@ -19,5 +19,8 @@
         <file>qmls/dialogs/DateTimeDialog.qml</file>
         <file>qmls/dialogs/TimeDialog.qml</file>
         <file>qmls/dialogs/TimerDialog.qml</file>
+        <file>qmls/dialogs/ConfirmDialog.qml</file>
+        <file>qmls/timer/TimerBackground.qml</file>
+        <file>qmls/timer/TimerModeText.qml</file>
     </qresource>
 </RCC>
