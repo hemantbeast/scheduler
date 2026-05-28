@@ -295,6 +295,52 @@ Item {
                                 onClicked: timerDialog.open()
                             }
                         }
+
+                        Row {
+                            spacing: 8
+                            Layout.topMargin: 5
+
+                            Repeater {
+                                model: [
+                                    { label: "5m",  secs: 300 },
+                                    { label: "10m", secs: 600 },
+                                    { label: "15m", secs: 900 },
+                                    { label: "30m", secs: 1800 },
+                                    { label: "1h",  secs: 3600 }
+                                ]
+
+                                delegate: Rectangle {
+                                    width: 50
+                                    height: 28
+                                    radius: 14
+                                    color: selectedTimer === modelData.secs ? layout.modeColors[layout.currentMode] : "#191919"
+                                    border.color: selectedTimer === modelData.secs ? layout.modeColors[layout.currentMode] : "#424242"
+                                    border.width: 1
+
+                                    Behavior on color { ColorAnimation { duration: 150 } }
+                                    Behavior on border.color { ColorAnimation { duration: 150 } }
+
+                                    Text {
+                                        text: modelData.label
+                                        anchors.centerIn: parent
+                                        color: selectedTimer === modelData.secs ? "white" : "#8A8A8A"
+                                        font {
+                                            pixelSize: 11
+                                            bold: selectedTimer === modelData.secs
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            selectedTimer = modelData.secs
+                                            timerField.text = setTimer(modelData.secs)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -449,6 +495,42 @@ Item {
             Layout.fillWidth: true
             Layout.leftMargin: 20
             Layout.rightMargin: 20
+
+            Text {
+                id: previewLabel
+                visible: selectedDateTime && selectedTimer
+                text: {
+                    if (!selectedDateTime || !selectedTimer) return ""
+
+                    var dayIndices = []
+                    if (repeatLayout.selectedRepeatType === 2) {
+                        for (var i = 0; i < repeatLayout.selectedDays.length; i++) {
+                            if (repeatLayout.selectedDays[i]) {
+                                dayIndices.push(i)
+                            }
+                        }
+                    }
+
+                    var repeatDaysString = dayIndices.join(",")
+                    var modeName = layout.modeNames[layout.currentMode].toUpperCase()
+
+                    return "Next run: " + timerManager.previewNextOccurrence(
+                        modeName,
+                        selectedDateTime,
+                        selectedTimer,
+                        repeatLayout.selectedRepeatType,
+                        repeatDaysString
+                    )
+                }
+                color: "#888"
+                font {
+                    pixelSize: 12
+                    italic: true
+                }
+                Layout.alignment: Qt.AlignVCenter
+            }
+
+            Item { Layout.fillWidth: true }
 
             Button {
                 id: saveBtn
