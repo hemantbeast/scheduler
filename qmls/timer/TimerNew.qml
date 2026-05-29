@@ -7,7 +7,7 @@ import QtGraphicalEffects 1.15
 Item {
     id: timerScreen
 
-    property var modeColors: ["#FF5F00", "#00B4FF", "#00FFC2"]
+    property var modeColors: ["#FF5F00", "#00B4FF", "#00A884"]
     property var modeNames: ["HEAT", "COOL", "DRY"]
 
     property real progressPercentage: timerManager.secondsRemaining / timerManager.totalDuration

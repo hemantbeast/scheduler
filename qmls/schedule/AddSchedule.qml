@@ -45,7 +45,7 @@ Item {
                 width: scrollView.availableWidth
 
                 property int currentMode: 0
-                property var modeColors: ["#FF5F00", "#00B4FF", "#00FFC2"]
+                property var modeColors: ["#FF5F00", "#00B4FF", "#00A884"]
                 property var modeNames: ["Heat", "Cool", "Dry"]
 
                 RowLayout {
@@ -220,8 +220,8 @@ Item {
                                 }
 
                                 background: Rectangle {
-                                    color: repeatTypeBtn.isActive ? "#FF5F00" : "#191919"
-                                    border.color: repeatTypeBtn.isActive ? "#FF5F00" : "#424242"
+                                    color: repeatTypeBtn.isActive ? "#9D4EDD" : "#191919"
+                                    border.color: repeatTypeBtn.isActive ? "#9D4EDD" : "#424242"
                                     border.width: 1
                                     radius: 6
 
@@ -274,14 +274,14 @@ Item {
                                     property bool isDaySelected: repeatLayout.selectedDays[index]
 
                                     // Visual states
-                                    color: isDaySelected ? "#00B4FF" : "#1B1B1B"
-                                    border.color: isDaySelected ? "#00B4FF" : "#2F2F2F"
+                                    color: isDaySelected ? "#B77CFF" : "#1B1B1B"
+                                    border.color: isDaySelected ? "#B77CFF" : "#2F2F2F"
                                     border.width: 1
 
                                     Text {
                                         text: modelData
                                         anchors.centerIn: parent
-                                        color: dayBubble.isDaySelected ? "#FFFFFF" : "#7A7A7A"
+                                        color: dayBubble.isDaySelected ? "#121212" : "#7A7A7A"
                                         font { pixelSize: 11; bold: true }
                                     }
 
@@ -467,8 +467,8 @@ Item {
                                     width: 50
                                     height: 28
                                     radius: 14
-                                    color: selectedTimer === modelData.secs ? layout.modeColors[layout.currentMode] : "#191919"
-                                    border.color: selectedTimer === modelData.secs ? layout.modeColors[layout.currentMode] : "#424242"
+                                    color: selectedTimer === modelData.secs ? "#FFD166" : "#191919"
+                                    border.color: selectedTimer === modelData.secs ? "#FFD166" : "#424242"
                                     border.width: 1
 
                                     Behavior on color { ColorAnimation { duration: 150 } }
@@ -477,7 +477,7 @@ Item {
                                     Text {
                                         text: modelData.label
                                         anchors.centerIn: parent
-                                        color: selectedTimer === modelData.secs ? "white" : "#8A8A8A"
+                                        color: selectedTimer === modelData.secs ? "#121212" : "#8A8A8A"
                                         font {
                                             pixelSize: 11
                                             bold: selectedTimer === modelData.secs
@@ -509,7 +509,7 @@ Item {
 
             Text {
                 id: previewLabel
-                visible: selectedDateTime && selectedTimer
+                visible: !!selectedDateTime && !!selectedTimer
                 text: {
                     if (!selectedDateTime || !selectedTimer) return ""
 

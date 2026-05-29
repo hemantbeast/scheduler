@@ -17,7 +17,7 @@ Item {
                     let r = parseInt(currentColor.substr(1, 2), 16) / 255
                     let g = parseInt(currentColor.substr(3, 2), 16) / 255
                     let b = parseInt(currentColor.substr(5, 2), 16) / 255
-                    return Qt.rgba(r, g, b, root.isActive ? 0.15 : 0.08)
+                    return Qt.rgba(r, g, b, root.isActive ? 0.25 : 0.15)
                 }
                 Behavior on color { ColorAnimation { duration: 800 } }
             }

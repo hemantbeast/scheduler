@@ -148,7 +148,7 @@ Item {
 
                     SvgImage {
                         height: 12; width: 12
-                        color: "#4CAF50"
+                        color: "#B77CFF"
                         source: "../../images/repeat.svg"
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom

@@ -20,7 +20,7 @@ Item {
         },
         "DRY": {
             label: "Dry Mode",
-            color: "#00FF94",
+            color: "#00A884",
             icon: "../../images/humidity.svg",
             bgGradient: "#102a1a"
         }
