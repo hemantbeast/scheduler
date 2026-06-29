@@ -8,8 +8,8 @@ Item {
 
     RadialGradient {
         anchors.fill: parent
-        horizontalRadius: width / 2
-        verticalRadius: height / 2
+        horizontalRadius: width / 1.1
+        verticalRadius: height / 1.1
         gradient: Gradient {
             GradientStop {
                 position: 0.0
