@@ -6,6 +6,7 @@ import "menu"
 import "toast"
 import "timer"
 import "schedule"
+import "settings"
 
 Window {
     width: 800
@@ -25,12 +26,13 @@ Window {
     }
 
     Component {
-        id:mainView
+        id: mainView
 
         Item {
             id: mainRoot
 
             property string selectedMenu: "Timer"
+            property int currentIndex: 0
 
             MenuView {
                 id: sideBar
@@ -39,43 +41,70 @@ Window {
                 anchors.bottom: parent.bottom
                 onSelected: {
                     mainRoot.selectedMenu = name
+
+                    if (name === "Schedule") {
+                        mainRoot.currentIndex = 1
+                    }
+
+                    if (name === "Sleep") {
+                        mainRoot.currentIndex = 2
+                    }
+
+                    if (name === "Setting") {
+                        mainRoot.currentIndex = 3
+                    }
+
+                    if (name === "Timer") {
+                        mainRoot.currentIndex = 0
+                    }
                 }
             }
 
+
             Item {
-                clip: true
+                id: viewport
                 anchors.left: sideBar.right
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                clip: true
 
-                TimerNew {
-                    id: timerPage
+                Item {
+                    id: strip
                     width: parent.width
-                    height: parent.height
-                    y: mainRoot.selectedMenu === "Timer" ? 0 : -parent.height
-                    opacity: mainRoot.selectedMenu === "Timer" ? 1.0 : 0.0
+                    height: parent.height * 3
+
+                    y: -mainRoot.currentIndex * mainRoot.height
 
                     Behavior on y {
-                        NumberAnimation { duration: 400; easing.type: Easing.OutCubic }
+                        NumberAnimation {
+                            duration: 400
+                            easing.type: Easing.OutCubic
+                        }
                     }
-                    Behavior on opacity {
-                        NumberAnimation { duration: 300 }
-                    }
-                }
 
-                Schedule {
-                    id: schedulePage
-                    width: parent.width
-                    height: parent.height
-                    y: mainRoot.selectedMenu === "Schedule" ? 0 : parent.height
-                    opacity: mainRoot.selectedMenu === "Schedule" ? 1.0 : 0.0
-
-                    Behavior on y {
-                        NumberAnimation { duration: 400; easing.type: Easing.OutCubic }
+                    TimerNew {
+                        width: parent.width
+                        height: mainRoot.height
+                        y: 0
                     }
-                    Behavior on opacity {
-                        NumberAnimation { duration: 300 }
+
+                    Schedule {
+                        width: parent.width
+                        height: mainRoot.height
+                        y: mainRoot.height
+                    }
+
+                    SleepCurveGraph {
+                        width: parent.width
+                        height: mainRoot.height
+                        y: mainRoot.height * 2
+                    }
+
+                    Setting {
+                        width: parent.width
+                        height: mainRoot.height
+                        y: mainRoot.height * 3
                     }
                 }
             }

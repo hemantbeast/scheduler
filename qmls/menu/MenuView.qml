@@ -32,6 +32,16 @@ Item {
                     iconSelected: "../../images/calendar_selected.svg"
                     iconUnselected: "../../images/calendar_unselected.svg"
                 }
+                ListElement {
+                    name: "Sleep"
+                    iconSelected: "../../images/sleep_selected.svg"
+                    iconUnselected: "../../images/sleep_unselected.svg"
+                }
+                ListElement {
+                    name: "Setting"
+                    iconSelected: "../../images/setting_selected.svg"
+                    iconUnselected: "../../images/setting_unselected.svg"
+                }
             }
 
             Repeater {

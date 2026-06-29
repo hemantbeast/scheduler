@@ -40,5 +40,10 @@
         <file>resources/icons/warning.svg</file>
         <file>resources/icons/warning-white.svg</file>
         <file>images/repeat.svg</file>
+        <file>images/chart.svg</file>
+        <file>images/setting_selected.svg</file>
+        <file>images/setting_unselected.svg</file>
+        <file>images/sleep_selected.svg</file>
+        <file>images/sleep_unselected.svg</file>
     </qresource>
 </RCC>

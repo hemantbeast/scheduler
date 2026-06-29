@@ -22,5 +22,7 @@
         <file>qmls/dialogs/ConfirmDialog.qml</file>
         <file>qmls/timer/TimerBackground.qml</file>
         <file>qmls/timer/TimerModeText.qml</file>
+        <file>qmls/schedule/SleepCurveGraph.qml</file>
+        <file>qmls/settings/Setting.qml</file>
     </qresource>
 </RCC>
