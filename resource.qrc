@@ -45,5 +45,7 @@
         <file>images/setting_unselected.svg</file>
         <file>images/sleep_selected.svg</file>
         <file>images/sleep_unselected.svg</file>
+        <file>resources/seed.sql</file>
+        <file>images/right_arrow.svg</file>
     </qresource>
 </RCC>

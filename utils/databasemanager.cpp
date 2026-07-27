@@ -10,6 +10,15 @@ DatabaseManager::DatabaseManager(const QString &dbName, QObject *parent)
         qDebug() << "Error: Connection with database failed:" << mDb.lastError().text();
     } else {
         qDebug() << "Database opened successfully at:" << dbName;
+
+        QSqlQuery pragmaQuery(mDb);
+
+        if (!pragmaQuery.exec("PRAGMA journal_mode = DELETE;")) {
+            qDebug() << "Failed to set PRAGMA:" << pragmaQuery.lastError().text();
+        } else {
+            pragmaQuery.next();
+            qDebug() << "SQLite Journal Mode set to:" << pragmaQuery.value(0).toString();
+        }
     }
 }
 
@@ -128,6 +137,32 @@ bool DatabaseManager::deleteRecord(const QString &tableName, const QString &wher
         return false;
     }
     return true;
+}
+
+void DatabaseManager::enableExternalChangeDetection(int intervalMs)
+{
+    QSqlQuery query(mDb);
+
+    if (query.exec("PRAGMA data_version") && query.next()) {
+        m_lastDataVersion = query.value(0).toInt();
+    }
+
+    m_watcherTimer = new QTimer(this);
+
+    connect(m_watcherTimer, &QTimer::timeout, this, [this]() {
+        QSqlQuery q(mDb);
+
+        if (q.exec("PRAGMA data_version") && q.next()) {
+            int ver = q.value(0).toInt();
+
+            if (ver != m_lastDataVersion) {
+                m_lastDataVersion = ver;
+                emit externalDatabaseChanged();
+            }
+        }
+    });
+
+    m_watcherTimer->start(intervalMs);
 }
 
 bool DatabaseManager::addColumnIfNeeded(const QString &tableName, const QString &columnName, const QString &columnType)

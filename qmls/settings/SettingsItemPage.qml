@@ -1,0 +1,41 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import "../common"
+
+Page {
+    id: root
+
+    property string pageTitle: ""
+
+    background: Rectangle {
+        color: "black"
+    }
+
+    header: NavigationHeader {
+        id: navigation
+        title: root.pageTitle
+        Layout.alignment: Qt.AlignTop
+    }
+
+    ListView {
+        id: settingsList
+        anchors.fill: parent
+        clip: true
+        model: itemModel            // SettingsItemModel*
+        spacing: 0
+
+        delegate: SettingDelegate {
+            onKeyValueChanged: (key, val) => itemModel.setValue(key, val)
+        }
+
+        // Empty state
+        Label {
+            anchors.centerIn: parent
+            visible: settingsList.count === 0
+            text: "No settings available"
+            color: "#444444"
+            font.pixelSize: 20
+        }
+    }
+}

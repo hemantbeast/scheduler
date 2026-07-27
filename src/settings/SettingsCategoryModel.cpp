@@ -1,0 +1,58 @@
+#include "SettingsCategoryModel.h"
+
+SettingsCategoryModel::SettingsCategoryModel(SettingsRepository *repo, QObject *parent)
+    : QAbstractListModel{parent}, mRepo(repo)
+{
+    connect(mRepo, &SettingsRepository::dataChanged, this, &SettingsCategoryModel::reload);
+    reload();
+}
+
+int SettingsCategoryModel::rowCount(const QModelIndex &parent) const
+{
+    if (parent.isValid()) {
+        return 0;
+    }
+    return mCategories.size();
+}
+
+QVariant SettingsCategoryModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() || index.row() >= mCategories.size()) {
+        return {};
+    }
+
+    const SettingCategory &cat = mCategories.at(index.row());
+
+    switch (role) {
+    case IdRole:
+        return cat.id;
+    case KeyRole:
+        return cat.key;
+    case LabelRole:
+        return cat.label;
+    case IconRole:
+        return cat.icon;
+    case SortOrderRole:
+        return cat.sortOrder;
+    default:
+        return {};
+    }
+}
+
+QHash<int, QByteArray> SettingsCategoryModel::roleNames() const
+{
+    return {
+        { IdRole, "id" },
+        { KeyRole, "key" },
+        { LabelRole, "label" },
+        { IconRole, "icon" },
+        { SortOrderRole, "sortOrder" }
+    };
+}
+
+void SettingsCategoryModel::reload()
+{
+    beginResetModel();
+    mCategories = mRepo->loadCategories();
+    endResetModel();
+}

@@ -77,7 +77,9 @@ QHash<int, QByteArray> ScheduleModel::roleNames() const
 
 void ScheduleModel::loadAllItems()
 {
-    // Fetch all records
+    beginResetModel();
+    mSchedules.clear();
+
     QVariantList records = dbManager->fetchAll("schedules");
 
     for (const QVariant &record : qAsConst(records)) {
@@ -91,15 +93,13 @@ void ScheduleModel::loadAllItems()
         item.repeatType = row["repeatType"].toInt();
         item.repeatDays = row["repeatDays"].toString();
 
-        // Convert SQLite text back into a proper QDateTime object
         item.startTime = QDateTime::fromString(row["startTime"].toString(), Qt::ISODate);
-
-        // Convert SQLite 1/0 integer back into a C++ bool
         item.isEnabled = row["isEnabled"].toBool();
 
-        // 5. Append to your model's internal memory array
         mSchedules.append(item);
     }
+
+    endResetModel();
 }
 
 void ScheduleModel::addItem(const QString &name, const QString &mode, const QDateTime &startTime, const int &timer, const int &repeatType, const QString &repeatDays)

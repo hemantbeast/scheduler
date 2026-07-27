@@ -9,6 +9,7 @@
 #include <QVariantMap>
 #include <QVariantList>
 #include <QDebug>
+#include <QTimer>
 
 class DatabaseManager : public QObject
 {
@@ -29,8 +30,19 @@ public:
 
     Q_INVOKABLE bool addColumnIfNeeded(const QString &tableName, const QString &columnName, const QString &columnType);
 
+    Q_INVOKABLE void enableExternalChangeDetection(int intervalMs = 2000);
+
+    QSqlDatabase getDb() const {
+        return mDb;
+    }
+
+signals:
+    void externalDatabaseChanged();
+
 private:
     QSqlDatabase mDb;
+    int m_lastDataVersion = 0;
+    QTimer *m_watcherTimer = nullptr;
 };
 
 #endif // DATABASEMANAGER_H

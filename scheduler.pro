@@ -1,4 +1,4 @@
-QT += quick quickcontrols2 svg sql
+QT += quick quickcontrols2 svg sql virtualkeyboard
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -7,6 +7,9 @@ QT += quick quickcontrols2 svg sql
 SOURCES += \
         main.cpp \
         src/schedule/schedulemodel.cpp \
+        src/settings/SettingsCategoryModel.cpp \
+        src/settings/SettingsItemModel.cpp \
+        src/settings/SettingsRepository.cpp \
         src/timer/timermanager.cpp \
         utils/databasemanager.cpp \
         utils/stringhelper.cpp
@@ -27,6 +30,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     src/schedule/schedulemodel.h \
+    src/settings/SettingCategory.h \
+    src/settings/SettingItem.h \
+    src/settings/SettingsCategoryModel.h \
+    src/settings/SettingsItemModel.h \
+    src/settings/SettingsRepository.h \
     src/timer/timermanager.h \
     utils/databasemanager.h \
     utils/stringhelper.h

@@ -101,7 +101,7 @@ Window {
                         y: mainRoot.height * 2
                     }
 
-                    Setting {
+                    SettingsScreen {
                         width: parent.width
                         height: mainRoot.height
                         y: mainRoot.height * 3

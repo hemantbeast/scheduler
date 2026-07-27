@@ -23,6 +23,13 @@
         <file>qmls/timer/TimerBackground.qml</file>
         <file>qmls/timer/TimerModeText.qml</file>
         <file>qmls/schedule/SleepCurveGraph.qml</file>
-        <file>qmls/settings/Setting.qml</file>
+        <file>qmls/settings/DropdownSetting.qml</file>
+        <file>qmls/settings/InputSetting.qml</file>
+        <file>qmls/settings/ReadOnlySetting.qml</file>
+        <file>qmls/settings/SettingDelegate.qml</file>
+        <file>qmls/settings/SettingsScreen.qml</file>
+        <file>qmls/settings/SliderSetting.qml</file>
+        <file>qmls/settings/ToggleSetting.qml</file>
+        <file>qmls/settings/SettingsItemPage.qml</file>
     </qresource>
 </RCC>
