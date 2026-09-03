@@ -33,7 +33,7 @@ Page {
         Label {
             anchors.centerIn: parent
             visible: settingsList.count === 0
-            text: "No settings available"
+            text: qsTr("No settings available")
             color: "#444444"
             font.pixelSize: 20
         }

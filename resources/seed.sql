@@ -17,7 +17,7 @@ INSERT INTO settings
    options, sort_order, description)
 VALUES
   (1, 'language',    'Language',    'dropdown', 'string', 'English',
-   '["English","Hindi","Kannada","Tamil"]', 0, 'App display language'),
+   '["English","Hindi","Kannada","Tamil","Korean"]', 0, 'App display language'),
 
   (1, 'timezone',    'Time Zone',   'input',    'string', 'Asia/Kolkata',
    '', 1, 'IANA timezone identifier'),
@@ -38,6 +38,13 @@ VALUES
 
   (2, 'color_temperature','Color Temperature', 'range', 'int', '4000',
    2700, 6500, 100, 'K', 2);
+
+INSERT INTO settings
+  (category_id, key, label, type, data_type, default_value,
+   options, sort_order, description)
+VALUES
+  (2, 'temperature_unit', 'Temperature Unit', 'dropdown', 'string', 'Celsius',
+   '["Celsius","Fahrenheit"]', 4, 'Temperature display unit');
 
 INSERT INTO settings
   (category_id, key, label, type, data_type, default_value, sort_order)

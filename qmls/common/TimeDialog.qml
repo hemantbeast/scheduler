@@ -40,7 +40,7 @@ Dialog {
         layer.enabled: true
 
         Label {
-            text: "Choose Time"
+            text: qsTr("Choose Time")
             color: "white"
             font.bold: true
             font.pixelSize: 16
@@ -60,8 +60,8 @@ Dialog {
             Repeater {
                 id: pickerRepeater
                 model: [
-                    { title: "Hour",  size: 24 },
-                    { title: "Min",   size: 60 }
+                    { title: qsTr("Hour"),  size: 24 },
+                    { title: qsTr("Min"),   size: 60 }
                 ]
 
                 delegate: Column {
@@ -115,7 +115,7 @@ Dialog {
         height: 55
 
         Button {
-            text: "OK"
+            text: qsTr("OK")
             anchors.right: parent.right
             anchors.rightMargin: 16
             anchors.verticalCenter: parent.verticalCenter

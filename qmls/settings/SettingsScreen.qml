@@ -6,7 +6,7 @@ import "../common"
 
 Page {
     id: root
-    title: "Settings"
+    title: qsTr("Settings")
 
     background: Rectangle { color: "black" }
 
@@ -16,7 +16,7 @@ Page {
         anchors.fill: parent
 
         Label {
-            text: "Settings"
+            text: qsTr("Settings")
             font.pixelSize: 24
             font.weight: Font.Normal
             color: "white"

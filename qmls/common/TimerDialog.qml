@@ -43,7 +43,7 @@ Dialog {
         layer.enabled: true
 
         Label {
-            text: "Set Timer"
+            text: qsTr("Set Timer")
             color: "white"
             font.bold: true
             font.pixelSize: 16
@@ -63,8 +63,8 @@ Dialog {
             Repeater {
                 id: pickerRepeater
                 model: [
-                    { title: "Min",   size: 60 }, // 0 to 59 minutes
-                    { title: "Sec",   size: 60 }  // 0 to 59 seconds
+                    { title: qsTr("Min"),   size: 60 }, // 0 to 59 minutes
+                    { title: qsTr("Sec"),   size: 60 }  // 0 to 59 seconds
                 ]
 
                 delegate: Column {
@@ -119,7 +119,7 @@ Dialog {
         height: 55
 
         Button {
-            text: "OK"
+            text: qsTr("OK")
             anchors.right: parent.right
             anchors.rightMargin: 16
             anchors.verticalCenter: parent.verticalCenter

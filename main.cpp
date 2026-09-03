@@ -8,6 +8,7 @@
 #include "src/schedule/schedulemodel.h"
 #include "src/timer/timermanager.h"
 #include "utils/stringhelper.h"
+#include "src/settings/AppSettings.h"
 #include "src/settings/SettingsRepository.h"
 #include "src/settings/SettingsCategoryModel.h"
 #include "src/settings/SettingsItemModel.h"
@@ -56,12 +57,22 @@ int main(int argc, char *argv[])
 
     settingsRepo->observeDatabaseChanges(dbGlobal);
 
+    // Initialize settings facade; applies the saved language before QML loads
+    AppSettings *appSettings = new AppSettings(settingsRepo, &engine, &app);
+
     SettingsCategoryModel *settingsCategory = new SettingsCategoryModel(settingsRepo, &app);
     SettingsItemModel *settingsItem = new SettingsItemModel(settingsRepo, &app);
+
+    // Re-resolve DB-driven labels after a language change
+    QObject::connect(appSettings, &AppSettings::languageChanged,
+                     settingsCategory, &SettingsCategoryModel::reload);
+    QObject::connect(appSettings, &AppSettings::languageChanged,
+                     settingsItem, &SettingsItemModel::reload);
 
     engine.rootContext()->setContextProperty("categoryModel", settingsCategory);
     engine.rootContext()->setContextProperty("itemModel", settingsItem);
     engine.rootContext()->setContextProperty("settingsRepo", settingsRepo);
+    engine.rootContext()->setContextProperty("appSettings", appSettings);
 
     /// Watcher for any database changes from external source.
     QFileSystemWatcher *dbWatcher = new QFileSystemWatcher(&app);

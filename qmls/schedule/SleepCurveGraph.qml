@@ -44,7 +44,10 @@ Item {
                 color: "#2A2A2A"
 
                 Text {
-                    text: Math.round(root.maxTemp - (index + 1) * ((root.maxTemp - root.minTemp) / 4)) + "°C"
+                    // Axis values are Celsius internally; converted for display
+                    text: appSettings.convertTemperature(
+                              Math.round(root.maxTemp - (index + 1) * ((root.maxTemp - root.minTemp) / 4))
+                          ).toFixed(0) + appSettings.unitSymbol
                     color: "#666666"
                     font.pixelSize: 11
                     anchors.left: parent.left
@@ -161,9 +164,9 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: -25
 
-            Text { width: root.width * 0.33; text: "Asleep\n" + root.tempAsleep + "°C"; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
-            Text { width: root.width * 0.34; text: "Deep Sleep\n" + root.tempDeep + "°C"; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
-            Text { width: root.width * 0.33; text: "Wake Up\n" + root.tempWake + "°C"; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
+            Text { width: root.width * 0.33; text: qsTr("Asleep") + "\n" + appSettings.convertTemperature(root.tempAsleep).toFixed(1) + appSettings.unitSymbol; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
+            Text { width: root.width * 0.34; text: qsTr("Deep Sleep") + "\n" + appSettings.convertTemperature(root.tempDeep).toFixed(1) + appSettings.unitSymbol; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
+            Text { width: root.width * 0.33; text: qsTr("Wake Up") + "\n" + appSettings.convertTemperature(root.tempWake).toFixed(1) + appSettings.unitSymbol; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
         }
     }
 }

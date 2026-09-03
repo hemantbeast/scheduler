@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/i18n">
+        <file>scheduler_en.qm</file>
+        <file>scheduler_hi.qm</file>
+        <file>scheduler_kn.qm</file>
+        <file>scheduler_ta.qm</file>
+        <file>scheduler_ko.qm</file>
+    </qresource>
+</RCC>

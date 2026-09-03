@@ -201,7 +201,7 @@ Item {
                         spacing: 10
 
                         Repeater {
-                            model: ["Once", "Daily", "Weekly", "Monthly"]
+                            model: [qsTr("Once"), qsTr("Daily"), qsTr("Weekly"), qsTr("Monthly")]
 
                             Button {
                                 id: repeatTypeBtn
@@ -549,7 +549,7 @@ Item {
                 Layout.preferredHeight: 40
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                text: isEdit ? "Update" : "Save"
+                text: isEdit ? qsTr("Update") : qsTr("Save")
                 palette.buttonText: "white"
 
                 onClicked: onAddEditSchedule()
@@ -578,7 +578,7 @@ Item {
                 Layout.preferredHeight: 40
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                text: "Cancel"
+                text: qsTr("Cancel")
                 palette.buttonText: "white"
 
                 onClicked: stackView.pop()

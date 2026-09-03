@@ -107,7 +107,7 @@ Dialog {
         }
 
         Label {
-            text: "Choose Day & Time"
+            text: qsTr("Choose Day & Time")
             color: "white"
             font.bold: true
             font.pixelSize: 16
@@ -129,9 +129,9 @@ Dialog {
 
                 // Unified configuration schema for data generation
                 model: [
-                    { title: "Day",   size: 31, offset: 1    },
-                    { title: "Hour",  size: 24, offset: 0    },
-                    { title: "Min",   size: 60, offset: 0    }
+                    { title: qsTr("Day"),   size: 31, offset: 1    },
+                    { title: qsTr("Hour"),  size: 24, offset: 0    },
+                    { title: qsTr("Min"),   size: 60, offset: 0    }
                 ]
 
                 // The single, reusable Column-Label-Tumbler template
@@ -212,7 +212,7 @@ Dialog {
         }
 
         Button {
-            text: "OK"
+            text: qsTr("OK")
             palette.buttonText: "white"
             anchors.right: parent.right
             anchors.rightMargin: 16

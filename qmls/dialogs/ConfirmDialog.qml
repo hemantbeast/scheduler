@@ -7,9 +7,9 @@ Item {
     anchors.centerIn: parent
 
     property bool isShown: false
-    property string message: "Are you sure?"
-    property string confirmText: "Delete"
-    property string cancelText: "Cancel"
+    property string message: qsTr("Are you sure?")
+    property string confirmText: qsTr("Delete")
+    property string cancelText: qsTr("Cancel")
     property color confirmColor: "#EF5350"
     property int fadeDuration: 300
 

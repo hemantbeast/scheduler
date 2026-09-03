@@ -53,6 +53,8 @@ private:
 
     void seedIfEmpty();
 
+    void migrate();
+
     SettingItem rowToItem(const QSqlQuery &query) const;
 };
 

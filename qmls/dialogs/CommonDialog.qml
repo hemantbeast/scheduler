@@ -160,7 +160,7 @@ Item {
 
                     Button {
                         id: okBtn
-                        text: "OK"
+                        text: qsTr("OK")
                         palette.buttonText: "white"
                         anchors.right: parent.right
                         anchors.rightMargin: 16
@@ -181,7 +181,7 @@ Item {
 
                     Button {
                         id: cancelBtn
-                        text: "Cancel"
+                        text: qsTr("Cancel")
                         palette.buttonText: pressed ? "#2980b9" : "#3498db"
                         anchors.right: okBtn.left
                         anchors.rightMargin: 16

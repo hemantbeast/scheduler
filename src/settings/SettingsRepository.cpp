@@ -28,6 +28,7 @@ bool SettingsRepository::open()
 
     ensureSchema();
     seedIfEmpty();
+    migrate();
     return true;
 }
 
@@ -384,6 +385,40 @@ void SettingsRepository::seedIfEmpty()
     }
 
     mDb.commit();
+}
+
+void SettingsRepository::migrate()
+{
+    QSqlQuery verQuery(mDb);
+    int version = 0;
+
+    if (verQuery.exec("PRAGMA user_version") && verQuery.next()) {
+        version = verQuery.value(0).toInt();
+    }
+
+    if (version >= 2) {
+        return;
+    }
+
+    QSqlQuery query(mDb);
+
+    if (!query.exec("UPDATE settings SET options = '[\"English\",\"Hindi\",\"Kannada\",\"Tamil\",\"Korean\"]' "
+                    "WHERE key = 'language' AND options NOT LIKE '%Korean%'")) {
+        qWarning() << "[SettingsRepository] migrate(language) error:" << query.lastError().text();
+    }
+
+    if (!query.exec("INSERT INTO settings "
+                    "(category_id, key, label, type, data_type, default_value, options, sort_order, description) "
+                    "SELECT (SELECT id FROM setting_categories WHERE key = 'display'), "
+                    "'temperature_unit', 'Temperature Unit', 'dropdown', 'string', 'Celsius', "
+                    "'[\"Celsius\",\"Fahrenheit\"]', 4, 'Temperature display unit' "
+                    "WHERE NOT EXISTS (SELECT 1 FROM settings WHERE key = 'temperature_unit')")) {
+        qWarning() << "[SettingsRepository] migrate(temperature_unit) error:" << query.lastError().text();
+    }
+
+    if (!query.exec("PRAGMA user_version = 2")) {
+        qWarning() << "[SettingsRepository] migrate(user_version) error:" << query.lastError().text();
+    }
 }
 
 SettingItem SettingsRepository::rowToItem(const QSqlQuery &query) const

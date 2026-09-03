@@ -24,6 +24,16 @@ Window {
         anchors.fill: parent
     }
 
+    // Applies brightness / night mode settings on top of every screen
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+        opacity: appSettings.nightMode ? 0.55 : Math.max(0, (100 - appSettings.brightness) / 250)
+        visible: opacity > 0.001
+        enabled: false
+        z: 1000
+    }
+
     Toast {
         id: toastManager
     }
@@ -134,7 +144,9 @@ Window {
 
                 Text {
                     id: timeDisplay
-                    text: Qt.formatDateTime(new Date(), "hh:mm ap").toUpperCase()
+                    // formatNow uses the timezone from Settings; the timer
+                    // below refreshes it every second
+                    text: appSettings.formatNow("hh:mm ap").toUpperCase()
                     color: "white"
                     anchors.verticalCenter: parent.verticalCenter
                     font {
@@ -148,7 +160,7 @@ Window {
                     running: true
                     repeat: true
                     onTriggered: {
-                        timeDisplay.text = Qt.formatDateTime(new Date(), "hh:mm ap").toUpperCase()
+                        timeDisplay.text = appSettings.formatNow("hh:mm ap").toUpperCase()
                     }
                 }
             }

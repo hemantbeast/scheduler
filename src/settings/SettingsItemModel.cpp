@@ -1,5 +1,9 @@
 #include "SettingsItemModel.h"
 
+#include <QCoreApplication>
+
+#include "SettingsTranslations.h"
+
 SettingsItemModel::SettingsItemModel(SettingsRepository *repo, QObject *parent)
     : QAbstractListModel{parent}, mRepo(repo)
 {
@@ -29,7 +33,7 @@ QVariant SettingsItemModel::data(const QModelIndex &index, int role) const
     case KeyRole:
         return item.key;
     case LabelRole:
-        return item.label;
+        return QCoreApplication::translate("SettingsItems", item.label.toUtf8().constData());
     case TypeRole:
         return item.type;
     case DataTypeRole:
@@ -55,7 +59,7 @@ QVariant SettingsItemModel::data(const QModelIndex &index, int role) const
     case MaxLengthRole:
         return item.maxLength;
     case DescriptionRole:
-        return item.description;
+        return QCoreApplication::translate("SettingsItems", item.description.toUtf8().constData());
     case IsReadOnlyRole:
         return item.isReadOnly;
     default:

@@ -41,8 +41,8 @@ CommonDialog {
             Repeater {
                 id: pickerRepeater
                 model: [
-                    { title: "Hour",  size: 24 },
-                    { title: "Min",   size: 60 }
+                    { title: qsTr("Hour"),  size: 24 },
+                    { title: qsTr("Min"),   size: 60 }
                 ]
 
                 delegate: Column {

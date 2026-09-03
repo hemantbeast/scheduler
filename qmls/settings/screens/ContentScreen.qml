@@ -13,12 +13,12 @@ Page {
     }
 
     header: NavigationHeader {
-        title: "Contents"
+        title: qsTr("Contents")
     }
 
     Label {
         anchors.centerIn: parent
-        text: "Contents"
+        text: qsTr("Contents")
         color: "#444444"
         font.pixelSize: 20
     }

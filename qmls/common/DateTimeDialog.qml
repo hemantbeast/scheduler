@@ -73,7 +73,7 @@ Dialog {
         layer.enabled: true
 
         Label {
-            text: "Choose Date & Time"
+            text: qsTr("Choose Date & Time")
             color: "white"
             font.bold: true
             font.pixelSize: 16
@@ -95,11 +95,11 @@ Dialog {
 
                 // Unified configuration schema for data generation
                 model: [
-                    { title: "Year",  size: 15,  offset: baseYear },
-                    { title: "Month", size: 12, offset: 1    },
-                    { title: "Day",   size: 31, offset: 1    },
-                    { title: "Hour",  size: 24, offset: 0    },
-                    { title: "Min",   size: 60, offset: 0    }
+                    { title: qsTr("Year"),  size: 15,  offset: baseYear },
+                    { title: qsTr("Month"), size: 12, offset: 1    },
+                    { title: qsTr("Day"),   size: 31, offset: 1    },
+                    { title: qsTr("Hour"),  size: 24, offset: 0    },
+                    { title: qsTr("Min"),   size: 60, offset: 0    }
                 ]
 
                 // The single, reusable Column-Label-Tumbler template
@@ -173,7 +173,7 @@ Dialog {
         layer.enabled: true
 
         Button {
-            text: "OK"
+            text: qsTr("OK")
             palette.buttonText: "white"
             anchors.right: parent.right
             anchors.rightMargin: 16

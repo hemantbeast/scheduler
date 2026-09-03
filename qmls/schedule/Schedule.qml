@@ -185,7 +185,7 @@ Item {
 
                             Text {
                                 id: runningLabel
-                                text: "RUNNING"
+                                text: qsTr("RUNNING")
                                 anchors.centerIn: parent
                                 color: "white"
                                 font {
@@ -407,11 +407,11 @@ Item {
                 return Qt.formatDateTime(startTime, "d MMM yyyy, hh:mm ap");
 
             case 1:
-                return "Every day at " + timeStr;
+                return qsTr("Every day at %1").arg(timeStr);
 
             case 2:
-                if (!repeatDays) return "Weekly at " + timeStr;
-                const longLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+                if (!repeatDays) return qsTr("Weekly at %1").arg(timeStr);
+                const longLabels = [qsTr("Mon"), qsTr("Tue"), qsTr("Wed"), qsTr("Thu"), qsTr("Fri"), qsTr("Sat"), qsTr("Sun")];
                 let indices = repeatDays.split(",");
                 let days = [];
 
@@ -420,7 +420,7 @@ Item {
                     if (n >= 0 && n < 7) days.push(longLabels[n]);
                 });
 
-                return days.join(", ") + " at " + timeStr;
+                return qsTr("%1 at %2").arg(days.join(", ")).arg(timeStr);
 
             case 3:
                 let suffix = "th";
@@ -428,7 +428,7 @@ Item {
                 else if (dayNum % 10 === 2 && dayNum !== 12) suffix = "nd";
                 else if (dayNum % 10 === 3 && dayNum !== 13) suffix = "rd";
 
-                return "Every " + dayNum + suffix + " of the month at " + timeStr;
+                return qsTr("Every %1%2 of the month at %3").arg(dayNum).arg(suffix).arg(timeStr);
 
             default:
                 return Qt.formatDateTime(startTime, "d MMM yyyy, hh:mm ap");
@@ -440,13 +440,13 @@ Item {
         property int scheduleIndex: -1
         property string scheduleName: ""
 
-        message: "Delete \"" + scheduleName + "\"?\nThis action cannot be undone."
-        confirmText: "Delete"
+        message: qsTr("Delete \"%1\"?\nThis action cannot be undone.").arg(scheduleName)
+        confirmText: qsTr("Delete")
         confirmColor: "#EF5350"
 
         onConfirmed: {
             scheduleModel.removeItem(scheduleIndex)
-            toastManager.createMessage("Schedule deleted", {
+            toastManager.createMessage(qsTr("Schedule deleted"), {
                 type: "success",
                 position: Qt.TopEdge,
                 theme: "Color"

@@ -1,5 +1,7 @@
 #include "SettingsCategoryModel.h"
 
+#include <QCoreApplication>
+
 SettingsCategoryModel::SettingsCategoryModel(SettingsRepository *repo, QObject *parent)
     : QAbstractListModel{parent}, mRepo(repo)
 {
@@ -29,7 +31,7 @@ QVariant SettingsCategoryModel::data(const QModelIndex &index, int role) const
     case KeyRole:
         return cat.key;
     case LabelRole:
-        return cat.label;
+        return QCoreApplication::translate("SettingsCategories", cat.label.toUtf8().constData());
     case IconRole:
         return cat.icon;
     case SortOrderRole:
