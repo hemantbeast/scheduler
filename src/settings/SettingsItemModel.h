@@ -30,6 +30,8 @@ public:
         LabelRole,
         TypeRole,
         DataTypeRole,
+        ScreenTypeRole,
+        CustomScreenRole,
         ValueRole,
         DefaultValueRole,
         MinRole,

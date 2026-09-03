@@ -51,6 +51,8 @@ private:
 
     void ensureSchema();
 
+    void seedIfEmpty();
+
     SettingItem rowToItem(const QSqlQuery &query) const;
 };
 

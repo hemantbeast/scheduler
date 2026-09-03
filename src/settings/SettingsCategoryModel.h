@@ -16,7 +16,8 @@ public:
         KeyRole,
         LabelRole,
         IconRole,
-        SortOrderRole
+        SortOrderRole,
+        ParentIdRole,
     };
     Q_ENUM(Roles)
 
@@ -26,6 +27,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void reload();
+
+    Q_INVOKABLE int idForKey(const QString &key) const;
 
 private:
     SettingsRepository *mRepo;

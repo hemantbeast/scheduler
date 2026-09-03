@@ -18,6 +18,9 @@ struct SettingItem
     QVariant value;
     QVariant defaultValue;
 
+    QString screenType;
+    QString customScreen;
+
     // for range or slider
     double min = 0.0;
     double max = 100.0;

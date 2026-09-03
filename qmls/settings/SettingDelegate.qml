@@ -41,6 +41,28 @@ ItemDelegate {
         }
     }
 
+    onClicked: {
+        switch (root.screenType) {
+            case "subcategory":
+                itemModel.categoryId = categoryModel.idForKey(root.customScreen)
+                stackView.push(settingsItemPage, {
+                                   "pageTitle": root.label
+                               })
+                break
+
+            case "custom":
+                stackView.push(customScreenRegistry[root.customScreen])
+                break
+
+            case "editor":
+            default:
+                if (!root.isReadOnly) {
+                    editorDialog.open()
+                }
+                break
+        }
+    }
+
     contentItem: Item {
         id: container
         anchors {
@@ -72,13 +94,14 @@ ItemDelegate {
 
             // ── Type router ───────────────────────────────────────────────────
             sourceComponent: {
-                if (root.isReadOnly)  return readonlyComp
+                if (root.isReadOnly) return readonlyComp
+
                 switch (root.type) {
-                case "range":    return sliderComp
-                case "toggle":   return toggleComp
-                case "dropdown": return dropdownComp
-                case "input":    return inputComp
-                default:         return readonlyComp
+                    case "range":    return sliderComp
+                    case "toggle":   return toggleComp
+                    case "dropdown": return dropdownComp
+                    case "input":    return inputComp
+                    default:         return readonlyComp
                 }
             }
         }

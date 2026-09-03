@@ -15,6 +15,9 @@ Window {
     title: qsTr("Timer & Scheduler")
     color: "#121212"
 
+    property var customScreenRegistry: ({})
+    property var settingsItemPage: settingsItemComp
+
     StackView {
         id: stackView
         initialItem: mainView
@@ -25,6 +28,19 @@ Window {
         id: toastManager
     }
 
+    // Settings screen component for nested screens
+    Component {
+        id: settingsScreenComp
+        SettingsScreen {}
+    }
+
+    // Settings item component for nested settings
+    Component {
+        id: settingsItemComp
+        SettingsItemPage {}
+    }
+
+    // Main view component
     Component {
         id: mainView
 

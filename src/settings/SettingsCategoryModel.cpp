@@ -34,6 +34,8 @@ QVariant SettingsCategoryModel::data(const QModelIndex &index, int role) const
         return cat.icon;
     case SortOrderRole:
         return cat.sortOrder;
+    case ParentIdRole:
+        return cat.parentId;
     default:
         return {};
     }
@@ -46,7 +48,8 @@ QHash<int, QByteArray> SettingsCategoryModel::roleNames() const
         { KeyRole, "key" },
         { LabelRole, "label" },
         { IconRole, "icon" },
-        { SortOrderRole, "sortOrder" }
+        { SortOrderRole, "sortOrder" },
+        { ParentIdRole, "parentId" }
     };
 }
 
@@ -55,4 +58,12 @@ void SettingsCategoryModel::reload()
     beginResetModel();
     mCategories = mRepo->loadCategories();
     endResetModel();
+}
+
+int SettingsCategoryModel::idForKey(const QString &key) const
+{
+    for (const auto &cat : mCategories) {
+        if (cat.key == key) return cat.id;
+    }
+    return -1;
 }

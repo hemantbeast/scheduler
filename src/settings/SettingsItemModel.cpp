@@ -34,6 +34,10 @@ QVariant SettingsItemModel::data(const QModelIndex &index, int role) const
         return item.type;
     case DataTypeRole:
         return item.dataType;
+    case ScreenTypeRole:
+        return item.screenType;
+    case CustomScreenRole:
+        return item.customScreen;
     case ValueRole:
         return item.value;
     case DefaultValueRole:
@@ -83,6 +87,8 @@ QHash<int, QByteArray> SettingsItemModel::roleNames() const
         { LabelRole, "label" },
         { TypeRole, "type" },
         { DataTypeRole, "dataType" },
+        { ScreenTypeRole, "screenType" },
+        { CustomScreenRole, "customScreen" },
         { ValueRole, "value" },
         { DefaultValueRole, "defaultValue" },
         { MinRole, "min" },
