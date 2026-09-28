@@ -26,6 +26,7 @@ SOURCES += \
         src/settings/SettingsRepository.cpp \
         src/timer/timermanager.cpp \
         utils/databasemanager.cpp \
+        utils/dbpathresolver.cpp \
         utils/stringhelper.cpp
 
 RESOURCES += qml.qrc \
@@ -54,4 +55,5 @@ HEADERS += \
     src/settings/SettingsTranslations.h \
     src/timer/timermanager.h \
     utils/databasemanager.h \
+    utils/dbpathresolver.h \
     utils/stringhelper.h

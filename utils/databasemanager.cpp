@@ -13,6 +13,10 @@ DatabaseManager::DatabaseManager(const QString &dbName, QObject *parent)
 
         QSqlQuery pragmaQuery(mDb);
 
+        if (!pragmaQuery.exec("PRAGMA busy_timeout = 3000;")) {
+            qDebug() << "Failed to set busy_timeout:" << pragmaQuery.lastError().text();
+        }
+
         if (!pragmaQuery.exec("PRAGMA journal_mode = DELETE;")) {
             qDebug() << "Failed to set PRAGMA:" << pragmaQuery.lastError().text();
         } else {

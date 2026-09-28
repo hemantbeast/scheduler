@@ -15,7 +15,7 @@ class DatabaseManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit DatabaseManager(const QString &dbName = "scheduler.db", QObject *parent = nullptr);
+    explicit DatabaseManager(const QString &dbName, QObject *parent = nullptr);
     ~DatabaseManager();
 
     Q_INVOKABLE bool createTable(const QString &tableName, const QString &schema);

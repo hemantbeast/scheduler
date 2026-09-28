@@ -8,6 +8,7 @@
 #include "src/schedule/schedulemodel.h"
 #include "src/timer/timermanager.h"
 #include "utils/stringhelper.h"
+#include "utils/dbpathresolver.h"
 #include "src/settings/AppSettings.h"
 #include "src/settings/SettingsRepository.h"
 #include "src/settings/SettingsCategoryModel.h"
@@ -25,8 +26,8 @@ int main(int argc, char *argv[])
     // Tell the engine to look inside your source directory for modules
     engine.addImportPath(":/");
 
-    // Register database manager
-    DatabaseManager *dbGlobal = new DatabaseManager("scheduler.db", &app);
+    // Register database manager (resolves shared db path: config override -> %APPDATA%/LG default)
+    DatabaseManager *dbGlobal = new DatabaseManager(DbPathResolver::resolve(), &app);
     dbGlobal->enableExternalChangeDetection(2000);
     engine.rootContext()->setContextProperty("DBManager", dbGlobal);
 
