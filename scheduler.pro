@@ -19,6 +19,7 @@ TRANSLATIONS += \
 
 SOURCES += \
         main.cpp \
+        src/dashboard/dashboardbackend.cpp \
         src/schedule/schedulemodel.cpp \
         src/settings/AppSettings.cpp \
         src/settings/SettingsCategoryModel.cpp \
@@ -45,6 +46,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    src/dashboard/dashboardbackend.h \
     src/schedule/schedulemodel.h \
     src/settings/AppSettings.h \
     src/settings/SettingCategory.h \

@@ -42,6 +42,11 @@ Item {
                     iconSelected: "../../images/setting_selected.svg"
                     iconUnselected: "../../images/setting_unselected.svg"
                 }
+                ListElement {
+                    name: "Dashboard"
+                    iconSelected: "../../images/chart.svg"
+                    iconUnselected: "../../images/chart.svg"
+                }
             }
 
             Repeater {

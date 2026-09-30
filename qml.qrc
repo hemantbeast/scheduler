@@ -31,5 +31,6 @@
         <file>qmls/settings/SliderSetting.qml</file>
         <file>qmls/settings/ToggleSetting.qml</file>
         <file>qmls/settings/SettingsItemPage.qml</file>
+        <file>qmls/dashboard/Dashboard.qml</file>
     </qresource>
 </RCC>

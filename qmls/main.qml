@@ -7,6 +7,7 @@ import "toast"
 import "timer"
 import "schedule"
 import "settings"
+import "dashboard"
 
 Window {
     width: 800
@@ -83,6 +84,10 @@ Window {
                     if (name === "Timer") {
                         mainRoot.currentIndex = 0
                     }
+
+                    if (name === "Dashboard") {
+                        mainRoot.currentIndex = 4
+                    }
                 }
             }
 
@@ -131,6 +136,12 @@ Window {
                         width: parent.width
                         height: mainRoot.height
                         y: mainRoot.height * 3
+                    }
+
+                    Dashboard {
+                        width: parent.width
+                        height: mainRoot.height
+                        y: mainRoot.height * 4
                     }
                 }
             }

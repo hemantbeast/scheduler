@@ -7,6 +7,7 @@
 
 #include "src/schedule/schedulemodel.h"
 #include "src/timer/timermanager.h"
+#include "src/dashboard/dashboardbackend.h"
 #include "utils/stringhelper.h"
 #include "utils/dbpathresolver.h"
 #include "src/settings/AppSettings.h"
@@ -44,6 +45,12 @@ int main(int argc, char *argv[])
 
     QObject::connect(dbGlobal, &DatabaseManager::externalDatabaseChanged,
                      scheduleModel, &ScheduleModel::loadAllItems);
+
+    // Dashboard backed by the shared device_state table (written by sys_control / IDU-ODU)
+    DashboardBackend *dashboardBackend = new DashboardBackend(dbGlobal, &app);
+    QObject::connect(dbGlobal, &DatabaseManager::externalDatabaseChanged,
+                     dashboardBackend, &DashboardBackend::reload);
+    engine.rootContext()->setContextProperty("dashboardBackend", dashboardBackend);
 
     StringHelper strHelper;
     engine.rootContext()-> setContextProperty("StringHelper", &strHelper);
