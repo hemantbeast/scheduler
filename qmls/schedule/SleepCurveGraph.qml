@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Shapes 1.15
 import QtGraphicalEffects 1.15
+import "../../config"
 
 Item {
     Item {
@@ -17,8 +18,8 @@ Item {
         // Core styling definitions
         readonly property real minTemp: 16.0
         readonly property real maxTemp: 30.0
-        readonly property color colorHeat: "#FF5F00"
-        readonly property color colorCool: "#00B4FF"
+        readonly property color colorHeat: StyleConfig.heatColor
+        readonly property color colorCool: StyleConfig.coolColor
 
         // Helper function to map temperatures directly to visual Y coordinates
         function tempToY(temp) {
@@ -41,14 +42,14 @@ Item {
                 y: (index + 1) * (root.height / 4)
                 width: root.width
                 height: 1
-                color: "#2A2A2A"
+                color: StyleConfig.surfaceHover
 
                 Text {
                     // Axis values are Celsius internally; converted for display
                     text: appSettings.convertTemperature(
                               Math.round(root.maxTemp - (index + 1) * ((root.maxTemp - root.minTemp) / 4))
                           ).toFixed(0) + appSettings.unitSymbol
-                    color: "#666666"
+                    color: StyleConfig.textTertiary
                     font.pixelSize: 11
                     anchors.left: parent.left
                     anchors.leftMargin: 8
@@ -71,7 +72,7 @@ Item {
 
                 Gradient {
                     GradientStop { position: 0.0; color: root.colorCool }
-                    GradientStop { position: 0.5; color: "#9D4EDD" } // Your Repeat Purple
+                    GradientStop { position: 0.5; color: StyleConfig.purple } // Your Repeat Purple
                     GradientStop { position: 1.0; color: root.colorHeat }
                 }
             }
@@ -116,7 +117,7 @@ Item {
             x: (root.width * 0.15) - 12
             y: root.tempToY(root.tempAsleep) - 12
             width: 24; height: 24; radius: 12
-            color: "#FFFFFF"
+            color: StyleConfig.textPrimary
             border.color: root.colorCool; border.width: 3
 
             MouseArea {
@@ -132,8 +133,8 @@ Item {
             x: (root.width * 0.50) - 12
             y: root.tempToY(root.tempDeep) - 12
             width: 24; height: 24; radius: 12
-            color: "#FFFFFF"
-            border.color: "#9D4EDD"; border.width: 3
+            color: StyleConfig.textPrimary
+            border.color: StyleConfig.purple; border.width: 3
 
             MouseArea {
                 anchors.fill: parent; drag.target: parent; drag.axis: Drag.YAxis
@@ -148,7 +149,7 @@ Item {
             x: (root.width * 0.85) - 12
             y: root.tempToY(root.tempWake) - 12
             width: 24; height: 24; radius: 12
-            color: "#FFFFFF"
+            color: StyleConfig.textPrimary
             border.color: root.colorHeat; border.width: 3
 
             MouseArea {
@@ -164,9 +165,9 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: -25
 
-            Text { width: root.width * 0.33; text: qsTr("Asleep") + "\n" + appSettings.convertTemperature(root.tempAsleep).toFixed(1) + appSettings.unitSymbol; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
-            Text { width: root.width * 0.34; text: qsTr("Deep Sleep") + "\n" + appSettings.convertTemperature(root.tempDeep).toFixed(1) + appSettings.unitSymbol; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
-            Text { width: root.width * 0.33; text: qsTr("Wake Up") + "\n" + appSettings.convertTemperature(root.tempWake).toFixed(1) + appSettings.unitSymbol; color: "#E0E0E0"; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
+            Text { width: root.width * 0.33; text: qsTr("Asleep") + "\n" + appSettings.convertTemperature(root.tempAsleep).toFixed(1) + appSettings.unitSymbol; color: StyleConfig.textSecondary; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
+            Text { width: root.width * 0.34; text: qsTr("Deep Sleep") + "\n" + appSettings.convertTemperature(root.tempDeep).toFixed(1) + appSettings.unitSymbol; color: StyleConfig.textSecondary; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
+            Text { width: root.width * 0.33; text: qsTr("Wake Up") + "\n" + appSettings.convertTemperature(root.tempWake).toFixed(1) + appSettings.unitSymbol; color: StyleConfig.textSecondary; font.pixelSize: 13; horizontalAlignment: Text.AlignHCenter }
         }
     }
 }

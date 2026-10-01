@@ -8,6 +8,10 @@
         <file>config/StyleConfig.qml</file>
         <file>config/qmldir</file>
         <file>qmls/common/SvgImage.qml</file>
+        <file>qmls/common/DateTimeDialog.qml</file>
+        <file>qmls/common/DayTimeDialog.qml</file>
+        <file>qmls/common/TimeDialog.qml</file>
+        <file>qmls/common/TimerDialog.qml</file>
         <file>qmls/schedule/AddSchedule.qml</file>
         <file>qmls/common/NavigationHeader.qml</file>
         <file>qmls/common/CustomComboBox.qml</file>
@@ -32,5 +36,6 @@
         <file>qmls/settings/ToggleSetting.qml</file>
         <file>qmls/settings/SettingsItemPage.qml</file>
         <file>qmls/dashboard/Dashboard.qml</file>
+        <file>qmls/settings/screens/ContentScreen.qml</file>
     </qresource>
 </RCC>

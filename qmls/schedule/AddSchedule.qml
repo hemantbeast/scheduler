@@ -5,6 +5,7 @@ import QtGraphicalEffects 1.15
 import "../common"
 import "../dialogs"
 import "../toast"
+import "../../config"
 
 Item {
     id: itemId
@@ -45,7 +46,7 @@ Item {
                 width: scrollView.availableWidth
 
                 property int currentMode: 0
-                property var modeColors: ["#FF5F00", "#00B4FF", "#00A884"]
+                property var modeColors: [StyleConfig.heatColor, StyleConfig.coolColor, StyleConfig.dryColor]
                 property var modeNames: ["Heat", "Cool", "Dry"]
 
                 RowLayout {
@@ -61,7 +62,7 @@ Item {
                         Text {
                             id: txtName
                             text: qsTr("Name")
-                            color: "#b0b0b0"
+                            color: StyleConfig.textSecondary
                             font.pointSize: 8
                         }
 
@@ -69,19 +70,19 @@ Item {
                             id: nameField
                             text: isEdit ? schedule.name : ""
                             placeholderText: qsTr("Enter name")
-                            placeholderTextColor: "#999"
-                            color: "white"
+                            placeholderTextColor: StyleConfig.textTertiary
+                            color: StyleConfig.textPrimary
                             clip: true
                             Layout.preferredHeight: 40
                             Layout.fillWidth: true
 
                             background: Rectangle {
-                                color: "#191919"
+                                color: StyleConfig.surface
                                 radius: 5
 
                                 border {
                                     width: 1
-                                    color: nameField.focus ? "white" : "#424242"
+                                    color: nameField.focus ? StyleConfig.textPrimary : StyleConfig.border
                                 }
                             }
                         }
@@ -96,7 +97,7 @@ Item {
                         Text {
                             id: txtMode
                             text: qsTr("Mode")
-                            color: "#b0b0b0"
+                            color: StyleConfig.textSecondary
                             font.pointSize: 8
                         }
 
@@ -106,8 +107,8 @@ Item {
                             Layout.preferredHeight: 40
                             Layout.alignment: Qt.AlignHCenter
                             radius: 5
-                            color: "#191919"
-                            border.color: "#424242"
+                            color: StyleConfig.surface
+                            border.color: StyleConfig.border
                             border.width: 1
 
                             Rectangle {
@@ -141,7 +142,7 @@ Item {
                                         Text {
                                             text: modelData
                                             anchors.centerIn: parent
-                                            color: layout.currentMode === index ? "white" : "#8A8A8A"
+                                            color: layout.currentMode === index ? StyleConfig.textPrimary : StyleConfig.textTertiary
                                             scale: layout.currentMode === index ? 1.05 : 1.0
                                             font {
                                                 pixelSize: 11
@@ -192,7 +193,7 @@ Item {
                     Text {
                         id: txtRepeat
                         text: qsTr("Repeat")
-                        color: "#b0b0b0"
+                        color: StyleConfig.textSecondary
                         font.pointSize: 8
                     }
 
@@ -213,15 +214,15 @@ Item {
 
                                 contentItem: Text {
                                     text: modelData
-                                    color: repeatTypeBtn.isActive ? "#FFFFFF" : "#8A8A8A"
+                                    color: repeatTypeBtn.isActive ? StyleConfig.textPrimary : StyleConfig.textTertiary
                                     font.bold: repeatTypeBtn.isActive
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                 }
 
                                 background: Rectangle {
-                                    color: repeatTypeBtn.isActive ? "#9D4EDD" : "#191919"
-                                    border.color: repeatTypeBtn.isActive ? "#9D4EDD" : "#424242"
+                                    color: repeatTypeBtn.isActive ? StyleConfig.purple : StyleConfig.surface
+                                    border.color: repeatTypeBtn.isActive ? StyleConfig.purple : StyleConfig.border
                                     border.width: 1
                                     radius: 6
 
@@ -274,14 +275,14 @@ Item {
                                     property bool isDaySelected: repeatLayout.selectedDays[index]
 
                                     // Visual states
-                                    color: isDaySelected ? "#B77CFF" : "#1B1B1B"
-                                    border.color: isDaySelected ? "#B77CFF" : "#2F2F2F"
+                                    color: isDaySelected ? StyleConfig.purple : StyleConfig.surface
+                                    border.color: isDaySelected ? StyleConfig.purple : StyleConfig.border
                                     border.width: 1
 
                                     Text {
                                         text: modelData
                                         anchors.centerIn: parent
-                                        color: dayBubble.isDaySelected ? "#121212" : "#7A7A7A"
+                                        color: dayBubble.isDaySelected ? StyleConfig.background : StyleConfig.textTertiary
                                         font { pixelSize: 11; bold: true }
                                     }
 
@@ -338,7 +339,7 @@ Item {
                             text: repeatLayout.selectedRepeatType == 1 || repeatLayout.selectedRepeatType == 2
                                   ? qsTr("Time")
                                   : repeatLayout.selectedRepeatType == 3 ? qsTr("Day & Time") : qsTr("Date & Time")
-                            color: "#b0b0b0"
+                            color: StyleConfig.textSecondary
                             font.pointSize: 8
                         }
 
@@ -347,20 +348,20 @@ Item {
                             placeholderText: repeatLayout.selectedRepeatType == 1  || repeatLayout.selectedRepeatType == 2
                                              ? qsTr("Select time")
                                              : repeatLayout.selectedRepeatType == 3 ? qsTr("Select day and time") : qsTr("Select date and time")
-                            placeholderTextColor: "#999"
-                            color: "white"
+                            placeholderTextColor: StyleConfig.textTertiary
+                            color: StyleConfig.textPrimary
                             clip: true
                             readOnly: true
                             Layout.preferredHeight: 40
                             Layout.fillWidth: true
 
                             background: Rectangle {
-                                color: "#191919"
+                                color: StyleConfig.surface
                                 radius: 5
 
                                 border {
                                     width: 1
-                                    color: dateField.focus ? "white" : "#424242"
+                                    color: dateField.focus ? StyleConfig.textPrimary : StyleConfig.border
                                 }
                             }
 
@@ -414,27 +415,27 @@ Item {
                         Text {
                             id: txtTimer
                             text: qsTr("Timer")
-                            color: "#b0b0b0"
+                            color: StyleConfig.textSecondary
                             font.pointSize: 8
                         }
 
                         TextField {
                             id: timerField
                             placeholderText: qsTr("Select timer")
-                            placeholderTextColor: "#999"
-                            color: "white"
+                            placeholderTextColor: StyleConfig.textTertiary
+                            color: StyleConfig.textPrimary
                             clip: true
                             readOnly: true
                             Layout.preferredHeight: 40
                             Layout.fillWidth: true
 
                             background: Rectangle {
-                                color: "#191919"
+                                color: StyleConfig.surface
                                 radius: 5
 
                                 border {
                                     width: 1
-                                    color: timerField.focus ? "white" : "#424242"
+                                    color: timerField.focus ? StyleConfig.textPrimary : StyleConfig.border
                                 }
                             }
 
@@ -467,8 +468,8 @@ Item {
                                     width: 50
                                     height: 28
                                     radius: 14
-                                    color: selectedTimer === modelData.secs ? "#FFD166" : "#191919"
-                                    border.color: selectedTimer === modelData.secs ? "#FFD166" : "#424242"
+                                    color: selectedTimer === modelData.secs ? StyleConfig.warning : StyleConfig.surface
+                                    border.color: selectedTimer === modelData.secs ? StyleConfig.warning : StyleConfig.border
                                     border.width: 1
 
                                     Behavior on color { ColorAnimation { duration: 150 } }
@@ -477,7 +478,7 @@ Item {
                                     Text {
                                         text: modelData.label
                                         anchors.centerIn: parent
-                                        color: selectedTimer === modelData.secs ? "#121212" : "#8A8A8A"
+                                        color: selectedTimer === modelData.secs ? StyleConfig.background : StyleConfig.textTertiary
                                         font {
                                             pixelSize: 11
                                             bold: selectedTimer === modelData.secs
@@ -533,7 +534,7 @@ Item {
                         repeatDaysString
                     )
                 }
-                color: "#888"
+                color: StyleConfig.textTertiary
                 font {
                     pixelSize: 12
                     italic: true
@@ -550,7 +551,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 text: isEdit ? qsTr("Update") : qsTr("Save")
-                palette.buttonText: "white"
+                palette.buttonText: StyleConfig.textPrimary
 
                 onClicked: onAddEditSchedule()
 
@@ -560,7 +561,7 @@ Item {
                 }
 
                 background: Rectangle {
-                    color: "green"
+                    color: StyleConfig.success
                     radius: 5
                     anchors.fill: parent
                     opacity: saveBtn.pressed ? 0.7 : 1.0
@@ -579,7 +580,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 text: qsTr("Cancel")
-                palette.buttonText: "white"
+                palette.buttonText: StyleConfig.textPrimary
 
                 onClicked: stackView.pop()
 
@@ -589,7 +590,7 @@ Item {
                 }
 
                 background: Rectangle {
-                    color: "slategray"
+                    color: StyleConfig.textTertiary
                     radius: 5
                     anchors.fill: parent
                     opacity: cancelBtn.pressed ? 0.7 : 1.0

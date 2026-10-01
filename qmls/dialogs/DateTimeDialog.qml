@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "../../config"
 
 CommonDialog {
     id: dateTimeDialog
@@ -91,7 +92,7 @@ CommonDialog {
 
                         Label {
                             text: itemLayout.config.title
-                            color: "#bdc3c7"
+                            color: StyleConfig.textSecondary
                             font.bold: true
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
@@ -107,7 +108,7 @@ CommonDialog {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
 
-                                color: Tumbler.displacement === 0 ? "white" : "#8a8a8a"
+                                color: Tumbler.displacement === 0 ? StyleConfig.textPrimary : StyleConfig.textTertiary
                                 font.pixelSize: Tumbler.displacement === 0 ? 16 : 14
                                 font.bold: Tumbler.displacement === 0
 
@@ -117,11 +118,11 @@ CommonDialog {
                             background: Item {
                                 Rectangle {
                                     anchors.centerIn: parent
-                                    width: parent.width + 10
-                                    height: 30
-                                    color: "white"
-                                    opacity: 0.12
-                                    radius: 4
+                                        width: parent.width + 10
+                                        height: 30
+                                        color: StyleConfig.textPrimary
+                                        opacity: 0.12
+                                        radius: 4
                                 }
                             }
                         }

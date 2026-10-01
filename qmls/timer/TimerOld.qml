@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
+import "../../config"
 
 Item {
     Shape {
@@ -11,7 +12,7 @@ Item {
         layer.samples: 4
 
         ShapePath {
-            strokeColor: "#333333"
+            strokeColor: StyleConfig.border
             strokeWidth: 10
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
@@ -24,7 +25,7 @@ Item {
         }
 
         ShapePath {
-            strokeColor: "#007acc"
+            strokeColor: StyleConfig.accent
             strokeWidth: 10
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
@@ -46,7 +47,7 @@ Item {
             anchors.centerIn: parent
             width: 220; height: 220
             radius: 110
-            color: "#007acc"
+            color: StyleConfig.accent
             opacity: 0.1
 
             SequentialAnimation on scale {

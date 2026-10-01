@@ -3,13 +3,14 @@
 // custom_screen = 'ContentScreen.qml'. Placeholder until the design lands.
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "../../../config"
 import "../../common"
 
 Page {
     id: root
 
     background: Rectangle {
-        color: "black"
+        color: StyleConfig.background
     }
 
     header: NavigationHeader {
@@ -19,7 +20,7 @@ Page {
     Label {
         anchors.centerIn: parent
         text: qsTr("Contents")
-        color: "#444444"
+        color: StyleConfig.textDisabled
         font.pixelSize: 20
     }
 }

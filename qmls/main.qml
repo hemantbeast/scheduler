@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
+import "../config"
 import "menu"
 import "toast"
 import "timer"
@@ -14,7 +15,7 @@ Window {
     height: 450
     visible: true
     title: qsTr("Timer & Scheduler")
-    color: "#121212"
+    color: StyleConfig.background
 
     property var customScreenRegistry: ({})
     property var settingsItemPage: settingsItemComp
@@ -23,16 +24,6 @@ Window {
         id: stackView
         initialItem: mainView
         anchors.fill: parent
-    }
-
-    // Applies brightness / night mode settings on top of every screen
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-        opacity: appSettings.nightMode ? 0.55 : Math.max(0, (100 - appSettings.brightness) / 250)
-        visible: opacity > 0.001
-        enabled: false
-        z: 1000
     }
 
     Toast {

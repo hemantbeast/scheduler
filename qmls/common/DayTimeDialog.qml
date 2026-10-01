@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "../../config"
 
 Dialog {
     id: dayTimeDialog
@@ -20,8 +21,8 @@ Dialog {
     }
 
     background: Rectangle {
-        color: "#2c3e50"
-        border.color: "#34495e"
+        color: StyleConfig.surface
+        border.color: StyleConfig.border
         radius: 5
         anchors.fill: parent
     }
@@ -91,7 +92,7 @@ Dialog {
     }
 
     header: Rectangle {
-        color: "#1a252f"
+        color: StyleConfig.surfaceAlt
         height: 50
         radius: 5
 
@@ -108,7 +109,7 @@ Dialog {
 
         Label {
             text: qsTr("Choose Day & Time")
-            color: "white"
+            color: StyleConfig.textPrimary
             font.bold: true
             font.pixelSize: 16
             anchors.left: parent.left
@@ -157,7 +158,7 @@ Dialog {
 
                         Label {
                             text: itemLayout.config.title
-                            color: "#bdc3c7"
+                            color: StyleConfig.textSecondary
                             font.bold: true
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
@@ -173,7 +174,7 @@ Dialog {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
 
-                                color: Tumbler.displacement === 0 ? "white" : "#8a8a8a"
+                                color: Tumbler.displacement === 0 ? StyleConfig.textPrimary : StyleConfig.textTertiary
                                 font.pixelSize: Tumbler.displacement === 0 ? 16 : 14
                                 font.bold: Tumbler.displacement === 0
 
@@ -198,7 +199,7 @@ Dialog {
     }
 
     footer: Rectangle {
-        color: "#1a252f" // Match header color
+        color: StyleConfig.surfaceAlt // Match header color
         height: 60
         radius: 5
         clip: true
@@ -213,7 +214,7 @@ Dialog {
 
         Button {
             text: qsTr("OK")
-            palette.buttonText: "white"
+            palette.buttonText: StyleConfig.textPrimary
             anchors.right: parent.right
             anchors.rightMargin: 16
             anchors.verticalCenter: parent.verticalCenter
@@ -222,7 +223,7 @@ Dialog {
             background: Rectangle {
                 implicitWidth: 80
                 implicitHeight: 36
-                color: parent.pressed ? "#2980b9" : "#3498db"
+                color: parent.pressed ? Qt.darker(StyleConfig.accent, 1.2) : StyleConfig.accent
                 radius: 4
             }
             onClicked: dayTimeDialog.accept() // Triggers onAccepted

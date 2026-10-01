@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 import "../common"
 
 Page {
@@ -9,7 +10,7 @@ Page {
     property string pageTitle: ""
 
     background: Rectangle {
-        color: "black"
+        color: StyleConfig.background
     }
 
     header: NavigationHeader {
@@ -34,7 +35,7 @@ Page {
             anchors.centerIn: parent
             visible: settingsList.count === 0
             text: qsTr("No settings available")
-            color: "#444444"
+            color: StyleConfig.textDisabled
             font.pixelSize: 20
         }
     }

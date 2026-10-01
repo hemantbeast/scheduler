@@ -2,6 +2,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 
 Item {
     id: root
@@ -24,21 +25,21 @@ Item {
             text: root.label
             font.pixelSize: 20
             font.weight: Font.Normal
-            color: "#ffffff"
+            color: StyleConfig.textPrimary
             Layout.fillWidth: true
         }
 
         Label {
             text: root.value.toFixed(root.stepSize < 1 ? 1 : 0) + " " + root.unit
             font.pixelSize: 20
-            color: "#999999"
+            color: StyleConfig.textSecondary
         }
     }
 
     Rectangle {
         anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
         height: 1
-        color: "#2a2a2a"
+        color: StyleConfig.surfaceHover
     }
 
     MouseArea {
@@ -56,7 +57,7 @@ Item {
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
         background: Rectangle {
-            color: "#1e1e1e"
+            color: StyleConfig.surface
             radius: 16
         }
 
@@ -69,7 +70,7 @@ Item {
                 text: root.label
                 font.pixelSize: 20
                 font.weight: Font.Normal
-                color: "#ffffff"
+                color: StyleConfig.textPrimary
                 Layout.alignment: Qt.AlignHCenter
             }
 
@@ -88,8 +89,8 @@ Item {
                     implicitWidth: 26
                     implicitHeight: 26
                     radius: 13
-                    color: slider.pressed ? "#d0d0d0" : "#ffffff"
-                    border.color: "#999999"
+                    color: slider.pressed ? StyleConfig.textSecondary : StyleConfig.textPrimary
+                    border.color: StyleConfig.textSecondary
                     border.width: 1
                 }
 
@@ -101,12 +102,12 @@ Item {
                     width: slider.availableWidth
                     height: implicitHeight
                     radius: 3
-                    color: "#404040"
+                    color: StyleConfig.textDisabled
 
                     Rectangle {
                         width: slider.visualPosition * parent.width
                         height: parent.height
-                        color: "#4a9eff"
+                        color: StyleConfig.accent
                         radius: 3
                     }
                 }
@@ -122,20 +123,20 @@ Item {
                 Label {
                     text: root.minVal + " " + root.unit
                     font.pixelSize: 14
-                    color: "#999999"
+                    color: StyleConfig.textSecondary
                 }
                 Item { Layout.fillWidth: true }
                 Label {
                     text: slider.value.toFixed(root.stepSize < 1 ? 1 : 0) + " " + root.unit
                     font.pixelSize: 15
-                    color: "#4a9eff"
+                    color: StyleConfig.accent
                     font.weight: Font.Medium
                 }
                 Item { Layout.fillWidth: true }
                 Label {
                     text: root.maxVal + " " + root.unit
                     font.pixelSize: 14
-                    color: "#999999"
+                    color: StyleConfig.textSecondary
                 }
             }
         }

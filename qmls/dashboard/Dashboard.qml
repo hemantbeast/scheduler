@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 import "../common"
 
 Item {
@@ -9,11 +10,11 @@ Item {
     readonly property var modeNames: ["auto", "heat", "cool", "dry", "fan"]
     readonly property var modeLabels: ["AUTO", "HEAT", "COOL", "DRY", "FAN"]
     readonly property var modeColors: {
-        "heat": "#FF5F00",
-        "cool": "#00B4FF",
-        "dry": "#00A884",
-        "fan": "#BB66FF",
-        "auto": "#FFD000"
+        "heat": StyleConfig.heatColor,
+        "cool": StyleConfig.coolColor,
+        "dry": StyleConfig.dryColor,
+        "fan": StyleConfig.purple,
+        "auto": StyleConfig.warning
     }
 
     function tempText(celsius) {
@@ -24,11 +25,12 @@ Item {
         anchors.fill: parent
         anchors.margins: 24
         anchors.leftMargin: 34
+        anchors.topMargin: 50
         spacing: 16
 
         Text {
             text: qsTr("Dashboard")
-            color: "white"
+            color: StyleConfig.textPrimary
             font { pixelSize: 22; weight: Font.Bold }
         }
 
@@ -36,7 +38,7 @@ Item {
             text: dashboardBackend.hasData
                   ? qsTr("Live data from shared database")
                   : qsTr("No device data yet - waiting for IDU/ODU")
-            color: "#9e9e9e"
+            color: StyleConfig.textSecondary
             font.pixelSize: 13
         }
 
@@ -49,7 +51,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 150
                 radius: 12
-                color: "#252526"
+                color: StyleConfig.surface
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -58,12 +60,12 @@ Item {
 
                     Text {
                         text: qsTr("INDOOR")
-                        color: "#9e9e9e"
+                        color: StyleConfig.textSecondary
                         font { pixelSize: 12; weight: Font.Medium; letterSpacing: 1 }
                     }
                     Text {
                         text: tempText(dashboardBackend.indoorTemp)
-                        color: "white"
+                        color: StyleConfig.textPrimary
                         font { pixelSize: 40; weight: Font.Bold }
                     }
                     Item { Layout.fillHeight: true }
@@ -71,12 +73,12 @@ Item {
                         spacing: 6
                         SvgImage {
                             source: "../../images/humidity.svg"
-                            color: "#9e9e9e"
+                            color: StyleConfig.textSecondary
                             width: 16; height: 16
                         }
                         Text {
                             text: dashboardBackend.humidity.toFixed(0) + "%"
-                            color: "#9e9e9e"
+                            color: StyleConfig.textSecondary
                             font.pixelSize: 13
                         }
                     }
@@ -88,7 +90,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 150
                 radius: 12
-                color: "#252526"
+                color: StyleConfig.surface
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -97,18 +99,18 @@ Item {
 
                     Text {
                         text: qsTr("OUTDOOR")
-                        color: "#9e9e9e"
+                        color: StyleConfig.textSecondary
                         font { pixelSize: 12; weight: Font.Medium; letterSpacing: 1 }
                     }
                     Text {
                         text: tempText(dashboardBackend.outdoorTemp)
-                        color: "white"
+                        color: StyleConfig.textPrimary
                         font { pixelSize: 40; weight: Font.Bold }
                     }
                     Item { Layout.fillHeight: true }
                     Text {
                         text: qsTr("ODU")
-                        color: "#9e9e9e"
+                        color: StyleConfig.textSecondary
                         font.pixelSize: 13
                     }
                 }
@@ -119,7 +121,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 150
                 radius: 12
-                color: "#252526"
+                color: StyleConfig.surface
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -128,7 +130,7 @@ Item {
 
                     Text {
                         text: qsTr("TARGET")
-                        color: "#9e9e9e"
+                        color: StyleConfig.textSecondary
                         font { pixelSize: 12; weight: Font.Medium; letterSpacing: 1 }
                     }
 
@@ -138,11 +140,11 @@ Item {
                         Rectangle {
                             width: 34; height: 34
                             radius: 17
-                            color: minusArea.pressed ? "#3a3a3c" : "#2f2f31"
+                            color: minusArea.pressed ? StyleConfig.surfaceHover : StyleConfig.surfaceAlt
                             Text {
                                 anchors.centerIn: parent
                                 text: "-"
-                                color: "white"
+                                color: StyleConfig.textPrimary
                                 font { pixelSize: 20; weight: Font.Bold }
                             }
                             MouseArea {
@@ -154,18 +156,18 @@ Item {
 
                         Text {
                             text: tempText(dashboardBackend.targetTemp)
-                            color: dashboardScreen.modeColors[dashboardBackend.mode] || "white"
+                            color: dashboardScreen.modeColors[dashboardBackend.mode] || StyleConfig.textPrimary
                             font { pixelSize: 28; weight: Font.Bold }
                         }
 
                         Rectangle {
                             width: 34; height: 34
                             radius: 17
-                            color: plusArea.pressed ? "#3a3a3c" : "#2f2f31"
+                            color: plusArea.pressed ? StyleConfig.surfaceHover : StyleConfig.surfaceAlt
                             Text {
                                 anchors.centerIn: parent
                                 text: "+"
-                                color: "white"
+                                color: StyleConfig.textPrimary
                                 font { pixelSize: 20; weight: Font.Bold }
                             }
                             MouseArea {
@@ -194,14 +196,14 @@ Item {
                     Layout.fillWidth: true
                     radius: 10
                     readonly property bool active: dashboardBackend.mode === dashboardScreen.modeNames[index]
-                    color: active ? "#33" + String(dashboardScreen.modeColors[dashboardScreen.modeNames[index]]).substring(1) : "#252526"
+                    color: active ? "#33" + String(dashboardScreen.modeColors[dashboardScreen.modeNames[index]]).substring(1) : StyleConfig.surface
                     border.color: active ? dashboardScreen.modeColors[dashboardScreen.modeNames[index]] : "transparent"
                     border.width: 1.5
 
                     Text {
                         anchors.centerIn: parent
                         text: dashboardScreen.modeLabels[index]
-                        color: parent.active ? dashboardScreen.modeColors[dashboardScreen.modeNames[index]] : "#9e9e9e"
+                        color: parent.active ? dashboardScreen.modeColors[dashboardScreen.modeNames[index]] : StyleConfig.textSecondary
                         font { pixelSize: 13; weight: Font.DemiBold; letterSpacing: 1 }
                     }
 
@@ -216,14 +218,14 @@ Item {
                 Layout.preferredHeight: 44
                 Layout.preferredWidth: 90
                 radius: 10
-                color: dashboardBackend.isOn ? "#252526" : "#3a1d1d"
-                border.color: dashboardBackend.isOn ? "transparent" : "#FF5F00"
+                color: dashboardBackend.isOn ? StyleConfig.surface : StyleConfig.surfaceAlt
+                border.color: dashboardBackend.isOn ? "transparent" : StyleConfig.heatColor
                 border.width: 1.5
 
                 Text {
                     anchors.centerIn: parent
                     text: dashboardBackend.isOn ? qsTr("ON") : qsTr("OFF")
-                    color: dashboardBackend.isOn ? "#4CAF50" : "#FF5F00"
+                    color: dashboardBackend.isOn ? StyleConfig.success : StyleConfig.heatColor
                     font { pixelSize: 13; weight: Font.DemiBold; letterSpacing: 1 }
                 }
 

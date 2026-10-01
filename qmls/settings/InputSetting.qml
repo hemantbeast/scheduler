@@ -2,6 +2,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 
 Item {
     id: root
@@ -21,21 +22,21 @@ Item {
             text: root.label
             font.pixelSize: 20
             font.weight: Font.Normal
-            color: "#ffffff"
+            color: StyleConfig.textPrimary
             Layout.fillWidth: true
         }
 
         Label {
             text: root.text !== "" ? root.text : "—"
             font.pixelSize: 20
-            color: "#999999"
+            color: StyleConfig.textSecondary
         }
     }
 
     Rectangle {
         anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
         height: 1
-        color: "#2a2a2a"
+        color: StyleConfig.surfaceHover
     }
 
     MouseArea {
@@ -53,7 +54,7 @@ Item {
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
         background: Rectangle {
-            color: "#1e1e1e"
+            color: StyleConfig.surface
             radius: 16
         }
 
@@ -71,10 +72,10 @@ Item {
                 Layout.preferredHeight: 48
 
                 font.pixelSize: 18
-                color: "#ffffff"
+                color: StyleConfig.textPrimary
 
                 background: Rectangle {
-                    color: "#2a2a2a"
+                    color: StyleConfig.surfaceHover
                     radius: 8
                 }
 
@@ -89,14 +90,14 @@ Item {
                 Layout.preferredHeight: 48
 
                 background: Rectangle {
-                    color: tickMouseArea.pressed ? "#1a5a9a" : "#2979ff"
+                    color: tickMouseArea.pressed ? Qt.darker(StyleConfig.accent, 1.2) : StyleConfig.accent
                     radius: 8
                 }
 
                 contentItem: Label {
                     text: "✓"
                     font.pixelSize: 24
-                    color: "#ffffff"
+                    color: StyleConfig.textPrimary
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }

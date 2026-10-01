@@ -2,6 +2,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 
 Item {
     id: root
@@ -20,7 +21,7 @@ Item {
             text: root.label
             font.pixelSize: 20
             font.weight: Font.Normal
-            color: "#ffffff"
+            color: StyleConfig.textPrimary
             Layout.fillWidth: true
         }
 
@@ -32,7 +33,7 @@ Item {
                 implicitWidth:  64
                 implicitHeight: 32
                 radius: 16
-                color: toggle.checked ? "#2979ff" : "#555555"
+                color: toggle.checked ? StyleConfig.accent : StyleConfig.textDisabled
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
 
@@ -48,7 +49,7 @@ Item {
                     width:  26
                     height: 26
                     radius: 13
-                    color: "#ffffff"
+                    color: StyleConfig.textPrimary
 
                     Behavior on x {
                         NumberAnimation {
@@ -66,6 +67,6 @@ Item {
     Rectangle {
         anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
         height: 1
-        color: "#2a2a2a"
+        color: StyleConfig.surfaceHover
     }
 }

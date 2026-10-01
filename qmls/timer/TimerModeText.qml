@@ -1,10 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "../../config"
 
 Rectangle {
     id: root
     property int currentMode: 0
-    property var modeColors: ["#FF5F00", "#00B4FF", "#00FFC2"]
+    property var modeColors: [StyleConfig.heatColor, StyleConfig.coolColor, StyleConfig.dryColor]
     property var modeNames: ["HEAT", "COOL", "DRY"]
     property bool isTimerRunning: false
 
@@ -13,8 +14,8 @@ Rectangle {
     width: 320
     height: 40
     radius: height / 2
-    color: "#161616"
-    border.color: "#282828"
+    color: StyleConfig.surface
+    border.color: StyleConfig.surfaceHover
     border.width: 1
 
     Rectangle {
@@ -48,7 +49,7 @@ Rectangle {
                 Text {
                     text: modelData
                     anchors.centerIn: parent
-                    color: root.currentMode === index ? "white" : "#8A8A8A"
+                    color: root.currentMode === index ? StyleConfig.textPrimary : StyleConfig.textSecondary
                     scale: root.currentMode === index ? 1.05 : 1.0
                     font {
                         pixelSize: 11

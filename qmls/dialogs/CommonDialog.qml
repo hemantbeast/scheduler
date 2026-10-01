@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 
 Item {
     id: commonDialogId
@@ -93,8 +94,8 @@ Item {
             scale: commonDialogId.isShown ? 1.0 : 0.3
 
             Rectangle {
-                color: "#2c3e50"
-                border.color: "#34495e"
+                color: StyleConfig.surface
+                border.color: StyleConfig.border
                 radius: 5
                 anchors.fill: parent
             }
@@ -105,7 +106,7 @@ Item {
 
                 // Header
                 Rectangle {
-                    color: "#1a252f"
+                    color: StyleConfig.surfaceAlt
                     radius: 5
                     Layout.preferredHeight: 50
                     Layout.fillWidth: true
@@ -124,7 +125,7 @@ Item {
 
                     Label {
                         text: commonDialogId.headerText
-                        color: "white"
+                        color: StyleConfig.textPrimary
                         font.bold: true
                         font.pixelSize: 16
                         anchors.left: parent.left
@@ -142,7 +143,7 @@ Item {
 
                 // Footer
                 Rectangle {
-                    color: "#1a252f"
+                    color: StyleConfig.surfaceAlt
                     radius: 5
                     clip: true
                     layer.enabled: true
@@ -161,7 +162,7 @@ Item {
                     Button {
                         id: okBtn
                         text: qsTr("OK")
-                        palette.buttonText: "white"
+                        palette.buttonText: StyleConfig.textPrimary
                         anchors.right: parent.right
                         anchors.rightMargin: 16
                         anchors.verticalCenter: parent.verticalCenter
@@ -170,7 +171,7 @@ Item {
                         background: Rectangle {
                             implicitWidth: 80
                             implicitHeight: 36
-                            color: okBtn.pressed ? "#2980b9" : "#3498db"
+                            color: okBtn.pressed ? Qt.darker(StyleConfig.accent, 1.2) : StyleConfig.accent
                             radius: 4
                         }
                         onClicked: {
@@ -182,7 +183,7 @@ Item {
                     Button {
                         id: cancelBtn
                         text: qsTr("Cancel")
-                        palette.buttonText: pressed ? "#2980b9" : "#3498db"
+                        palette.buttonText: StyleConfig.accent
                         anchors.right: okBtn.left
                         anchors.rightMargin: 16
                         anchors.verticalCenter: parent.verticalCenter

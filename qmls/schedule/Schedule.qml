@@ -26,7 +26,7 @@ Item {
 
             // Outer Dashed Ring
             ShapePath {
-                strokeColor: "#333333"
+                strokeColor: StyleConfig.border
                 strokeWidth: 2
                 fillColor: "transparent"
                 strokeStyle: ShapePath.DashLine
@@ -36,7 +36,7 @@ Item {
 
             // Inner solid hands icon representation
             ShapePath {
-                strokeColor: "#444444"
+                strokeColor: StyleConfig.textDisabled
                 strokeWidth: 3
                 capStyle: ShapePath.RoundCap
                 fillColor: "transparent"
@@ -49,7 +49,7 @@ Item {
         // Primary Label Text
         Text {
             text: qsTr("No Schedules Found")
-            color: "#eeeeee"
+            color: StyleConfig.textPrimary
             Layout.topMargin: 8
             Layout.alignment: Qt.AlignHCenter
             font { pixelSize: 18; weight: Font.Medium }
@@ -58,7 +58,7 @@ Item {
         // Helper Sub-Text Instruction
         Text {
             text: qsTr("Tap the button below to add your first active task configuration window.")
-            color: "#666666"
+            color: StyleConfig.textTertiary
             Layout.alignment: Qt.AlignHCenter
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
@@ -107,8 +107,8 @@ Item {
             property bool isActive: model.id === timerManager.activeScheduleId
             property var currentSettings: StyleConfig.modeSettings[model.mode] || StyleConfig.modeSettings["HEAT"]
 
-            color: isActive ? Qt.darker(currentSettings.color, 8) : (mouseArea.containsMouse ? "#252525" : "#1a1a1a")
-            border.color: isActive ? currentSettings.color : "#333"
+            color: isActive ? Qt.darker(currentSettings.color, 8) : (mouseArea.containsMouse ? StyleConfig.surfaceHover : StyleConfig.surface)
+            border.color: isActive ? currentSettings.color : StyleConfig.border
             border.width: isActive ? 2 : 1
 
             Behavior on color {
@@ -148,7 +148,7 @@ Item {
 
                     SvgImage {
                         height: 12; width: 12
-                        color: "#B77CFF"
+                        color: StyleConfig.purple
                         source: "../../images/repeat.svg"
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
@@ -168,7 +168,7 @@ Item {
 
                         Text {
                             text: model.name
-                            color: model.isEnabled ? "white" : "#d9d9d9"
+                            color: model.isEnabled ? StyleConfig.textPrimary : StyleConfig.textSecondary
                             font {
                                 pixelSize: 17
                                 weight: Font.Bold
@@ -187,7 +187,7 @@ Item {
                                 id: runningLabel
                                 text: qsTr("RUNNING")
                                 anchors.centerIn: parent
-                                color: "white"
+                                color: StyleConfig.textPrimary
                                 font {
                                     pixelSize: 9
                                     bold: true
@@ -213,14 +213,14 @@ Item {
 
                             SvgImage {
                                 height: 15; width: 15
-                                color: model.isEnabled ? "#777" : "#555"
+                                color: model.isEnabled ? StyleConfig.textTertiary : StyleConfig.textDisabled
                                 source: "../../images/play.svg"
                                 anchors.verticalCenter: parent.verticalCenter
                             }
 
                             Text {
                                 text: getScheduleDateTimeLabel(model.startTime, model.repeatType, model.repeatDays)
-                                color: model.isEnabled ? "#e0e0e0" : "#d1d1d1"
+                                color: model.isEnabled ? StyleConfig.textSecondary : StyleConfig.textTertiary
                                 font {
                                     pixelSize: 13
                                     weight: Font.Medium
@@ -243,13 +243,13 @@ Item {
 
                             SvgImage {
                                 height: 15; width: 15
-                                color: model.isEnabled ? "#777" : "#555"
+                                color: model.isEnabled ? StyleConfig.textTertiary : StyleConfig.textDisabled
                                 source: "../../images/clock.svg"
                                 anchors.verticalCenter: parent.verticalCenter
                             }
 
                             Text {
-                                color: model.isEnabled ? "#e0e0e0" : "#d1d1d1"
+                                color: model.isEnabled ? StyleConfig.textSecondary : StyleConfig.textTertiary
                                 font {
                                     pixelSize: 13
                                     weight: Font.Medium
@@ -292,7 +292,7 @@ Item {
                                 height: 12
                                 radius: height / 2
                                 anchors.verticalCenter: parent.verticalCenter
-                                color: switchBtn.checked ? "#804CAF50" : "#424242"
+                                color: switchBtn.checked ? "#80" + StyleConfig.success.toString().substring(1) : StyleConfig.border
 
                                 Behavior on color {
                                     ColorAnimation { duration: 150 }
@@ -305,7 +305,7 @@ Item {
                                 height: parent.height
                                 radius: width / 2
                                 anchors.verticalCenter: parent.verticalCenter
-                                color: switchBtn.checked ? "#4CAF50" : "#FFFFFF"
+                                color: switchBtn.checked ? StyleConfig.success : StyleConfig.textPrimary
                                 x: switchBtn.checked ? (parent.width - width) : 0
 
                                 Behavior on x {
@@ -331,7 +331,7 @@ Item {
                         SvgImage {
                             id: imgEdit
                             height: 22; width: 22
-                            color: "#fff"
+                            color: StyleConfig.textPrimary
                             source: "../../images/edit.svg"
                             anchors.centerIn: parent
                             scale: editMouseArea.pressed ? 0.97 : 1.0
@@ -364,7 +364,7 @@ Item {
                         SvgImage {
                             id: imgDelete
                             height: 25; width: 25
-                            color: "#EF5350"
+                            color: StyleConfig.error
                             source: "../../images/delete.svg"
                             anchors.centerIn: parent
                             scale: delMouseArea.pressed ? 0.97 : 1.0
@@ -442,7 +442,7 @@ Item {
 
         message: qsTr("Delete \"%1\"?\nThis action cannot be undone.").arg(scheduleName)
         confirmText: qsTr("Delete")
-        confirmColor: "#EF5350"
+        confirmColor: StyleConfig.error
 
         onConfirmed: {
             scheduleModel.removeItem(scheduleIndex)

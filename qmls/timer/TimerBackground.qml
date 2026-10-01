@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
+import "../../config"
 
 Item {
     id: root
-    property string currentColor: "#FF5F00"
+    property string currentColor: StyleConfig.heatColor
     property bool isActive: false
 
     RadialGradient {

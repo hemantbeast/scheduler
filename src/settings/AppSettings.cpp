@@ -64,11 +64,20 @@ QString AppSettings::formatNow(const QString &format) const
         return now.toString(format);
     }
 
-    const QTimeZone tz(mTimezone.toUtf8());
+    QTimeZone tz(mTimezone.toUtf8());
 
+    // On Windows, IANA IDs may not be recognized directly.
+    // Try converting IANA -> Windows ID as a fallback.
     if (!tz.isValid()) {
-        qWarning() << "[AppSettings] Unknown time zone:" << mTimezone;
-        return now.toString(format);
+        const QByteArray windowsId = QTimeZone::ianaIdToWindowsId(mTimezone.toUtf8());
+        if (!windowsId.isEmpty()) {
+            tz = QTimeZone(windowsId);
+        }
+    }
+
+    // If still invalid, fall back to the system timezone.
+    if (!tz.isValid()) {
+        tz = QTimeZone::systemTimeZone();
     }
 
     return now.toTimeZone(tz).toString(format);

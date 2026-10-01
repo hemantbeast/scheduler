@@ -54,7 +54,7 @@ CommonDialog {
 
                     Label {
                         text: itemLayout.config.title
-                        color: "#bdc3c7"
+                        color: StyleConfig.textSecondary
                         font.bold: true
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
@@ -70,7 +70,7 @@ CommonDialog {
                             text: String(modelData).padStart(2, '0')
                             font.pixelSize: Tumbler.displacement === 0 ? 16 : 13
                             font.bold: Tumbler.displacement === 0
-                            color: Tumbler.displacement === 0 ? "white" : "#7f8c8d"
+                            color: Tumbler.displacement === 0 ? StyleConfig.textPrimary : StyleConfig.textTertiary
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }

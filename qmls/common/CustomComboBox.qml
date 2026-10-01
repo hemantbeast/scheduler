@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 
 ComboBox {
     id: comboField
@@ -8,19 +9,19 @@ ComboBox {
     contentItem: Text {
         text: comboField.displayText
         font.pixelSize: 14
-        color: "white"
+        color: StyleConfig.textPrimary
         verticalAlignment: Text.AlignVCenter
         leftPadding: 12 // Space text away from left border
         elide: Text.ElideRight
     }
 
     background: Rectangle {
-        color: "#1f1f1f"
+        color: StyleConfig.surfaceHover
         radius: 5
         border {
             width: 1
             // Changes color when dropdown is open or field is focused
-            color: (comboField.focus || comboField.popup.visible) ? "white" : "#a1a1a1"
+            color: (comboField.focus || comboField.popup.visible) ? StyleConfig.textPrimary : StyleConfig.textSecondary
         }
     }
 
@@ -40,7 +41,7 @@ ComboBox {
             ctx.lineTo(width / 2, height);
             ctx.closePath();
             // Arrow turns white when open, grey when closed
-            ctx.fillStyle = comboField.popup.visible ? "white" : "#b0b0b0";
+            ctx.fillStyle = comboField.popup.visible ? StyleConfig.textPrimary : StyleConfig.textSecondary;
             ctx.fill();
         }
 
@@ -58,7 +59,7 @@ ComboBox {
 
         contentItem: Text {
             text: modelData
-            color: itemDel.highlighted ? "white" : "#b0b0b0"
+            color: itemDel.highlighted ? StyleConfig.textPrimary : StyleConfig.textSecondary
             font.pixelSize: 14
             verticalAlignment: Text.AlignVCenter
             leftPadding: 12
@@ -67,7 +68,7 @@ ComboBox {
 
         background: Rectangle {
             // Dark highlight color when hovered/selected, solid dark gray otherwise
-            color: itemDel.highlighted ? "#2a2a2a" : "#1f1f1f"
+            color: itemDel.highlighted ? StyleConfig.surfaceHover : StyleConfig.surfaceAlt
         }
 
         highlighted: comboField.highlightedIndex === index
@@ -90,9 +91,9 @@ ComboBox {
         }
 
         background: Rectangle {
-            color: "#1f1f1f"
+            color: StyleConfig.surfaceHover
             radius: 5
-            border.color: "#a1a1a1"
+            border.color: StyleConfig.textSecondary
             border.width: 1
         }
     }

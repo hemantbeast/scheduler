@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Shapes 1.15
 import QtGraphicalEffects 1.15
+import "../../config"
 
 Item{
     id: root
@@ -26,11 +27,11 @@ Item{
         property real progress: 0
         property real startPosX: position===Qt.TopLeftCorner ? -mainRect.width-borderMargin : position===Qt.TopEdge ? mainRect.width/2-width/2 : position===Qt.TopRightCorner ? mainRect.width+12 : position===Qt.BottomLeftCorner? -mainRect.width-borderMargin : position===Qt.BottomEdge ? mainRect.width/2-width/2 : position===Qt.BottomRightCorner ? mainRect.width+12 : -1
         property real endPosX: 0
-        property color accent: type==="info" ?    "#3498db" :
-                               type==="success" ? "#07bc0c" :
-                               type==="warning" ? "#f1c40f" :
-                               type==="error" ?   "#e74c3c" :
-                                                  "#000000"
+        property color accent: type==="info" ?    StyleConfig.accent :
+                               type==="success" ? StyleConfig.success :
+                               type==="warning" ? StyleConfig.warning :
+                               type==="error" ?   StyleConfig.error :
+                                                  StyleConfig.background
     }
 
     Component.onCompleted: {
@@ -43,10 +44,10 @@ Item{
         y: 12
         width: parent.width
         height: parent.height-12
-        color: theme==="Light" ? "#ffffff" :
-               theme==="Dark"  ? "#121212" :
+        color: theme==="Light" ? StyleConfig.textPrimary :
+               theme==="Dark"  ? StyleConfig.background :
                theme==="Color" ?  privateProperty.accent   :
-                                 "white"
+                                 StyleConfig.textPrimary
         radius: 6
         layer.enabled: true
         layer.effect: DropShadow{
@@ -54,7 +55,7 @@ Item{
             verticalOffset: 0
             radius: 8.0
             samples: 16
-            color: "#1A000000"
+            color: StyleConfig.background
         }
 
         RowLayout{
@@ -81,9 +82,9 @@ Item{
                 horizontalAlignment: "AlignLeft"
                 font.weight: theme==="Light" ? Font.Normal : Font.Medium
                 text: message
-                color: theme==="Light" ? "#000000" :
-                       theme==="Dark"  ? "#ffffff" :
-                                         "white"
+                color: theme==="Light" ? StyleConfig.background :
+                       theme==="Dark"  ? StyleConfig.textPrimary :
+                                         StyleConfig.textPrimary
             }
         }
         Rectangle{
@@ -100,7 +101,7 @@ Item{
                 height: 4
                 radius: 2
                 anchors.bottom: parent.bottom
-                color: theme==="Light" ? privateProperty.accent : "#9Cf5f5f5"
+                color: theme==="Light" ? privateProperty.accent : StyleConfig.textPrimary
             }
         }
     }

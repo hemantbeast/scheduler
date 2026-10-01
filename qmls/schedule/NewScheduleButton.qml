@@ -2,13 +2,14 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "../common"
+import "../../config"
 
 Button {
     id: newScheduleBtn
     onClicked: stackView.push("AddSchedule.qml")
 
     background: Rectangle {
-        color: "crimson"
+        color: StyleConfig.accent
         radius: 5
         anchors.fill: parent
         opacity: newScheduleBtn.pressed ? 0.7 : 1.0
@@ -26,13 +27,13 @@ Button {
 
             SvgImage {
                 height: 17; width: 17
-                color: "white"
+                color: StyleConfig.textPrimary
                 source: "../../images/add.svg"
             }
 
             Text {
                 text: qsTr("New Schedule")
-                color: "white"
+                color: StyleConfig.textPrimary
                 font {
                     pixelSize: 15
                     weight: Font.Medium

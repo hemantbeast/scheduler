@@ -2,6 +2,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 
 RowLayout {
     id: root
@@ -13,14 +14,14 @@ RowLayout {
     Label {
         text: root.label
         font.pixelSize: 20
-        color: "white"
+        color: StyleConfig.textPrimary
         Layout.fillWidth: true
     }
 
     Label {
         text: root.displayValue !== undefined ? root.displayValue : "—"
         font.pixelSize: 18
-        color: "#999999"
+        color: StyleConfig.textSecondary
         horizontalAlignment: Text.AlignRight
     }
 }

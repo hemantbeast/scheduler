@@ -2,13 +2,14 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 import "../common"
 
 Page {
     id: root
     title: qsTr("Settings")
 
-    background: Rectangle { color: "black" }
+    background: Rectangle { color: StyleConfig.background }
 
     ColumnLayout {
         spacing: 8
@@ -19,7 +20,7 @@ Page {
             text: qsTr("Settings")
             font.pixelSize: 24
             font.weight: Font.Normal
-            color: "white"
+            color: StyleConfig.textPrimary
             horizontalAlignment: Text.AlignHCenter
             Layout.fillWidth: true
         }
@@ -44,7 +45,7 @@ Page {
                             bottom: parent.bottom
                         }
                         height: 1
-                        color: "#2a2a2a"
+                        color: StyleConfig.surfaceHover
                     }
                 }
 
@@ -61,7 +62,7 @@ Page {
                         text: model.label
                         font.pixelSize: 20
                         font.weight: Font.Normal
-                        color: "white"
+                        color: StyleConfig.textPrimary
                         Layout.fillWidth: true
                     }
 
@@ -69,7 +70,7 @@ Page {
                         height: 20
                         width: 20
                         source: "../../images/right_arrow.svg"
-                        color: "white"
+                        color: StyleConfig.textPrimary
                         Layout.alignment: Qt.AlignRight
                     }
                 }

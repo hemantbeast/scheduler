@@ -3,11 +3,12 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Shapes 1.15
 import QtGraphicalEffects 1.15
+import "../../config"
 
 Item {
     id: timerScreen
 
-    property var modeColors: ["#FF5F00", "#00B4FF", "#00A884"]
+    property var modeColors: [StyleConfig.heatColor, StyleConfig.coolColor, StyleConfig.dryColor]
     property var modeNames: ["HEAT", "COOL", "DRY"]
 
     property real progressPercentage: timerManager.secondsRemaining / timerManager.totalDuration
@@ -80,7 +81,7 @@ Item {
             model: 40 // Number of ticks
             delegate: Rectangle {
                 width: 1.25; height: 6.25
-                color: "#444"
+                color: StyleConfig.textDisabled
                 x: 125 + 112.5 * Math.cos((index * (270/40) - 225) * Math.PI / 180) - width/2
                 y: 125 + 112.5 * Math.sin((index * (270/40) - 225) * Math.PI / 180) - height/2
                 rotation: index * (270/40) - 135
@@ -141,11 +142,11 @@ Item {
             width: 187.5
             height: 187.5
             radius: 93.75
-            color: "#1a1a1a"
+            color: StyleConfig.surface
             anchors.centerIn: parent
 
             border {
-                color: "#2a2a2a"
+                color: StyleConfig.surfaceHover
                 width: 1.25
             }
 
@@ -155,7 +156,7 @@ Item {
 
                 Text {
                     text: timerManager.secondsRemaining > 0 ? qsTr("TIME LEFT") : qsTr("SYSTEM IDLE")
-                    color: "#666"
+                    color: StyleConfig.textTertiary
                     Layout.alignment: Qt.AlignHCenter
                     font {
                         pixelSize: 10
@@ -166,7 +167,7 @@ Item {
                 Text {
                     id: timeDisplay
                     text: timerScreen.formatTime(timerManager.secondsRemaining)
-                    color: "white"
+                    color: StyleConfig.textPrimary
                     font {
                         pixelSize: 50
                         weight: Font.Light
@@ -185,7 +186,7 @@ Item {
                 }
 
                 Rectangle {
-                    width: 75; height: 1; color: "#333"
+                    width: 75; height: 1; color: StyleConfig.border
                     Layout.alignment: Qt.AlignHCenter
                 }
 
@@ -196,7 +197,7 @@ Item {
 
                     Text {
                         text: qsTr("RUNNING")
-                        color: "#555"
+                        color: StyleConfig.textDisabled
                         Layout.alignment: Qt.AlignHCenter
                         font {
                             pixelSize: 8; bold: true
@@ -219,7 +220,7 @@ Item {
 
                     Text {
                         text: qsTr("NEXT UP")
-                        color: "#555"
+                        color: StyleConfig.textDisabled
                         Layout.alignment: Qt.AlignHCenter
                         font {
                             pixelSize: 8; bold: true
@@ -227,7 +228,7 @@ Item {
                     }
                     Text {
                         text: timerManager.nextScheduleName
-                        color: "#AAA"
+                        color: StyleConfig.textSecondary
                         Layout.alignment: Qt.AlignHCenter
                         font {
                             pixelSize: 10; italic: true
@@ -252,7 +253,7 @@ Item {
 
         background: Rectangle {
             radius: width / 2
-            color: "#424242"
+            color: StyleConfig.surfaceHover
             scale: stopBtn.pressed ? 0.9 : 1.0
             opacity: stopBtn.pressed ? 0.7 : 1.0
 
@@ -269,7 +270,7 @@ Item {
                 height: 14
                 radius: 2
                 anchors.centerIn: parent
-                color: "#EF4444"
+                color: StyleConfig.error
                 opacity: stopBtn.pressed ? 0.7 : 1.0
                 scale: stopBtn.pressed ? 0.9 : 1.0
 

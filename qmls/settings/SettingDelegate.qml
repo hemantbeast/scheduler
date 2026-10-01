@@ -3,6 +3,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 
 ItemDelegate {
     id: root
@@ -37,7 +38,7 @@ ItemDelegate {
                 bottom: parent.bottom
             }
             height: 1
-            color: "#2a2a2a"
+            color: StyleConfig.surfaceHover
         }
     }
 

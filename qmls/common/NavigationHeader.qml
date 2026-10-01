@@ -1,10 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "../../config"
 
 Rectangle {
     id: navigationHeader
     height: 60
-    color: "#252526"
+    color: StyleConfig.surfaceAlt
 
     property string title: ""
     property var titleColor
@@ -22,7 +23,7 @@ Rectangle {
 
         SvgImage {
             height: 27; width: 27
-            color: "white"
+            color: StyleConfig.textPrimary
             source: "../../images/back.svg"
             anchors.centerIn: parent
             scale: backMouseArea.pressed ? 0.97 : 1.0
@@ -46,7 +47,7 @@ Rectangle {
         Label {
             id: lblTitle
             text: navigationHeader.title
-            color: navigationHeader.titleColor || "white"
+            color: navigationHeader.titleColor || StyleConfig.textPrimary
             anchors.centerIn: parent
             font {
                 pixelSize: 20

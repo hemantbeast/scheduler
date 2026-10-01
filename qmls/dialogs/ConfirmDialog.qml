@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../config"
 
 Item {
     id: root
@@ -10,7 +11,7 @@ Item {
     property string message: qsTr("Are you sure?")
     property string confirmText: qsTr("Delete")
     property string cancelText: qsTr("Cancel")
-    property color confirmColor: "#EF5350"
+    property color confirmColor: StyleConfig.error
     property int fadeDuration: 300
 
     signal confirmed()
@@ -68,8 +69,8 @@ Item {
         }
 
         background: Rectangle {
-            color: "#1a1a1a"
-            border.color: "#333"
+            color: StyleConfig.surface
+            border.color: StyleConfig.border
             radius: 8
         }
 
@@ -83,7 +84,7 @@ Item {
 
                 Text {
                     text: root.message
-                    color: "white"
+                    color: StyleConfig.textPrimary
                     font.pixelSize: 16
                     horizontalAlignment: Text.AlignHCenter
                     wrapMode: Text.WordWrap
@@ -118,7 +119,7 @@ Item {
 
                         contentItem: Text {
                             text: confirmBtn.text
-                            color: "white"
+                            color: StyleConfig.textPrimary
                             font.pixelSize: 14
                             font.bold: true
                             horizontalAlignment: Text.AlignHCenter
@@ -138,8 +139,8 @@ Item {
                         }
 
                         background: Rectangle {
-                            color: cancelBtn.pressed ? "#333" : "#2a2a2a"
-                            border.color: "#444"
+                            color: cancelBtn.pressed ? StyleConfig.border : StyleConfig.surfaceHover
+                            border.color: StyleConfig.border
                             border.width: 1
                             radius: 5
                             opacity: cancelBtn.pressed ? 0.8 : 1.0
@@ -152,7 +153,7 @@ Item {
 
                         contentItem: Text {
                             text: cancelBtn.text
-                            color: "#ccc"
+                            color: StyleConfig.textSecondary
                             font.pixelSize: 14
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter

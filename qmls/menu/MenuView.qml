@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
 import "../common"
+import "../../config"
 
 Item {
     id: sideBarRootId
@@ -12,12 +13,12 @@ Item {
     Rectangle {
         id: sideBarId
         anchors.fill: parent
-        color: "#252526"
+        color: StyleConfig.surfaceAlt
 
         property string selectedName: "Timer"
 
         ColumnLayout {
-            spacing: 50
+            spacing: 30
             anchors.centerIn: parent
 
             ListModel {
@@ -26,6 +27,11 @@ Item {
                     name: "Timer"
                     iconSelected: "../../images/timer_selected.svg"
                     iconUnselected: "../../images/timer_unselected.svg"
+                }
+                ListElement {
+                    name: "Dashboard"
+                    iconSelected: "../../images/chart.svg"
+                    iconUnselected: "../../images/chart.svg"
                 }
                 ListElement {
                     name: "Schedule"
@@ -41,11 +47,6 @@ Item {
                     name: "Setting"
                     iconSelected: "../../images/setting_selected.svg"
                     iconUnselected: "../../images/setting_unselected.svg"
-                }
-                ListElement {
-                    name: "Dashboard"
-                    iconSelected: "../../images/chart.svg"
-                    iconUnselected: "../../images/chart.svg"
                 }
             }
 
@@ -65,7 +66,7 @@ Item {
                     SvgImage {
                         id: imageId
                         height:40; width: 40
-                        color: sideBarId.selectedName === name ? "#ffffff" : "#e0e0e1"
+                        color: sideBarId.selectedName === name ? StyleConfig.textPrimary : StyleConfig.textSecondary
                         source: sideBarId.selectedName === name ? iconSelected : iconUnselected
                         anchors.centerIn: parent
                         scale: itemMouseArea.pressed ? 0.97 : 1.0

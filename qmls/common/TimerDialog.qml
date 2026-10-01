@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "../../config"
 
 Dialog {
     id: timerDialog
@@ -18,8 +19,8 @@ Dialog {
     }
 
     background: Rectangle {
-        color: "#2c3e50"
-        border.color: "#34495e"
+        color: StyleConfig.surface
+        border.color: StyleConfig.border
         radius: 5
         anchors.fill: parent
     }
@@ -38,13 +39,13 @@ Dialog {
     }
 
     header: Rectangle {
-        color: "#1a252f"
+        color: StyleConfig.surfaceAlt
         height: 50
         layer.enabled: true
 
         Label {
             text: qsTr("Set Timer")
-            color: "white"
+            color: StyleConfig.textPrimary
             font.bold: true
             font.pixelSize: 16
             anchors.left: parent.left
@@ -76,7 +77,7 @@ Dialog {
 
                     Label {
                         text: itemLayout.config.title
-                        color: "#bdc3c7"
+                        color: StyleConfig.textSecondary
                         font.bold: true
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
@@ -93,7 +94,7 @@ Dialog {
                             text: String(modelData).padStart(2, '0')
                             font.pixelSize: Tumbler.displacement === 0 ? 16 : 13
                             font.bold: Tumbler.displacement === 0
-                            color: Tumbler.displacement === 0 ? "white" : "#7f8c8d"
+                            color: Tumbler.displacement === 0 ? StyleConfig.textPrimary : StyleConfig.textTertiary
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }
@@ -115,7 +116,7 @@ Dialog {
     }
 
     footer: Rectangle {
-        color: "#1a252f"
+        color: StyleConfig.surfaceAlt
         height: 55
 
         Button {
@@ -123,12 +124,12 @@ Dialog {
             anchors.right: parent.right
             anchors.rightMargin: 16
             anchors.verticalCenter: parent.verticalCenter
-            palette.buttonText: "white"
+            palette.buttonText: StyleConfig.textPrimary
 
             background: Rectangle {
                 implicitWidth: 80
                 implicitHeight: 34
-                color: parent.pressed ? "#2980b9" : "#3498db"
+                color: parent.pressed ? Qt.darker(StyleConfig.accent, 1.2) : StyleConfig.accent
                 radius: 4
             }
             onClicked: {
