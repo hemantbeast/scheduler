@@ -14,7 +14,7 @@ Window {
     width: 800
     height: 450
     visible: true
-    title: qsTr("Timer & Scheduler")
+    title: qsTr("Timer & Scheduler - QT/QML application")
     color: StyleConfig.background
 
     property var customScreenRegistry: ({})
