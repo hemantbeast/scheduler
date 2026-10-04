@@ -20,14 +20,25 @@ Window {
     property var customScreenRegistry: ({})
     property var settingsItemPage: settingsItemComp
 
-    StackView {
-        id: stackView
-        initialItem: mainView
-        anchors.fill: parent
-    }
+    // ponytail: fixed 800x450 design canvas scaled uniformly with the window;
+    // reflow layouts if true responsive behavior is ever needed.
+    // Controls-2 Popups (settings) live in the window Overlay and stay 1:1.
+    Item {
+        id: design
+        width: 800
+        height: 450
+        anchors.centerIn: parent
+        scale: Math.min(parent.width / 800, parent.height / 450)
 
-    Toast {
-        id: toastManager
+        StackView {
+            id: stackView
+            initialItem: mainView
+            anchors.fill: parent
+        }
+
+        Toast {
+            id: toastManager
+        }
     }
 
     // Settings screen component for nested screens
